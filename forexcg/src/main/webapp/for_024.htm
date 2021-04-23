@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
+<meta name="HandheldFriendly" content="true">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="imagetoolbar" content="no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>손해보험협회 외환정보시스템</title>
+<link rel="stylesheet" type="text/css" href="css/design.css" />
+<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="js/design.js"></script>
+</head>
+
+<body>
+
+<div id="popLayerBg"></div>
+
+<!--+++++ 상단 +++++-->
+<header id="header">
+	<nav class="gnb">
+		<ul>
+			<li class="depth1">
+				<a href="javascript:;">공통관리</a>
+				<ul>
+					<li><a href="for_007.htm">사용자 등록관리</a></li>
+					<li><a href="for_008.htm">내정보 관리</a></li>
+					<li><a href="for_009.htm">시스템 설정관리</a></li>
+					<li><a href="for_017.htm">통계 및 조회</a></li>
+				</ul>				
+			</li>
+			<li class="depth1">
+				<a href="javascript:;">게시판</a>
+				<ul>
+					<li><a href="for_020.htm">FAQ</a></li>
+					<li><a href="for_021.htm">공지사항</a></li>
+					<li><a href="for_022.htm">보고관련 자료실</a></li>
+				</ul>				
+			</li>
+			<li class="depth1">
+				<a href="for_023.htm">보고서 전송 및 결과확인</a>
+			</li>
+			<li class="depth1">
+				<a href="javascript:;">조회</a>
+				<ul>
+					<li><a href="for_024.htm">보고서 입수현황 점검표</a></li>
+					<li><a href="for_025.htm">주요계수현황</a></li>
+					<li><a href="for_026.htm">차액상세표</a></li>
+				</ul>				
+			</li>
+		</ul>
+	</nav>
+	<div class="top_con">
+		<a href="javascript:" class="btn_sh" title="상단메뉴 열기/닫기">
+			<i class="fa fa-angle-down" aria-hidden="true"></i>
+			<i class="fa fa-angle-up" aria-hidden="true"></i>
+		</a>
+		<div class="page_area">
+			<a href="javascript:;" class="btn_move btn_prev" title="이전"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+			<a href="javascript:;" class="btn_move btn_next" title="다음"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+			<!-- 활성화 된 페이지 addClass="on" -->
+			<div class="page_unit on">
+				<h3>페이지명1</h3>
+				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+			</div>
+			<div class="page_unit">
+				<h3>페이지명2</h3>
+				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+			</div>
+			<div class="page_unit">
+				<h3>페이지명3</h3>
+				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+			</div>
+		</div>
+		<div class="info_area">
+			<div class="user"><i class="fa fa-user-o" aria-hidden="true"></i> 관리자 <a href="javascript:;" class="btn btn-xs">정보수정</a></div>
+			<div class="timer"><i class="fa fa-clock-o" aria-hidden="true"></i> 남은시간 : 54분 41초 <a href="javascript:;" class="btn btn-xs">시간연장</a></div>
+			<a href="javascript:;" class="btn btn-primary btn_help"><i class="fa fa-question-circle" aria-hidden="true"></i> 도움말</a>
+			<a href="javascript:;" class="btn btn-info"><i class="fa fa-sign-out" aria-hidden="true"></i> 로그아웃</a>
+		</div>		
+	</div>
+</header>
+<!--+++++ /상단 +++++-->
+
+<!--+++++ 좌측 레이어 +++++-->
+<aside id="aside_left">
+	<a href="javascript:;" class="btn btn_sh" title="좌측메뉴 열기/닫기">
+		<i class="fa fa-angle-right" aria-hidden="true"></i>
+		<i class="fa fa-angle-left" aria-hidden="true"></i>
+	</a>
+	<header class="aside_left_header">
+		<h1><a href="main.htm"><img src="img/ci.png" alt="ci"></a></h1>
+		<h2>외환정보시스템</h2>
+	</header>
+	<nav class="gnb">
+		<ul>
+			<!-- 현재 메뉴 addClass="on" -->
+			<li class="depth1">
+				<a href="javascript:;">공통관리</a>
+				<ul>
+					<!-- 현재 메뉴 addClass="on" -->
+					<li><a href="for_007.htm">사용자 등록관리</a></li>
+					<li><a href="for_008.htm">내정보 관리</a></li>
+					<li><a href="for_009.htm">시스템 설정관리</a></li>
+					<li><a href="for_017.htm">통계 및 조회</a></li>
+				</ul>				
+			</li>
+			<li class="depth1">
+				<a href="javascript:;">게시판</a>
+				<ul>
+					<li><a href="for_020.htm">FAQ</a></li>
+					<li><a href="for_021.htm">공지사항</a></li>
+					<li><a href="for_022.htm">보고관련 자료실</a></li>
+				</ul>				
+			</li>
+			<li class="depth1">
+				<a href="for_023.htm">보고서</a>
+			</li>
+			<li class="depth1 on">
+				<a href="javascript:;">조회</a>
+				<ul>
+					<li class="on"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
+					<li><a href="for_025.htm">주요계수현황</a></li>
+					<li><a href="for_026.htm">차액상세표</a></li>
+				</ul>				
+			</li>
+		</ul>
+	</nav>
+</aside>
+<!--+++++ /좌측 레이어 +++++-->
+
+<!--+++++ 컨텐츠 +++++-->
+<div id="contents">
+	
+	<header class="contents_header">
+		<h2>보고서 입수현황 점검표</h2>
+		<div class="navi">
+			<a href="main.htm" class="btn_home" title="홈"><i class="fa fa-home" aria-hidden="true"></i></a>
+			<span class="styled_select">
+				<select>
+					<option>공통관리</option>
+					<option>게시판</option>
+					<option>보고서 전송 및 결과확인</option>
+					<option selected>조회</option>
+				</select>
+				<i class="fa fa-chevron-down" aria-hidden="true"></i>
+			</span>
+			<span class="styled_select">
+				<select>
+					<option selected>보고서 입수현황 점검표</option>
+					<option>주요계수현황</option>
+					<option>차액상세표</option>
+				</select>
+				<i class="fa fa-chevron-down" aria-hidden="true"></i>
+			</span>
+		</div>
+	</header>
+	
+	<div class="top_search_area">
+		<span class="label">보험사</span>
+		<span class="styled_select">
+			<select>
+				<option>전체</option>
+				<option></option>
+				<option></option>
+				<option></option>
+			</select>
+			<i class="fa fa-sort" aria-hidden="true"></i>
+		</span>
+		<span class="space"></span>
+		<span class="label">기준일자</span>
+		<input type="text" class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i>
+		<input type="text" class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i>
+		<a href="javascript:;" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
+	</div>
+	
+	<div class="tbl_top">
+		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong>10</strong>건</p>
+	</div>
+	
+	<div class="table_h01" style="height:calc(100% - 176px)">
+		<table>
+			<colgroup>
+				<col style="width:80px">
+				<col style="">
+				<col style="">
+				<col style="">
+				<col style="">
+				<col style="width:100px">
+				<col style="width:100px">
+				<!--스크롤바 영역 빈th-->
+				<col class="col_scrollbar">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>순번</th>
+					<th>보험사</th>
+					<th>기준일자</th>
+					<th>수신일시</th>
+					<th>결과확인/다운로드 여부</th>
+					<th>결과확인</th>
+					<th>보고서다운</th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+		<div class="overflow_y">
+		<table>
+			<colgroup>
+				<col style="width:80px">
+				<col style="">
+				<col style="">
+				<col style="">
+				<col style="">
+				<col style="width:100px">
+				<col style="width:100px">
+			</colgroup>
+			<tbody>
+				<tr>
+					<td>100</td>
+					<td>OOO화재</td>
+					<td><strong>2021-01-01</strong></td>
+					<td>2021-01-01 08:00</td>
+					<td><strong class="txt_gray">미열람</strong></td>
+					<td><a href="javascript:;" class="btn btn-sm btn-primary btn_result"><i class="fa fa-file-text-o" aria-hidden="true"></i> 확인</a></td>
+					<td><a href="javascript:;" class="btn btn-sm"><i class="fa fa-download" aria-hidden="true"></i> 다운</a></td>
+				</tr>
+				<tr>
+					<td>99</td>
+					<td>OOO화재</td>
+					<td><strong>2021-01-01</strong></td>
+					<td>2021-01-01 08:00</td>
+					<td><strong>열람</strong></td>
+					<td><a href="javascript:;" class="btn btn-sm btn-primary btn_result"><i class="fa fa-file-text-o" aria-hidden="true"></i> 확인</a></td>
+					<td><a href="javascript:;" class="btn btn-sm"><i class="fa fa-download" aria-hidden="true"></i> 다운</a></td>
+				</tr>
+				<tr>
+					<td>98</td>
+					<td>OOO화재</td>
+					<td><strong>2021-01-01</strong></td>
+					<td>2021-01-01 08:00</td>
+					<td><strong class="txt_gray">미열람</strong></td>
+					<td><a href="javascript:;" class="btn btn-sm btn-primary btn_result"><i class="fa fa-file-text-o" aria-hidden="true"></i> 확인</a></td>
+					<td><a href="javascript:;" class="btn btn-sm"><i class="fa fa-download" aria-hidden="true"></i> 다운</a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	
+</div>
+<!--+++++ /컨텐츠 +++++-->
+
+<!--+++++ 우측 레이어(도움말) +++++-->
+<aside id="aside_right">
+	<header class="aside_right_header">
+		<h2>도움말</h2>
+		<a href="javascript:;" class="btn_close">창닫기</a>
+	</header>
+	<div class="aside_right_con">
+		<textarea>도움말 내용</textarea>
+		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+	</div>
+</aside>
+<!--+++++ /우측 레이어(도움말) +++++-->
+
+<!--+++ 결과확인 팝업 +++--->
+<div class="pop_layer pop_result">
+	<header class="pop_header">
+		<h2>보고서 입수현황 점검표</h2>
+		<a href="javascript:;" class="btn_close">창닫기</a>
+	</header>
+	<div class="pop_con">
+		<h3>#메리츠화재해상보험(4301)</h3>
+		<dl>
+			<dt>
+				<i class="fa fa-calendar" aria-hidden="true"></i> 일보 : 기한내미입수율0%(우수) 누락률0%
+				<span class="space"></span>
+				<i class="fa fa-calendar" aria-hidden="true"></i> 월보 : 기한내미입수율0%(우수) 누락률0%
+				<span class="space"></span>
+				<i class="fa fa-calendar" aria-hidden="true"></i> 분기보 : 기한내미입수율0%(우수) 누락률0%
+			</dt>
+			<dd class="overflow">
+				<div class="table_h01">
+					<table>
+						<colgroup>
+							<col style="width:80px">
+							<col style="width:80px">
+							<col style="width:80px">
+							<col style="width:60px">
+							<col style="width:60px">
+							<col style="width:80px">
+							<col style="">							
+						</colgroup>
+						<thead>
+							<tr>
+								<th>년월</th>
+								<th>기관</th>
+								<th>보고서</th>
+								<th>그룹</th>
+								<th>주기</th>
+								<th>면제여부</th>
+								<th>월/분</th>
+								<th>1일</th>
+								<th>2일</th>
+								<th>3일</th>
+								<th>4일</th>
+								<th>5일</th>
+								<th>6일</th>
+								<th>7일</th>
+								<th>8일</th>
+								<th>9일</th>
+								<th>10일</th>
+								<th>11일</th>
+								<th>12일</th>
+								<th>13일</th>
+								<th>14일</th>
+								<th>15일</th>
+								<th>16일</th>
+								<th>17일</th>
+								<th>18일</th>
+								<th>19일</th>
+								<th>20일</th>
+								<th>21일</th>
+								<th>22일</th>
+								<th>23일</th>
+								<th>24일</th>
+								<th>25일</th>
+								<th>26일</th>
+								<th>27일</th>
+								<th>28일</th>
+								<th>29일</th>
+								<th>30일</th>
+								<th>31일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202102</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>
+				<i class="fa fa-calendar" aria-hidden="true"></i> 일보 : 기한내미입수율11.7%(미흡) 누락률0%
+				<span class="space"></span>
+				<i class="fa fa-calendar" aria-hidden="true"></i> 월보 : 기한내미입수율4.8%(양호) 누락률0%
+				<span class="space"></span>
+				<i class="fa fa-calendar" aria-hidden="true"></i> 분기보 : 기한내미입수율0%(우수) 누락률0%
+			</dt>
+			<dd class="overflow">
+				<div class="table_h01">
+					<table>
+						<colgroup>
+							<col style="width:80px">
+							<col style="width:80px">
+							<col style="width:80px">
+							<col style="width:60px">
+							<col style="width:60px">
+							<col style="width:80px">
+							<col style="">							
+						</colgroup>
+						<thead>
+							<tr>
+								<th>년월</th>
+								<th>기관</th>
+								<th>보고서</th>
+								<th>그룹</th>
+								<th>주기</th>
+								<th>면제여부</th>
+								<th>월/분</th>
+								<th>1일</th>
+								<th>2일</th>
+								<th>3일</th>
+								<th>4일</th>
+								<th>5일</th>
+								<th>6일</th>
+								<th>7일</th>
+								<th>8일</th>
+								<th>9일</th>
+								<th>10일</th>
+								<th>11일</th>
+								<th>12일</th>
+								<th>13일</th>
+								<th>14일</th>
+								<th>15일</th>
+								<th>16일</th>
+								<th>17일</th>
+								<th>18일</th>
+								<th>19일</th>
+								<th>20일</th>
+								<th>21일</th>
+								<th>22일</th>
+								<th>23일</th>
+								<th>24일</th>
+								<th>25일</th>
+								<th>26일</th>
+								<th>27일</th>
+								<th>28일</th>
+								<th>29일</th>
+								<th>30일</th>
+								<th>31일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>202101</td>
+								<td>4301</td>
+								<td>FX0024</td>
+								<td>1</td>
+								<td>일</td>
+								<td>O</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</dd>
+		</dl>
+	</div>
+</div>
+<!--+++ /비밀번호 찾기 팝업 +++--->
+
+<script>
+$(function(){
+	$('.btn_result').click(function(){ // 결과확인 팝업
+		$('#popLayerBg').css('display','block');
+		$('.pop_result').css('display','block');
+	});
+	$('.pop_result .btn_close').click(function(){
+		$('#popLayerBg').css('display','none');
+		$('.pop_result').css('display','none');
+	});
+});
+</script>
+
+</body>
+</html>
