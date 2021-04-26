@@ -25,4 +25,12 @@ public class LoginController {
 		
 		return "usr/login";
 	}
+	
+	@RequestMapping(value="/loginAction.do")
+	public String loginAction(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		LoginVO resultVO = null;
+		
+		return "redirect:/for/index.do";
+	}
 }
