@@ -44,9 +44,13 @@
         </property>
     </bean>
 
+<!--     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1" -->
+<!-- 	    p:viewClass="org.springframework.web.servlet.view.JstlView" -->
+<!-- 	    p:prefix="/WEB-INF/jsp/egovframework/example/" p:suffix=".jsp"/> -->
+
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
-	    p:prefix="/WEB-INF/jsp/egovframework/example/" p:suffix=".jsp"/>
+	    p:prefix="/WEB-INF/jsp/for/" p:suffix=".jsp"/>
 
     <!-- For Pagination Tag -->
     <bean id="imageRenderer" class="egovframework.example.cmmn.web.EgovImgPaginationRenderer"/>
