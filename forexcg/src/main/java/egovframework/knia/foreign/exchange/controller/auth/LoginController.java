@@ -13,6 +13,7 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 
 @Controller
@@ -23,6 +24,9 @@ public class LoginController {
 	@Resource(name = "beanValidator")
 	protected DefaultBeanValidator beanValidator;
 	
+	@Resource(name = "loginService")
+	private LoginService loginService;
+	
 	@RequestMapping(value="/login.do")
 	public String login(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -32,13 +36,9 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/loginAction.do")
-	public String loginAction(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, BindingResult bindingResult, ModelMap model) throws Exception {
+	public String loginAction(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
-		beanValidator.validate("loginVO", bindingResult);
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("loginVO", loginVO);
-			return "forward:/login.do";
-		}
+//		loginService.selectUser(loginVO);
 		
 		LoginVO resultVO = null;
 		

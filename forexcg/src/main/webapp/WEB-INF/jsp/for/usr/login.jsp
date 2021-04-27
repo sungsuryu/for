@@ -3,7 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="validator" uri="http://www.springmodules.org/tags/commons-validator" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!DOCTYPE html>
 <html>
 <head>
@@ -17,21 +16,29 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/cmmn/validator.do'/>"></script>
-<validator:javascript formName="loginVO" staticJavascript="false" xhtml="true" cdata="false"/>
 <script type="text/javascript">
+	$(document).ready(function() {
+		$("form").submit(function(event) {
+			var loginid = $("#loginId").val();
+			var password = $("#password").val();
+			
+			if (loginid == "") {
+				alert("아이디를 입력해주세요.");
+				event.preventDefault();
+				return;
+			}
+			
+			/*if (password == "") {
+				alert("비밀번호를 입력해주세요.");
+				event.preventDefault();
+				return;
+			}*/
+		})
+	});
+	
 	$(function() {
 		$("#btnLogin").click(function() {
-			
-			frm = document.formLoginin;
-			
-			if(!validateLoginVO(frm)) {
-		        return;
-		    } else {
-		        frm.action = "/for/index.do";
-		        frm.submit();
-		    }			
-			//$("#formLoginin").submit();
+			$("form").submit();
 		});
 	});
 </script>
@@ -44,13 +51,14 @@
 <div class="login_bg">
 	<div id="login">	
 		<h1><img src="img/ci_s.png" alt="ci"><small>외환정보시스템</small></h1>
-			<form:form commandName="loginVO" id="formLoginin" name="formLoginin" action="/for/index.do">
+			<form id="formLoginin" name="formLoginin" method="post" action="loginAction.do">
 			<fieldset>
-				<form:input path="loginId" cssClass="line" maxlength="20" placeholder="아이디" />
-				<form:password path="password" cssClass="line" maxlength="25" placeholder="비밀번호" />
+				<input type="text" class="line" maxlength="20" name="loginId" id="loginId"  placeholder="아이디" />
+				<input type="password" class="line" maxlength="25" name="password" id="password" placeholder="비밀번호" />
+				
 				<button type="button" id="btnLogin" name="btnLogin" class="btn btn_submit">login</button>
 			</fieldset>
-			</form:form>
+			</form>
 			<div class="btn_area">
 				<a href="javascript:;" class="btn_idsearch"><i class="fa fa-user-o" aria-hidden="true"></i> 아이디 찾기</a>
 				<a href="javascript:;" class="btn_pwdsearch"><i class="fa fa-lock" aria-hidden="true"></i> 비밀번호 찾기</a>
