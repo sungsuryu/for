@@ -6,15 +6,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import egovframework.com.cmm.annotation.IncludedInfo;
+import egovframework.com.cmm.EgovMessageSource;
 import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
+import egovframework.knia.foreign.exchange.vo.UserVO;
 
 @Controller
 public class LoginController {
@@ -27,6 +28,9 @@ public class LoginController {
 	@Resource(name = "loginService")
 	private LoginService loginService;
 	
+	@Resource(name = "egovMessageSource")
+	EgovMessageSource egovMessageSource;
+	
 	@RequestMapping(value="/login.do")
 	public String login(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -38,10 +42,15 @@ public class LoginController {
 	@RequestMapping(value="/loginAction.do")
 	public String loginAction(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
-		loginService.selectUser(loginVO);
+		UserVO userVO = loginService.selectUser(loginVO);
 		
-		LoginVO resultVO = null;
-		
-		return "redirect:/for/index.do";
+		if (userVO != null && userVO.getUserId() != null && !userVO.getUserId().equals("")) {
+			request.getSession().setAttribute("loginVO", loginVO);
+			
+			return "redirect:/for/index.do";
+		} else {
+			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+			return "usr/login";
+		}
 	}
 }

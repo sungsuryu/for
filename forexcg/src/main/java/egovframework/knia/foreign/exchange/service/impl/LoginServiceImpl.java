@@ -13,6 +13,8 @@ import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
+import egovframework.com.cmm.util.EgovFileScrty;
+
 @Service("loginService")
 public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginService {
 
@@ -24,6 +26,17 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 	@Override
 	public UserVO selectUser(LoginVO loginVO) throws Exception {
 		
-		return (UserVO)loginMapper.selectUser(loginVO);
+		String encPassword = EgovFileScrty.encryptPassword(loginVO.getPassword(), loginVO.getLoginId());
+		loginVO.setPassword(encPassword);
+		
+		UserVO userVO = loginMapper.selectUser(loginVO);
+		
+		if (userVO != null && !userVO.getUserId().equals("") && !userVO.getPassword().equals("")) {
+			return userVO;
+		} else {
+			userVO = new UserVO();
+		}
+		
+		return userVO;
 	}
 }
