@@ -38,7 +38,7 @@ public class LoginController {
 	@RequestMapping(value="/loginAction.do")
 	public String loginAction(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
-//		loginService.selectUser(loginVO);
+		loginService.selectUser(loginVO);
 		
 		LoginVO resultVO = null;
 		

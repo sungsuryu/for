@@ -8,7 +8,7 @@
 			FROM
 				TB_FOR_USER
 			WHERE
-				USER_ID=#{userId}
+				USER_ID=#{loginId}
 	</select>
 
 </mapper>
