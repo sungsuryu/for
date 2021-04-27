@@ -19,4 +19,14 @@
         </form>
     </formset>
 
+	<formset>
+		<form name="loginVO">
+			<field property="loginId" depends="required">
+				<arg0 key="title.login.loginid" />
+			</field>
+			<field property="password" depends="required">
+				<arg0 key="title.login.password" />
+			</field>
+		</form>
+	</formset>
 </form-validation>
