@@ -48,6 +48,8 @@
 <!-- 	    p:viewClass="org.springframework.web.servlet.view.JstlView" -->
 <!-- 	    p:prefix="/WEB-INF/jsp/egovframework/example/" p:suffix=".jsp"/> -->
 
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
+	
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/for/" p:suffix=".jsp"/>
