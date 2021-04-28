@@ -44,13 +44,16 @@ public class LoginController {
 		
 		UserVO userVO = loginService.selectUser(loginVO);
 		
-		if (userVO != null && userVO.getUserId() != null && !userVO.getUserId().equals("")) {
-			request.getSession().setAttribute("loginVO", loginVO);
-			
-			return "redirect:/for/index.do";
-		} else {
-			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "usr/login";
-		}
+//		model.addAttribute("userVO", userVO);
+		
+		return "jsonView";
+//		if (userVO != null && userVO.getUserId() != null && !userVO.getUserId().equals("")) {
+//			request.getSession().setAttribute("loginVO", loginVO);
+//			
+//			return "redirect:/for/index.do";
+//		} else {
+//			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
+//			return "usr/login";
+//		}
 	}
 }

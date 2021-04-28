@@ -6,11 +6,7 @@
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:/egovframework/sqlmap/exchange/sql-mapper-config.xml" />
-		<property name="mapperLocations">
-			<array>
-				<value>classpath:/egovframework/sqlmap/exchange/common/*.xml</value>
-			</array>
-		</property>
+		<property name="mapperLocations" value="classpath:/egovframework/sqlmap/exchange/*.xml" />
 	</bean>
 
 	<!-- MapperConfigurer setup for MyBatis Database Layer with @Mapper("deptMapper") in DeptMapper Interface -->

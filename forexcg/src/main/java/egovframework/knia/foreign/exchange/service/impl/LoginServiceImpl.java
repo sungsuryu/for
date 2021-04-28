@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.knia.foreign.exchange.dao.mapper.LoginMapper;
+import egovframework.knia.foreign.exchange.dao.mapper.UserMapper;
 import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
@@ -20,6 +21,9 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
 	
+	@Resource(name="userMapper")
+	private UserMapper userMapper;
+	
 	@Resource(name="loginMapper")
 	private LoginMapper loginMapper;
 	
@@ -28,6 +32,12 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		
 		String encPassword = EgovFileScrty.encryptPassword(loginVO.getPassword(), loginVO.getLoginId());
 		loginVO.setPassword(encPassword);
+		
+		int countUser = userMapper.countUser();
+		
+//		UserVO userVO = userMapper.selectUser(loginVO);
+		
+		int countLoginUser = loginMapper.countUser();
 		
 		UserVO userVO = loginMapper.selectUser(loginVO);
 		

@@ -10,6 +10,8 @@
 		<result property="emlAddr" column="EML_ADDR" />
 		<result property="cellNum" column="CELL_NUM" />
 	</resultMap>
+
+<!-- 	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO"> -->
 	
 	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO">
 			SELECT
@@ -17,6 +19,17 @@
 				CMPY_CD, EML_ADDR, CELL_NUM
 			FROM
 				TB_FOR_USER
+			WHERE
+				USER_ID=#{loginId} 
+				AND PASSWORD=#{password}
+				AND IS_DEL='N' 
+				AND USE_YN='Y' 
+				AND IS_APPROVE='Y'
+	</select>
+	
+	<select id="countUser" parameterType="loginVO" resultType="int">
+			SELECT
+				COUNT(USER_ID) FROM TB_FOR_USER
 			WHERE
 				USER_ID=#{loginId} 
 				AND PASSWORD=#{password}

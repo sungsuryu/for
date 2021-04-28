@@ -18,7 +18,7 @@
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("form").submit(function(event) {
+		$("#btnLogin").click(function(event) {
 			var loginid = $("#loginId").val();
 			var password = $("#password").val();
 			
@@ -32,7 +32,7 @@
 				event.preventDefault();
 				return;
 			}
-			
+			console.log('start');
 			$.ajax({
 		        type:"POST",
 		        url:"/loginAction.do",
