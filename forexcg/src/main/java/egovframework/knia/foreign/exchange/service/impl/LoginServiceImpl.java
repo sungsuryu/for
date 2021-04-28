@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.knia.foreign.exchange.dao.mapper.LoginMapper;
-import egovframework.knia.foreign.exchange.dao.mapper.UserMapper;
 import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
@@ -20,9 +19,6 @@ import egovframework.com.cmm.util.EgovFileScrty;
 public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
-	
-	@Resource(name="userMapper")
-	private UserMapper userMapper;
 	
 	@Resource(name="loginMapper")
 	private LoginMapper loginMapper;
@@ -36,6 +32,9 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		UserVO userVO = loginMapper.selectUser(loginVO);
 		
 		if (userVO != null && !userVO.getUserId().equals("") && !userVO.getPassword().equals("")) {
+			
+			// TODO OTP 발생 필요함.
+			
 			return userVO;
 		} else {
 			userVO = new UserVO();

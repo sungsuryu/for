@@ -18,6 +18,9 @@
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		
+		var loginstatus = false;
+		
 		$("#btnLogin").click(function(event) {
 			var loginid = $("#loginId").val();
 			var password = $("#password").val();
@@ -32,7 +35,7 @@
 				event.preventDefault();
 				return;
 			}
-			console.log('start');
+
 			$.ajax({
 		        type:"POST",
 		        url:"/loginAction.do",
@@ -40,16 +43,34 @@
 		        	"loginId":loginid, 
 		        	"password":password
 		        },
+		        beforeSend: function(xhr, opts) {
+		        	if (loginstatus)
+		        		xhr.abort();
+		        	
+		        	loginstatus = true;
+		        }, 
 		        success: function(e){
-		            console.log(e);
+		            if (e.result.status = 'SUCCESS') {
+		            	authOTP(e.result.loginId, e.result.timestamp);
+		            }
 		        },
 		        error: function(xhr, status, error) {
 		            alert(error);
-		        }  
+		        }, 
+		        complete : function() {
+		        	loginstatus = false;
+		        }
 		    });
 		})
 	});
-	
+
+	var authOTP = function(loginid, timestamp) {
+		console.log(loginid);
+		console.log(timestamp);
+		$('#popLayerBg').css('display','block');
+       	$('.pop_otp').css('display','block');
+	};
+
 </script>
 </head>
 
