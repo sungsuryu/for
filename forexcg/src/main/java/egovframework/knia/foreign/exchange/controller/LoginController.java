@@ -1,4 +1,4 @@
-package egovframework.knia.foreign.exchange.controller.auth;
+package egovframework.knia.foreign.exchange.controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

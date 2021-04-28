@@ -27,20 +27,29 @@
 				event.preventDefault();
 				return;
 			}
-			
-			/*if (password == "") {
+			if (password == "") {
 				alert("비밀번호를 입력해주세요.");
 				event.preventDefault();
 				return;
-			}*/
+			}
+			
+			$.ajax({
+		        type:"POST",
+		        url:"/loginAction.do",
+		        data : {
+		        	"loginId":loginid, 
+		        	"password":password
+		        },
+		        success: function(e){
+		            console.log(e);
+		        },
+		        error: function(xhr, status, error) {
+		            alert(error);
+		        }  
+		    });
 		})
 	});
 	
-	$(function() {
-		$("#btnLogin").click(function() {
-			$("form").submit();
-		});
-	});
 </script>
 </head>
 
