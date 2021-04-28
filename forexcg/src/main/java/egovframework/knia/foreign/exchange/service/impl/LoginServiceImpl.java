@@ -32,13 +32,7 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		
 		String encPassword = EgovFileScrty.encryptPassword(loginVO.getPassword(), loginVO.getLoginId());
 		loginVO.setPassword(encPassword);
-		
-		int countUser = userMapper.countUser();
-		
-//		UserVO userVO = userMapper.selectUser(loginVO);
-		
-		int countLoginUser = loginMapper.countUser();
-		
+
 		UserVO userVO = loginMapper.selectUser(loginVO);
 		
 		if (userVO != null && !userVO.getUserId().equals("") && !userVO.getPassword().equals("")) {

@@ -7,6 +7,13 @@
 		<typeAlias alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
 		<typeAlias alias="sampleVO" type="egovframework.example.sample.service.SampleVO"/>
 		
+		
+		
+		
+		
+		
+		
+		
 		<typeAlias alias="loginVO" type="egovframework.knia.foreign.exchange.vo.LoginVO" />
 		<typeAlias alias="userVO" type="egovframework.knia.foreign.exchange.vo.UserVO" />
     </typeAliases>
