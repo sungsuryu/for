@@ -78,25 +78,4 @@ public class LoginController {
 		
 		return "jsonView";
 	}
-	
-	
-	
-//	public static void main(String[] args) {
-//
-//		SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyyMMddhhmmss", new Locale("ko", "KR"));
-//
-//		String dateString = simpleFormat.format(new Date());
-//
-//		System.out.println(dateString);
-//		
-//		Timestamp timestamp = Timestamp.valueOf(dateString);
-//		
-//		System.out.println(timestamp);
-////		long time = System.currentTimeMillis();
-////		System.out.println(time);
-////		SimpleDateFormat simpl = new SimpleDateFormat("yyyy년 MM월 dd일 aa hh시 mm분 ss초");
-////		String s = simpl.format(time); // String s = simpl.format(time); System.out.println(s);
-////
-////		System.out.println(date);
-//	}
 }
