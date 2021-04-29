@@ -36,6 +36,8 @@ public class UserVO implements Serializable {
 	private Date updtDate = null;
 	
 	private String updtId;
+	
+	private String timestamp;
 
 	public String getUserId() {
 		return userId;
@@ -155,5 +157,13 @@ public class UserVO implements Serializable {
 
 	public void setUpdtId(String updtId) {
 		this.updtId = updtId;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 }

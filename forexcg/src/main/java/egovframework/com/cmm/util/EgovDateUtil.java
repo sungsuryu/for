@@ -862,9 +862,9 @@ public class EgovDateUtil {
 		return timeStr;
 	}
 
-	public static String currentDateTime() {
+	public static String currentDateTimeString(String format) {
 		
-		SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyyMMddhhmmss", new Locale("ko", "KR"));
+		SimpleDateFormat simpleFormat = new SimpleDateFormat(format);
 		return simpleFormat.format(new Date());
 	}
 }

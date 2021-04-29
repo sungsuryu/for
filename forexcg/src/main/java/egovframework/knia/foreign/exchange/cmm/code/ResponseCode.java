@@ -3,8 +3,8 @@ package egovframework.knia.foreign.exchange.cmm.code;
 public enum ResponseCode {
 
 	RESULT_0("0", "Success"), 
-	RESULT_403("403", "not Permission"), 
-	RESULT_500("500", "server Error");
+	RESULT_403("403", "Forbidden"), 
+	RESULT_500("500", "Server Error");
 	
 	private String code;
 	private String message;

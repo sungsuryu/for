@@ -3,6 +3,7 @@ package egovframework.com.cmm.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.com.cmm.service.EgovUserDetailsService;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -10,6 +11,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 /**
  * 
  * @author 공통서비스 개발팀 서준식
@@ -34,8 +36,12 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 			return null;
 		}
 
-		return RequestContextHolder.getRequestAttributes().getAttribute("loginVO", RequestAttributes.SCOPE_SESSION);
-
+		return RequestContextHolder.getRequestAttributes().getAttribute(ConstCode.loginVO.toString(), RequestAttributes.SCOPE_SESSION);
+//		System.out.println("++++++++++++++++++++++++++++");
+//		LoginVO loginVO = new LoginVO();
+//		loginVO.setLoginId("test");
+//
+//		return loginVO;
 	}
 
 	public List<String> getAuthorities() {
@@ -52,14 +58,12 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 		if (RequestContextHolder.getRequestAttributes() == null) {
 			return false;
 		} else {
-
-			if (RequestContextHolder.getRequestAttributes().getAttribute("loginVO", RequestAttributes.SCOPE_SESSION) == null) {
+			if (RequestContextHolder.getRequestAttributes().getAttribute(ConstCode.loginVO.toString(), RequestAttributes.SCOPE_SESSION) == null) {
 				return false;
 			} else {
 				return true;
 			}
 		}
-
 	}
 
 }

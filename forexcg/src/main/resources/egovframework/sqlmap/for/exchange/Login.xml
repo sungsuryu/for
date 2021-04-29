@@ -38,4 +38,36 @@
 				AND IS_APPROVE='Y'
 	</select>
 
+	<insert id="insertAuthHist" parameterType="loginAuthHistVO">
+			INSERT INTO TB_FOR_LOGIN_AUTH_HIST (
+				USER_ID, 
+				APPROVE_TIMESTAMP, 
+				AUTH_NUM,
+				IS_EXP, 
+				IS_DEL, 
+				INSRT_DATE
+			) VALUES (
+				#{userId}, 
+				#{approveTimestamp}, 
+				#{authNum}, 
+				'N', 
+				'N',
+				#{insrtDate}
+			)
+	</insert>
+	
+	<select id="selectAuthNum" parameterType="loginAuthHistVO" resultType="String">
+			SELECT
+				AUTH_NUM
+			FROM
+				TB_FOR_LOGIN_AUTH_HIST
+			WHERE
+				USER_ID=#{userId}
+				AND IS_EXP='N'
+				AND IS_DEL='N'
+				AND INSRT_DATE > DATE_SUB(#{insrtDate}, INTERVAL 2 MINUTE)
+			ORDER BY
+				INSRT_DATE DESC LIMIT 1
+			
+	</select>
 </mapper>

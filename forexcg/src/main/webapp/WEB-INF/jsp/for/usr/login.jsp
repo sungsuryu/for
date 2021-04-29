@@ -58,17 +58,60 @@
 		            alert(error);
 		        }, 
 		        complete : function() {
+		        	console.log('complete');
 		        	loginstatus = false;
 		        }
 		    });
-		})
+		});
+		
+		$("#linkOTPconfirm").click(function(event) {
+	 		$.ajax({
+		        type:"POST",
+		        url:"/otpAction.do",
+		        data : {
+		        	"loginId":$("#returnLoginId").text(), 
+		        	"authNum":$("#authNum").val()
+		        },
+		        success: function(e){
+		        },
+		        error: function(xhr, status, error) {
+		            alert(error);
+		        }
+	    	});
+		});
+		
+		$(".linkOTPcancel").click(function(event) {
+			alert('ok');
+		});
+		
+		
 	});
 
+	
 	var authOTP = function(loginid, timestamp) {
+		$("#returnLoginId").text(loginid);
+		
 		console.log(loginid);
 		console.log(timestamp);
+		
 		$('#popLayerBg').css('display','block');
        	$('.pop_otp').css('display','block');
+       	
+// 		$.ajax({
+// 	        type:"POST",
+// 	        url:"/otpAction.do",
+// 	        data : {
+// 	        	"loginId":loginid, 
+// 	        	"timestamp":timestamp
+// 	        },
+// 	        success: function(e){
+// 	        	$('#popLayerBg').css('display','block');
+// 	           	$('.pop_otp').css('display','block');
+// 	        },
+// 	        error: function(xhr, status, error) {
+// 	            alert(error);
+// 	        }
+// 	    });
 	};
 
 </script>
@@ -83,6 +126,7 @@
 		<h1><img src="img/ci_s.png" alt="ci"><small>외환정보시스템</small></h1>
 			<form id="formLoginin" name="formLoginin" method="post" action="loginAction.do">
 			<fieldset>
+				<div id="returnLoginId" style="display:none"></div>
 				<input type="text" class="line" maxlength="20" name="loginId" id="loginId"  placeholder="아이디" />
 				<input type="password" class="line" maxlength="25" name="password" id="password" placeholder="비밀번호" />
 				
@@ -102,18 +146,18 @@
 <div class="pop_layer pop_otp">
 	<header class="pop_header">
 		<h2>2차 인증번호(OTP) 입력</h2>
-		<a href="javascript:;" class="btn_close">창닫기</a>
+		<a href="javascript:void(0)" class="btn_close linkOTPcancel">창닫기</a>
 	</header>
 	<div class="pop_con">
-		<input type="text" placeholder="인증번호" class="line">
+		<input type="text" placeholder="인증번호" class="line" maxlength="4" id="authNum" name="authNum" />
 		<p>*카카오알림톡으로 전송한 인증번호를 입력하세요.</p>
 		<dl>
 			<dt>입력 가능 시간</dt>
 			<dd><strong>90</strong>초</dd>
 		</dl>
 		<div class="btn_area">
-			<a href="index.htm" class="btn btn-primary">확인</a>
-			<a href="javascript:;" class="btn btn-default">취소</a>
+			<a href="javascript:void(0)" class="btn btn-primary" id="linkOTPconfirm">확인</a>
+			<a href="javascript:void(0)" class="btn btn-default linkOTPcancel">취소</a>
 		</div>
 	</div>
 </div>
