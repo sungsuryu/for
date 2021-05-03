@@ -413,15 +413,15 @@
           <columnName>BOARD_TYPE</columnName>
           <logicalName>게시판 구분</logicalName>
           <columnType class="net.java.amateras.db.dialect.ColumnType">
-            <name>CHAR</name>
-            <logicalName>Character</logicalName>
+            <name>VARCHAR2</name>
+            <logicalName>String</logicalName>
             <supportSize>true</supportSize>
-            <type>1</type>
+            <type>12</type>
           </columnType>
-          <size>1</size>
+          <size>32</size>
           <notNull>true</notNull>
           <primaryKey>false</primaryKey>
-          <description>공지사항 OR 자료실</description>
+          <description>공지사항 OR 자료실 - NOTICE, PDS</description>
           <autoIncrement>false</autoIncrement>
           <defaultValue></defaultValue>
         </net.java.amateras.db.visual.model.ColumnModel>
