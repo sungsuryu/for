@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.CommonCodeMapper">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.LoginMapper">
 
+	<resultMap id="mapUserVO" type="egovframework.knia.foreign.exchange.vo.UserVO">
+		<result property="userId" column="USER_ID" />
+		<result property="userNm" column="USER_NM" />
+		<result property="password" column="PASSWORD" />
+		<result property="insurCd" column="INSUR_CD" />
+		<result property="emlAddr" column="EML_ADDR" />
+		<result property="cellNum" column="CELL_NUM" />
+	</resultMap>
 
+<!-- 	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO"> -->
 	
 	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO">
 			SELECT
