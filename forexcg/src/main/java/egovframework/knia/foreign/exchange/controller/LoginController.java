@@ -69,7 +69,7 @@ public class LoginController {
 			logger.debug("로그인 성공:{}", loginVO.getLoginId());
 			model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(loginInfo));
 		} else {
-			logger.info("로그인 실패: 사용자를 찾을 수 없습니다.");
+			logger.info("로그인 실패: 계정을 찾을 수 없습니다.");
 			model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_403).toMap());
 		}
 		

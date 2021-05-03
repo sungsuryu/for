@@ -9,11 +9,11 @@ public class UserVO implements Serializable {
 
 	private String userId;
 	
-	private String userName;
+	private String userNm;
 	
 	private String password;
 	
-	private String cmpyCd;
+	private String insurCd;
 	
 	private String emlAddr;
 	
@@ -47,12 +47,12 @@ public class UserVO implements Serializable {
 		this.userId = userId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUserNm() {
+		return userNm;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserNm(String userNm) {
+		this.userNm = userNm;
 	}
 
 	public String getPassword() {
@@ -63,12 +63,12 @@ public class UserVO implements Serializable {
 		this.password = password;
 	}
 
-	public String getCmpyCd() {
-		return cmpyCd;
+	public String getInsurCd() {
+		return insurCd;
 	}
 
-	public void setCmpyCd(String cmpyCd) {
-		this.cmpyCd = cmpyCd;
+	public void setInsurCd(String insurCd) {
+		this.insurCd = insurCd;
 	}
 
 	public String getEmlAddr() {

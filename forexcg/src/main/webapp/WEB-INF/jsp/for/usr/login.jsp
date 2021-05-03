@@ -27,11 +27,13 @@
 			
 			if (loginid == "") {
 				alert("아이디를 입력해주세요.");
+				$("#loginId").focus();
 				event.preventDefault();
 				return;
 			}
 			if (password == "") {
 				alert("비밀번호를 입력해주세요.");
+				$("#password").focus();
 				event.preventDefault();
 				return;
 			}
@@ -50,8 +52,10 @@
 		        	loginstatus = true;
 		        }, 
 		        success: function(e){
-		            if (e.result.status = 'SUCCESS') {
+		            if (e.result.status == 'SUCCESS') {
 		            	authOTP(e.result.loginId, e.result.timestamp);
+		            } else {
+		            	alert("계정을 찾을 수 없습니다.");
 		            }
 		        },
 		        error: function(xhr, status, error) {
@@ -91,27 +95,8 @@
 	var authOTP = function(loginid, timestamp) {
 		$("#returnLoginId").text(loginid);
 		
-		console.log(loginid);
-		console.log(timestamp);
-		
 		$('#popLayerBg').css('display','block');
        	$('.pop_otp').css('display','block');
-       	
-// 		$.ajax({
-// 	        type:"POST",
-// 	        url:"/otpAction.do",
-// 	        data : {
-// 	        	"loginId":loginid, 
-// 	        	"timestamp":timestamp
-// 	        },
-// 	        success: function(e){
-// 	        	$('#popLayerBg').css('display','block');
-// 	           	$('.pop_otp').css('display','block');
-// 	        },
-// 	        error: function(xhr, status, error) {
-// 	            alert(error);
-// 	        }
-// 	    });
 	};
 
 </script>
