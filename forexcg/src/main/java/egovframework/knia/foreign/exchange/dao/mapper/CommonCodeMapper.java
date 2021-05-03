@@ -10,7 +10,7 @@ public interface CommonCodeMapper {
 
 	CommonCodeVO selectCode(String cmmCd) throws Exception;
 	
-	List<?> selectCodeList(String cmmCd) throws Exception;
+	List<?> selectCodeList(String prtCmmCd) throws Exception;
 	
 	void insertCode(CommonCodeVO commonCodeVO) throws Exception;
 	
