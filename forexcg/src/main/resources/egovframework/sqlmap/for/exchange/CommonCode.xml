@@ -28,6 +28,19 @@
 			AND IS_DEL='N'
 	</select>
 	
+	<select id="selectGroupCodeList" resultMap="mapCommonCodeVO">
+		SELECT
+			CMM_CD, CMM_CD_NM, LVL, PRT_CMM_CD, CD_DESC, SORT_NUM, USE_YN, 
+			INSRT_ID, INSRT_DATE, UPDT_ID, UPDT_DATE
+		FROM
+			TB_FOR_CMM_CD
+		WHERE
+			PRT_CMM_CD IS NULL 
+			AND LVL=1 
+			AND IS_DEL='N'
+		ORDER BY SORT_NUM
+	</select>
+	
 	<select id="selectCodeList" parameterType="String" resultMap="mapCommonCodeVO">
 		SELECT
 			CMM_CD, CMM_CD_NM, LVL, PRT_CMM_CD, CD_DESC, SORT_NUM, USE_YN, 

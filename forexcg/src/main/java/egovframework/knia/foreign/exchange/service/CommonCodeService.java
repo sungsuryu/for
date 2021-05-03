@@ -1,18 +1,16 @@
-package egovframework.knia.foreign.exchange.dao.mapper;
+package egovframework.knia.foreign.exchange.service;
 
 import java.util.List;
 
 import egovframework.knia.foreign.exchange.vo.CommonCodeVO;
-import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
-@Mapper("commonCodeMapper")
-public interface CommonCodeMapper {
+public interface CommonCodeService {
 
-	CommonCodeVO selectCode(String cmmCd) throws Exception;
-	
 	List<?> selectCodeList(String prtCmmCd) throws Exception;
-
+	
 	List<?> selectGroupCodeList() throws Exception;
+	
+	CommonCodeVO selectCode(String cmmCd) throws Exception;
 	
 	void insertCode(CommonCodeVO commonCodeVO) throws Exception;
 	
