@@ -518,8 +518,13 @@
         <net.java.amateras.db.visual.model.ColumnModel>
           <columnName>FILE_PATH</columnName>
           <logicalName>파일경로</logicalName>
-          <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../../net.java.amateras.db.visual.model.TableModel/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel/target/columns/net.java.amateras.db.visual.model.ColumnModel[8]/columnType"/>
-          <size>255</size>
+          <columnType class="net.java.amateras.db.dialect.ColumnType">
+            <name>VARCHAR2</name>
+            <logicalName>String</logicalName>
+            <supportSize>true</supportSize>
+            <type>12</type>
+          </columnType>
+          <size>256</size>
           <notNull>true</notNull>
           <primaryKey>false</primaryKey>
           <description></description>
