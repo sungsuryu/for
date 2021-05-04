@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.MenuMapper">
+
+	<resultMap id="mapMenuVO" type="egovframework.knia.foreign.exchange.vo.MenuVO">
+		<result property="mnuId" column="MNU_ID" />
+		<result property="mnuNm" column="MNU_NM" />
+		<result property="prtMnuId" column="PRT_MNU_ID" />
+		<result property="mnuType" column="MNU_TYPE" />
+		<result property="lvl" column="LVL" />
+		<result property="sortNum" column="SORT_NUM" />
+		<result property="useYn" column="USE_YN" />
+		<result property="isDel" column="IS_DEL" />
+<!-- 		<result property="insrtId" column="INSRT_ID" /> -->
+<!-- 		<result property="insrtDate" column="INSRT_DATE" /> -->
+<!-- 		<result property="updtId" column="UPDT_ID" /> -->
+<!-- 		<result property="updtDate" column="UPDT_DATE" /> -->
+	</resultMap>
+
+	<sql id="commonMenu">
+		SELECT
+			MNU_ID, MNU_NM, PRT_MNU_ID, 
+			MNU_TYPE, LVL, SORT_NUM, 
+			USE_YN, IS_DEL
+		FROM
+			${tableName}
+	</sql>
+	
+	<select id="selectMenu" parameterType="menuVO" resultMap="mapMenuVO">
+		<include refid="commonMenu">
+			<property name="tableName" value="TB_FOR_MNU" />
+		</include>
+		WHERE
+			IS_DEL=#{isDel}
+			AND LVL=#{lvl}
+			<if test="mnuId != null and mnuId !=''">
+				AND MNU_ID=#{mnuId}
+			</if>
+			<if test="prtMnuId != null and prtMnuId !=''">
+				AND PRT_MNU_ID=#{prtMnuId}
+			</if>
+			<if test="mnuType != null and mnuType !=''">
+				AND MNU_TYPE=#{mnuType}
+			</if>
+		LIMIT 1
+	</select>
+	
+	<select id="selectMenuList" parameterType="menuVO" resultMap="mapMenuVO">
+		<include refid="commonMenu">
+			<property name="tableName" value="TB_FOR_MNU" />
+		</include>
+		WHERE
+			IS_DEL=#{isDel}
+			AND LVL=#{lvl}
+			<if test="mnuId != null and mnuId !=''">
+				AND MNU_ID=#{mnuId}
+			</if>
+			<if test="prtMnuId != null and prtMnuId !=''">
+				AND PRT_MNU_ID=#{prtMnuId}
+			</if>
+			<if test="mnuType != null and mnuType !=''">
+				AND MNU_TYPE=#{mnuType}
+			</if>
+	</select>
+	
+	<insert id="insertMenu" parameterType="menuVO">
+		INSERT INTO
+			TB_FOR_MNU (
+				MNU_ID, 
+				MNU_NM, 
+				PRT_MNU_ID, 
+				LVL, 
+				SORT_NUM, 
+				USE_YN, 
+				IS_DEL
+				INSRT_ID, 
+				INSRT_DATE, 
+				UPDT_ID, 
+				UPDT_DATE
+			) VALUES(
+				#{mnuId}, 
+				#{mnuNm}, 
+				#{prtMnuId}, 
+				#{mnuType}, 
+				#{lvl}, 
+				#{sortNum}, 
+				#{useYn}, 
+				#{isDel}, 
+				#{insrtId}, 
+				NOW(), 
+				#{updtId}, 
+				NOW()
+			)
+	</insert>
+	
+	
+	
+	
+<!-- 	//no property  -->
+<!-- <sql id="example01"> -->
+<!--   FROM -->
+<!-- </sql> -->
+
+<!-- //property 한개 작성 -->
+<!-- <sql id="example02"> -->
+<!--   FROM ${alias(별칭)} -->
+<!-- </sql> -->
+
+<!-- //property 여러 개 작성 -->
+<!-- <sql id="example03"> -->
+<!--   FROM ${alias(별칭)} WHERE id = ${alias02(별칭)} -->
+<!-- </sql> -->
+<!-- <select id="selectUser" resultType="User"> -->
+<!-- SELECT id,name -->
+<!-- <include refid="example03"> -->
+<!--   <property name="alias" value="tablename"/> -->
+<!--   <property name="alias02" value="119"/> -->
+<!-- </include> -->
+<!-- </select> -->
+	
+	
+	
+</mapper>
