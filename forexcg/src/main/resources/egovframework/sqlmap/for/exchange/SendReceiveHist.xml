@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.SendReceiveHistMapper">
+
+	<resultMap id="mapSendReceiveHistVO" type="egovframework.knia.foreign.exchange.vo.SendReceiveHistVO">
+		<result property="hisNum" column="HIS_NUM" />
+		<result property="rptNum" column="RPT_NUM" />
+		<result property="rptGrp" column="RPT_GRP" />
+		<result property="rptCycle" column="RPT_CYCLE" />
+		<result property="sndRst" column="SND_RST" />
+		<result property="sndRstNm" column="SND_RST_NM" />
+		<result property="rptCycleNm" column="RPT_CYCLE_NM" />
+		<result property="rptTitle" column="RPT_TITLE" />
+		<result property="tgDt" column="TG_DT" />
+		<result property="tgDtNm" column="TG_DT_NM" />
+		<result property="rptSiz" column="RPT_SIZ" />
+		<result property="insurCd" column="INSUR_CD" />
+		<result property="insurNm" column="INSUR_NM" />
+	</resultMap>
+
+	<select id="selectSendReceiveHistList" parameterType="sendReceiveHistVO" resultMap="mapSendReceiveHistVO">
+		SELECT
+			HIS.HIS_NUM, 
+			HIS.RPT_NUM, 
+			HIS.RPT_GRP, 
+			HIS.RPT_CYCLE, 
+			HIS.SND_RST,
+			RST.CMM_CD_NM SND_RST_NM, 
+			HIS.TRANS_FLAG, 
+			HIS.FILE_NM, 
+			MST.RPT_TITLE, 
+			MST.TG_DT, 
+			MST.RPT_SIZ, 
+			HIS.INSUR_CD,
+			INS.INSUR_NM,
+		FROM TB_FOR_SND_RCV_HIST HIS
+			INNER JOIN TB_FOR_INSUR_CD INS ON HIS.INSUR_CD=INS.INSUR_CD
+			INNER JOIN TB_FOR_RPT_MST MST ON HIS.RPT_NUM=MST.RPT_NUM AND HIS.RPT_GRP=MST.RPT_GRP AND HIS.RPT_CYCLE=MST.RPT_CYCLE
+			LEFT JOIN TB_FOR_CMM_CD RST ON HIS.SND_RST=RST.CMM_CD 
+		WHERE
+			HIS.TRANS_FLAG='03000030'
+		ORDER BY REQ_DATE DESC
+	</select>
+	
+	<select id="countNotyetFinish" parameterType="sendReceiveHistVO" resultType="int">
+		SELECT
+			COUNT(*) CNT
+		FROM TB_FOR_SND_RCV_HIST
+		WHERE
+			INSUR_CD=#{insurCd}
+			AND RPT_NUM=#{rptNum}
+			AND REQ_DATE=#{reqDate}
+			AND TRANS_FLAG='03000030'
+			AND (SND_RST IS NULL OR SND_RST != '000')
+	</select>
+	
+	<insert id="insertSendHist" parameterType="sendReceiveHistVO">
+		INSERT
+			TB_FOR_SND_RCV_HIST (
+				HIS_NUM, 
+				INSUR_CD, 
+				RPT_NUM, 
+				RPT_GRP, 
+				RPT_CYCLE, 
+				SND_RST, 
+				FILE_NM, 
+				REQ_DATE, 
+				IS_DEL, 
+				INSRT_ID, 
+				INSRT_DATE, 
+				UPDT_ID, 
+				UPDT_DATE
+			) VALUES (
+				#{hisNum}, 
+				#{insurCd}, 
+				#{rptNum}, 
+				#{rptGrp}, 
+				#{rptCycle}, 
+				#{sndRst}, 
+				#{fileNm}, 
+				#{reqDate}, 
+				'N', 
+				#{insrtId}, 
+				now(), 
+				#{updtId}, 
+				now()
+			)
+	</insert>
+</mapper>

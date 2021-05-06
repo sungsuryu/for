@@ -19,5 +19,8 @@
 		<typeAlias alias="loginAuthHistVO" type="egovframework.knia.foreign.exchange.vo.LoginAuthHistVO" />
 		<typeAlias alias="commonCodeVO" type="egovframework.knia.foreign.exchange.vo.CommonCodeVO" />
 		<typeAlias alias="menuVO" type="egovframework.knia.foreign.exchange.vo.MenuVO" />
+		<typeAlias alias="insurVO" type="egovframework.knia.foreign.exchange.vo.InsurVO" />
+		<typeAlias alias="reportMasterVO" type="egovframework.knia.foreign.exchange.vo.ReportMasterVO" />
+		<typeAlias alias="sendReceiveHistVO" type="egovframework.knia.foreign.exchange.vo.SendReceiveHistVO" />
     </typeAliases>
 </configuration>

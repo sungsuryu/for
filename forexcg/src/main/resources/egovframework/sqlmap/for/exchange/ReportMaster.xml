@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.ReportMasterMapper">
+
+	<resultMap id="mapReportMasterVO" type="egovframework.knia.foreign.exchange.vo.ReportMasterVO">
+		<result property="rptNum" column="RPT_NUM" />
+		<result property="rptGrp" column="RPT_GRP" />
+		<result property="rptCycle" column="RPT_CYCLE" />
+		<result property="rptCycleNm" column="RPT_CYCLE_NM" />
+		<result property="rptTitle" column="RPT_TITLE" />
+		<result property="tgDt" column="TG_DT" />
+	</resultMap>
+
+	<select id="selectReportMasterList" parameterType="reportMasterVO" resultMap="mapReportMasterVO">
+		SELECT
+			RPT.RPT_NUM, 
+			RPT.RPT_GRP, 
+			RPT.RPT_CYCLE, 
+			CM.CMM_CD_NM RPT_CYCLE_NM,
+			RPT.RPT_TITLE, 
+			RPT.TG_DT
+		FROM
+			TB_FOR_RPT_MST RPT INNER JOIN TB_FOR_CMM_CD CM ON RPT.RPT_CYCLE=CM.CMM_CD
+		ORDER BY DOCNO
+	</select>
+	
+</mapper>
