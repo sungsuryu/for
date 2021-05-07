@@ -7,6 +7,8 @@ import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -25,13 +27,15 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  *  -------    --------    ---------------------------
  *  2011.07.01  서준식          최초 생성
  *  2011.09.07  서준식          인증이 필요없는 URL을 패스하는 로직 추가
- *  2021.05.08	류성수          loginVO 교체
+ *  2021.05.08	류성수          loginVO 교체 - login 페이지 설정
  *  </pre>
  */
 
 
 public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticInterceptor.class);
+	
 	/**
 	 * 세션에 계정정보(LoginVO)가 있는지 여부로 인증 여부를 체크한다.
 	 * 계정정보(LoginVO)가 없다면, 로그인 페이지로 이동한다.
@@ -43,6 +47,8 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 
 		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 
+		logger.debug("AuthenticInterceptor - preHandle: {}", loginVO);
+		
 		if(loginVO != null){
 			return true;
 		} else if(!isPermittedURL){

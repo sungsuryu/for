@@ -16,6 +16,16 @@ public class LoginVO implements Serializable {
 	
 	private String authNum;
 	
+	private String ip;
+	
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
 	public String getLoginId() {
 		return loginId;
 	}

@@ -7,6 +7,8 @@ import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  
 /**
@@ -28,11 +30,14 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class IpObtainInterceptor extends HandlerInterceptorAdapter {
  
+	private static final Logger logger = LoggerFactory.getLogger(IpObtainInterceptor.class);
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
- 
+		
 		String clientIp = request.getRemoteAddr();
- 
+		logger.debug("IpObtainInterceptor - clientIp: {}", clientIp);
+		
 		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
  
 		if (loginVO != null) {
