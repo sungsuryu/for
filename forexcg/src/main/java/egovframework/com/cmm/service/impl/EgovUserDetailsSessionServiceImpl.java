@@ -25,6 +25,7 @@ import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
  *   수정일      수정자          수정내용
  *  -------    --------    ---------------------------
  *  2011. 8. 12.    서준식        최초생성
+ *  2021. 5. 07.    류성수        서비스환경으로 수정
  *  
  *  </pre>
  */
@@ -37,10 +38,10 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 		}
 
 		return RequestContextHolder.getRequestAttributes().getAttribute(ConstCode.loginVO.toString(), RequestAttributes.SCOPE_SESSION);
-//		System.out.println("++++++++++++++++++++++++++++");
+
+//		테스트를 위한 계정 생성
 //		LoginVO loginVO = new LoginVO();
-//		loginVO.setLoginId("test");
-//
+//		loginVO.setLoginId("testid");
 //		return loginVO;
 	}
 
