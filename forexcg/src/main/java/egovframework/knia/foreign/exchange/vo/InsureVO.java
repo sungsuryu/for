@@ -2,7 +2,7 @@ package egovframework.knia.foreign.exchange.vo;
 
 import java.io.Serializable;
 
-public class InsurVO extends CommonVO implements Serializable {
+public class InsureVO extends CommonVO implements Serializable {
 
 	private static final long serialVersionUID = -8193803072183120458L;
 
