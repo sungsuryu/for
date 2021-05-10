@@ -469,6 +469,7 @@ a.link01 { color:#0094cd; text-decoration:underline }
 .pop_result dd.overflow .table_h01 th { border:1px solid #0094cd }
 .pop_result dd.overflow .table_h01 td { border:1px solid #e0e0e0 }
 
+.dispNon {display:none}
 
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
 html { scrollbar-arrow-color:#45b1da; scrollbar-3dlight-color:#e6e6e6;  scrollbar-darkshadow-color:#45b1da; scrollbar-face-color:#45b1da; scrollbar-hightlight-color:#45b1da; scrollbar-shadow-color:#45b1da; scrollbar-track-color:#e6e6e6 }
