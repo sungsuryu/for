@@ -15,9 +15,9 @@ public class BoardServiceImpl implements BoardService {
 	private BoardMapper boardMapper;
 	
 	@Override
-	public BoardVO selectListCnt(String boardtype) throws Exception {
-		BoardVO boardVO = boardMapper.selectBoardCnt(boardtype);
-		return boardVO;
+	public int selectListCnt(String boardtype) throws Exception {
+		int cnt = boardMapper.selectBoardCnt(boardtype);
+		return cnt;
 	}
 
 }

@@ -17,19 +17,19 @@
 		<result property="isdel" column="IS_DEL"/>
 		<result property="alarmyn" column="ALARM_YN"/>
 		<result property="alarmdate" column="ALARM_DATE"/>
-		<result property="boardtype" column="BARD_TYPE"/>
-		
+		<result property="boardtype" column="BOARD_TYPE"/>
+		<result property="totalcnt" column="TOTAL_CNT"/>
 	</resultMap>
 	
-	<select id="selectBoardCnt" parameterType="boardVO" resultMap="mapBoardVO">
+	<select id="selectBoardCnt" parameterType="String" resultType="int">
 			SELECT
-				COUNT(*)
+				COUNT(*) AS TOTAL_CNT
 			FROM
-				TB_FOR_USER
+				TB_FOR_BOARD
 			WHERE
 				BOARD_TYPE = #{boardtype}
 	</select>
-
+	
 	<insert id="insertAuthHist" parameterType="loginAuthHistVO">
 			INSERT INTO TB_FOR_LOGIN_AUTH_HIST (
 				USER_ID, 

@@ -6,6 +6,8 @@ import java.util.Date;
 public class BoardVO implements Serializable {
 	private static final long serialVersionUID = 5404555371266643157L;
 	
+	private int cnt;
+	
 	private int boardidx;
 	
 	private String title;
@@ -93,6 +95,8 @@ public class BoardVO implements Serializable {
 	}
 
 	public void setInsrtdate(Date insrtdate) {
+//		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
+//		return sdf.format(insrtdate);
 		this.insrtdate = insrtdate;
 	}
 

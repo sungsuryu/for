@@ -1,5 +1,7 @@
 package egovframework.knia.foreign.exchange.controller;
 
+import java.util.HashMap;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,10 +32,15 @@ public class BoardController {
 	@RequestMapping(value="/setting/ajax/noticelist.do")
 	public String noticeList(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 리스트 가져오기");
-		boardVO = boardService.selectListCnt("NOTICE");
-		System.out.println("KJWKJW CHECK - " + boardVO.toString());
-		//return "setting/board";
-		return "";
+		int max_content = 10;
+		
+		int cnt = boardService.selectListCnt("NOTICE");
+		int page_num = Integer.parseInt(request.getAttribute("page_num").toString());
+		
+//		int page_num = Integer.parseInt(request.getAttribute("page_num").toString());
+//		int page_num = Integer.parseInt(request.getAttribute("page_num").toString());
+		
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/setting/pds.do")

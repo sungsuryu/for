@@ -11,5 +11,5 @@ public interface BoardMapper {
 	 * @return UserVO 사용자정보
 	 * @throws Exception
 	 */
-	BoardVO selectBoardCnt(String boardtype) throws Exception;
+	int selectBoardCnt(String boardtype) throws Exception;
 }
