@@ -418,7 +418,7 @@
             <supportSize>true</supportSize>
             <type>12</type>
           </columnType>
-          <size>32</size>
+          <size>20</size>
           <notNull>true</notNull>
           <primaryKey>false</primaryKey>
           <description>공지사항 OR 자료실 - NOTICE, PDS</description>

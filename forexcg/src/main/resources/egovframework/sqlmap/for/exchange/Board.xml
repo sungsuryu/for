@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.BoardMapper">
+
+	<resultMap id="mapBoardVO" type="egovframework.knia.foreign.exchange.vo.BoardVO">
+		<result property="boardidx" column="BOARD_IDX"/>
+		<result property="title" column="BOARD_TITLE"/>
+		<result property="content" column="BOARD_CONTENT"/>
+		<result property="insurcd" column="INSUR_CD"/>
+		<result property="user_id" column="USER_ID"/>
+		<result property="user_nm" column="USER_NM"/>
+		<result property="insrt_id" column="INSRT_ID"/>
+		<result property="insrtdate" column="INSRT_DATE"/>
+		<result property="updtid" column="UPDT_ID"/>
+		<result property="updtdate" column="UPDT_DATE"/>
+		<result property="viewcnt" column="VIEW_CNT"/>
+		<result property="isdel" column="IS_DEL"/>
+		<result property="alarmyn" column="ALARM_YN"/>
+		<result property="alarmdate" column="ALARM_DATE"/>
+		<result property="boardtype" column="BARD_TYPE"/>
+		
+	</resultMap>
+	
+	<select id="selectBoardCnt" parameterType="boardVO" resultMap="mapBoardVO">
+			SELECT
+				COUNT(*)
+			FROM
+				TB_FOR_USER
+			WHERE
+				BOARD_TYPE = #{boardtype}
+	</select>
+
+	<insert id="insertAuthHist" parameterType="loginAuthHistVO">
+			INSERT INTO TB_FOR_LOGIN_AUTH_HIST (
+				USER_ID, 
+				APPROVE_TIMESTAMP, 
+				AUTH_NUM,
+				IS_EXP, 
+				IS_DEL, 
+				INSRT_DATE
+			) VALUES (
+				#{userId}, 
+				#{approveTimestamp}, 
+				#{authNum}, 
+				'N', 
+				'N',
+				#{insrtDate}
+			)
+	</insert>
+
+</mapper>
