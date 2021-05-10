@@ -2,8 +2,11 @@
 <!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
 
 <sqlMapConfig>
-	<sqlMap resource="egovframework/sqlmap/example/sample/EgovSample_Sample_SQL.xml"/>
-	
-	<sqlMap resource="egovframework/sqlmap/for/exchange/User.xml"/>
+	<sqlMap resource="egovframework/sqlmap/for/exchange/CommonCode.xml"/>
+	<sqlMap resource="egovframework/sqlmap/for/exchange/Insure.xml"/>
 	<sqlMap resource="egovframework/sqlmap/for/exchange/Login.xml"/>
+	<sqlMap resource="egovframework/sqlmap/for/exchange/Menu.xml"/>
+	<sqlMap resource="egovframework/sqlmap/for/exchange/ReportMaster.xml"/>
+	<sqlMap resource="egovframework/sqlmap/for/exchange/SendReceiveHist.xml"/>
+	<sqlMap resource="egovframework/sqlmap/for/exchange/User.xml"/>
 </sqlMapConfig>
