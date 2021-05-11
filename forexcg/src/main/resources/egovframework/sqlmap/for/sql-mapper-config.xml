@@ -11,5 +11,6 @@
 		<typeAlias alias="insureVO" type="egovframework.knia.foreign.exchange.vo.InsureVO" />
 		<typeAlias alias="reportMasterVO" type="egovframework.knia.foreign.exchange.vo.ReportMasterVO" />
 		<typeAlias alias="sendReceiveHistVO" type="egovframework.knia.foreign.exchange.vo.SendReceiveHistVO" />
+		<typeAlias alias="boardVO" type="egovframework.knia.foreign.exchange.vo.BoardVO" />
     </typeAliases>
 </configuration>
