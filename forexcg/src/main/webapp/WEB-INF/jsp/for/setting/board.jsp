@@ -23,9 +23,20 @@
 	        success: function(e){
 	            if (e.result.status == 'SUCCESS') {
 	            	alert("공지사항을 불러왔습니다");
-	            	console.log(result);
-	            } else {
-	            	alert("공지사항을 불러울 수  없습니다.");
+	            	console.log(e.result);
+	            	$("#notice_list").empty();
+	            	 $.each(e.result.notice_list, function (i, item) {
+	            		 $("#notice_list").append('<tr><td>1</td><td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td><td><a href="javascript:;" class="link01">abc.doc</a></td><td>관리자</td><td>2021-01-11</td><td>999</td></tr>');
+	                 });
+	            }
+	            else if(e.result.status == 'EMPTY'){
+	            	alert("공지사항 목록이  없습니다.");
+	            	$("#notice_list").empty();
+	            } 
+	            else {
+	            	alert("공지사항을 불러올 수  없습니다.");
+	            	$("#notice_list").empty();
+	            	
 	            }
 	        },
 	        error: function(xhr, status, error) {
@@ -264,7 +275,7 @@
 					<th>조회</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="notice_list">
 				<tr>
 					<td>1</td>
 					<td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td>

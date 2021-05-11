@@ -30,7 +30,7 @@
 				TB_FOR_BOARD
 			WHERE
 				BOARD_TYPE = #{boardtype}
-			AND IS_DEL = 'Y'
+			AND IS_DEL = 'N'
 	</select>
 
 	<select id="selectBoardList" resultMap="mapBoardVO">

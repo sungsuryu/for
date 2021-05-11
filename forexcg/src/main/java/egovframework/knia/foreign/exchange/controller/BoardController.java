@@ -85,7 +85,7 @@ public class BoardController {
 			noticeInfo.put("total_page", total_page);
 			noticeInfo.put("total_cnt", cnt);
 			noticeInfo.put("notice_list", notice_list);
-			noticeInfo.put("status", "SUCCES");
+			noticeInfo.put("status", "SUCCESS");
 
 			logger.debug("공지사항 : 공지사항 목록을 불러옵니다.");
 			model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(noticeInfo));
