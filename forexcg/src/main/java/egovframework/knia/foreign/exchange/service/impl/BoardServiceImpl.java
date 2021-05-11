@@ -1,5 +1,8 @@
 package egovframework.knia.foreign.exchange.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +21,17 @@ public class BoardServiceImpl implements BoardService {
 	public int selectListCnt(String boardtype) throws Exception {
 		int cnt = boardMapper.selectBoardCnt(boardtype);
 		return cnt;
+	}
+
+	@Override
+	public List<?> selectBoardList(HashMap<String, Object> boardInfo) throws Exception {
+		return boardMapper.selectBoardList(boardInfo);
+	}
+
+	@Override
+	public void updateBoardViewCnt(HashMap<String, Object> boardInfo) throws Exception {
+		boardMapper.updateBoardViewCnt(boardInfo);
+		
 	}
 
 }

@@ -19,7 +19,7 @@
 	$(document).ready(function() {
 		$.ajax({
 	        type:"POST",
-	        url:"/setting/ajax/noticelist.do",
+	        url:"/setting/noticelist.ajax",
 	        success: function(e){
 	            if (e.result.status == 'SUCCESS') {
 	            	alert("공지사항을 불러왔습니다");
@@ -36,6 +36,30 @@
 	        }
 	    });
 	});
+	
+	var getBoardList = function(pagenum) {
+		$.ajax({
+	        type:"POST",
+	        url:"/setting/ajax/noticelist.do",
+	        data: {"page_num": 1 },
+	        success: function(e){
+	            if (e.result.status == 'SUCCESS') {
+	            	alert("공지사항을 불러왔습니다");
+	            	console.log(result);
+	            } else {
+	            	alert("공지사항을 불러울 수  없습니다.");
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            alert(error);
+	        }, 
+	        complete : function() {
+	        	console.log('complete');
+	        }
+	    });
+	};
+	
+	
 </script>
 
 <body>

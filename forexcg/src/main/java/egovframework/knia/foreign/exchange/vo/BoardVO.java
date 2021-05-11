@@ -8,6 +8,8 @@ public class BoardVO implements Serializable {
 	
 	private int cnt;
 	
+	private int listNum; 
+	
 	private int boardidx;
 	
 	private String title;
@@ -49,6 +51,8 @@ public class BoardVO implements Serializable {
 	private int StartNo;
 	
 	private int EndNo;
+	
+	private int fileCnt;
 	
 	public int getTotalcnt() {
 		return totalcnt;
@@ -220,6 +224,22 @@ public class BoardVO implements Serializable {
 
 	public void setBoardtype(String boardtype) {
 		this.boardtype = boardtype;
+	}
+
+	public int getListNum() {
+		return listNum;
+	}
+
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
+
+	public int getFileCnt() {
+		return fileCnt;
+	}
+
+	public void setFileCnt(int fileCnt) {
+		this.fileCnt = fileCnt;
 	}
 	
 	

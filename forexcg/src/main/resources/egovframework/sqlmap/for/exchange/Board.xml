@@ -19,6 +19,8 @@
 		<result property="alarmdate" column="ALARM_DATE"/>
 		<result property="boardtype" column="BOARD_TYPE"/>
 		<result property="totalcnt" column="TOTAL_CNT"/>
+		<result property="listNum" column="LIST_NUM"/>
+		<result property="fileCnt" column="FILE_CNT"/>
 	</resultMap>
 	
 	<select id="selectBoardCnt" parameterType="String" resultType="int">
@@ -28,7 +30,47 @@
 				TB_FOR_BOARD
 			WHERE
 				BOARD_TYPE = #{boardtype}
+			AND IS_DEL = 'Y'
 	</select>
+
+	<select id="selectBoardList" resultMap="mapBoardVO">
+		SELECT 
+			 TB.LIST_NUM
+			,TB.BOARD_IDX
+			,TB.BOARD_TITLE
+			,TB.USER_ID
+			,TB.USER_NM
+			,TB.UPDT_DATE
+			,TB.VIEW_CNT
+			,TB.FILE_CNT
+		FROM
+		(SELECT
+			@ROWNUM:=@ROWNUM+1 AS LIST_NUM,
+			 TB.BOARD_IDX
+			,TB.BOARD_TITLE
+			,TB.USER_ID
+			,TB.USER_NM
+			,TB.UPDT_DATE
+			,TB.VIEW_CNT
+			,TB.FILE_CNT
+		FROM
+			(SELECT
+				TB.*,
+				COUNT(TBF.BOARD_IDX) AS FILE_CNT
+			FROM
+				TB_FOR_BOARD TB LEFT OUTER JOIN TB_FOR_BOARD_FILES TBF ON TB.BOARD_IDX = TBF.BOARD_IDX
+			WHERE 1=1
+			GROUP BY TB.BOARD_IDX) TB, (SELECT @rownum:=0) temp
+		WHERE
+			TB.BOARD_TYPE = #{boardtype}
+			AND TB.IS_DEL = 'N'
+		ORDER BY TB.BOARD_IDX DESC) TB
+		WHERE TB.LIST_NUM BETWEEN #{start_num} AND #{end_num}
+	</select>
+	
+	<update id="updateBoardViewCnt">
+	
+	</update>
 	
 	<insert id="insertAuthHist" parameterType="loginAuthHistVO">
 			INSERT INTO TB_FOR_LOGIN_AUTH_HIST (
