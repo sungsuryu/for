@@ -15,6 +15,8 @@ public class UserVO implements Serializable {
 	
 	private String insurCd;
 	
+	private String acsIp;
+	
 	private String emlAddr;
 	
 	private String isRcvEml;
@@ -38,6 +40,14 @@ public class UserVO implements Serializable {
 	private String updtId;
 	
 	private String timestamp;
+
+	public String getAcsIp() {
+		return acsIp;
+	}
+
+	public void setAcsIp(String acsIp) {
+		this.acsIp = acsIp;
+	}
 
 	public String getUserId() {
 		return userId;

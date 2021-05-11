@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -203,7 +202,7 @@
 			<div class="btn_area">
 				<a href="javascript:;" class="btn_idsearch"><i class="fa fa-user-o" aria-hidden="true"></i> 아이디 찾기</a>
 				<a href="javascript:;" class="btn_pwdsearch"><i class="fa fa-lock" aria-hidden="true"></i> 비밀번호 찾기</a>
-				<a href="join.htm" class="btn_join"><i class="fa fa-sign-in" aria-hidden="true"></i> 회원가입</a>
+				<a href="/join.do" class="btn_join"><i class="fa fa-sign-in" aria-hidden="true"></i> 회원가입</a>
 			</div>
 		</div>	
 	</div>

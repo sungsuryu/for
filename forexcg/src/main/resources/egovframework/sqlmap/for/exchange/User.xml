@@ -2,9 +2,70 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.UserMapper">
 
+	<resultMap id="mapUserVO" type="egovframework.knia.foreign.exchange.vo.UserVO">
+		<result property="userId" column="USER_ID" />
+		<result property="userNm" column="USER_NM" />
+		<result property="password" column="PASSWORD" />
+		<result property="acsIp" column="ACS_IP" />
+		<result property="insurCd" column="INSUR_CD" />
+		<result property="emlAddr" column="EML_ADDR" />
+		<result property="cellNum" column="CELL_NUM" />
+		<result property="isRcvEml" column="IS_RCV_EML" />
+		<result property="isRcvCell" column="IS_RCV_CELL" />
+		<result property="isApprove" column="IS_APPROVE" />
+		<result property="isDel" column="IS_DEL" />
+		<result property="useYn" column="USE_YN" />
+		<result property="insrtId" column="INSRT_ID" />
+		<result property="insrtDate" column="INSRT_DATE" />
+		<result property="updtId" column="UPDT_ID" />
+		<result property="updtDate" column="UPDT_DATE" />
+	</resultMap>
+	
 	<select id="countUser" resultType="int">
 			SELECT
 				COUNT(USER_ID) FROM TB_FOR_USER
 	</select>
 
+	<select id="selectUser" parameterType="userVO" resultMap="mapUserVO">
+		SELECT
+			USER_ID, USER_NM, 
+			PASSWORD, ACS_IP, 
+			INSUR_CD, EML_ADDR, 
+			IS_RCV_EML, CELL_NUM, 
+			IS_RCV_CELL, IS_APPROVE, 
+			IS_DEL, USE_YN, 
+			INSRT_ID, INSRT_DATE, 
+			UPDT_ID, UPDT_DATE
+		FROM
+			TB_FOR_USER
+	</select>
+	
+	<select id="countUserId" parameterType="String" resultType="int">
+		SELECT COUNT(*) CNT
+		FROM TB_FOR_USER
+		WHERE
+			USER_ID=#{userId}
+	</select>
+	
+	<insert id="insertNewUser" parameterType="userVO">
+		INSERT INTO TB_FOR_USER (
+			USER_ID, USER_NM, 
+			PASSWORD, ACS_IP, 
+			INSUR_CD, EML_ADDR, 
+			IS_RCV_EML, CELL_NUM, 
+			IS_RCV_CELL, IS_APPROVE, 
+			IS_DEL, USE_YN, 
+			INSRT_ID, INSRT_DATE, 
+			UPDT_ID, UPDT_DATE
+		) VALUES (
+			#{userId}, #{userNm}, 
+			#{password}, #{acsIp}, 
+			#{insurCd}, #{emlAddr}, 
+			#{isRcvEmail}, #{cellNum},
+			#{isRcvCell}, 'N' 
+			'N', 'Y', 
+			#{userId}, now(), 
+			#{userId}, now()
+		)
+	</insert>
 </mapper>
