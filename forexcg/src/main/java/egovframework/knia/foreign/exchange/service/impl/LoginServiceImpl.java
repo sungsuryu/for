@@ -13,15 +13,13 @@ import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginAuthHistVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
-import egovframework.knia.foreign.exchange.vo.LoginAuthHistVO;
-import egovframework.com.cmm.util.EgovDateUtil;
 import egovframework.com.cmm.util.EgovFileScrty;
 import egovframework.com.cmm.util.EgovNumberUtil;
 
 @Service("loginService")
 public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 	
 	@Resource(name="loginMapper")
 	private LoginMapper loginMapper;
@@ -35,8 +33,6 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		UserVO userVO = loginMapper.selectUser(loginVO);
 		
 		if (userVO != null && !userVO.getUserId().equals("") && !userVO.getPassword().equals("")) {
-			userVO.setTimestamp(EgovDateUtil.currentDateTimeString("yyyyMMddhhmmss"));
-			
 			this.insertAuthHist(userVO);
 			
 			return userVO;
@@ -47,22 +43,42 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		return userVO;
 	}
 	
+	/**
+	 * 2차 인증번호 등록
+	 * @param userVO
+	 * @throws Exception
+	 */
 	private void insertAuthHist(UserVO userVO) throws Exception {
-
+		// 2차인증번호 생성
 		String authNum = EgovNumberUtil.getRandomNum(1000, 9999) + "";
 
 		LoginAuthHistVO loginAuthHistVO = new LoginAuthHistVO();
 		loginAuthHistVO.setUserId(userVO.getUserId());
-		loginAuthHistVO.setApproveTimestamp(userVO.getTimestamp());
 		loginAuthHistVO.setAuthNum(authNum);
-		loginAuthHistVO.setInsrtDate(EgovDateUtil.currentDateTimeString("yyyy-MM-dd HH:mm:ss"));
 		
 		loginMapper.insertAuthHist(loginAuthHistVO);
 	}
 	
-	public String getAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception {
-		String authNum = loginMapper.selectAuthNum(loginAuthHistVO);
+	private LoginAuthHistVO getAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception {
+		return loginMapper.selectAuthNum(loginAuthHistVO);
+	}
+
+	@Override
+	public void deleteAuthNum(LoginVO loginVO) throws Exception {
+		loginMapper.updateExpireOtp(loginVO);
+	}
+	
+	@Override
+	public boolean loginAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception {
 		
-		return authNum;
+		LoginAuthHistVO getHis = this.getAuthNum(loginAuthHistVO);
+		
+		if (getHis != null) {
+			if (loginAuthHistVO.getAuthNum().equals(getHis.getAuthNum())) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

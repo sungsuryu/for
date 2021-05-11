@@ -1,5 +1,6 @@
 package egovframework.com.cmm.interceptor;
 
+import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  *  2011.07.01  서준식          최초 생성
  *  2011.09.07  서준식          인증이 필요없는 URL을 패스하는 로직 추가
  *  2021.05.08	류성수          loginVO 교체 - login 페이지 설정
+ *  2021.05.11	류성수          OTP 2차인증 유무 체크
  *  </pre>
  */
 
@@ -49,13 +51,23 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 
 		logger.debug("AuthenticInterceptor - preHandle: {}", loginVO);
 		
-		if(loginVO != null){
-			return true;
-		} else if(!isPermittedURL){
+		if(loginVO != null) {
+			if (loginVO.getLoginStep() > 0) {
+				return true;
+			} else {
+				logger.debug("AuthenticInterceptor - OTP인증 필요.:{} 단계", loginVO.getLoginStep());
+				request.getSession().setAttribute(ConstCode.loginVO.toString(), null);
+				
 				ModelAndView modelAndView = new ModelAndView("redirect:/login.do");
 				throw new ModelAndViewDefiningException(modelAndView);
-			}else{
-				return true;
 			}
+		} else if(!isPermittedURL) {
+			request.getSession().setAttribute(ConstCode.loginVO.toString(), null);
+			
+			ModelAndView modelAndView = new ModelAndView("redirect:/login.do");
+			throw new ModelAndViewDefiningException(modelAndView);
+		} else {
+			return true;
+		}
 	}
 }

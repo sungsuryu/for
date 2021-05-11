@@ -8,5 +8,9 @@ public interface LoginService {
 
 	UserVO selectUser(LoginVO loginVO) throws Exception;
 	
-	String getAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception;
+//	LoginAuthHistVO getAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception;
+	
+	void deleteAuthNum(LoginVO loginVO) throws Exception;
+	
+	boolean loginAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception;
 }

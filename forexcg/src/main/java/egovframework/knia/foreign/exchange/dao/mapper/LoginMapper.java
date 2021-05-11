@@ -27,12 +27,12 @@ public interface LoginMapper {
 	/**
 	 * AuthNum 조회
 	 * @param loginAuthHistVO 인증 요청자 정보
-	 * @return
+	 * @return LoginAuthHistVO 인증번호 및 timestamp
 	 * @throws Exception
 	 */
-	String selectAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception;
+	LoginAuthHistVO selectAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception;
 	
-	
+	void updateExpireOtp(LoginVO loginVO) throws Exception;
 	
 	int countUser() throws Exception;
 }

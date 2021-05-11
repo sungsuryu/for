@@ -6,18 +6,28 @@ public class LoginVO extends CommonVO implements Serializable {
 
 	private static final long serialVersionUID = -2459454960913481924L;
 
+	private String uuId;
+	
 	private String loginId;
 	
 	private String password;
 	
 	private String timestamp;
 
-	private int loginStep;
+	private int loginStep = 0;
 	
 	private String authNum;
 	
 	private String ip;
-	
+
+	public String getUuId() {
+		return uuId;
+	}
+
+	public void setUuId(String uuId) {
+		this.uuId = uuId;
+	}
+
 	public String getIp() {
 		return ip;
 	}

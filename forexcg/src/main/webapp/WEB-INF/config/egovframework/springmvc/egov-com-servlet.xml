@@ -51,6 +51,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**/*.do" />
             <mvc:exclude-mapping path="/login*.do" />
+            <mvc:exclude-mapping path="/otp*.do" />
             <bean class="egovframework.com.cmm.interceptor.AuthenticInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

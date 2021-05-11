@@ -1,10 +1,6 @@
 package egovframework.knia.foreign.exchange.controller;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
-import java.text.SimpleDateFormat;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -15,21 +11,22 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springmodules.validation.commons.DefaultBeanValidator;
-import org.slf4j.Logger;
 
-import egovframework.com.cmm.annotation.IncludedInfo;
 import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.util.EgovNumberUtil;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
+import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.knia.foreign.exchange.vo.LoginAuthHistVO;
 
-import egovframework.com.cmm.util.EgovDateUtil;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.com.cmm.util.EgovFormBasedUUID;
+
+import org.slf4j.Logger;
 
 @Controller
 public class LoginController {
@@ -45,28 +42,33 @@ public class LoginController {
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
 	
+    @Resource(name="propertiesService")
+    protected EgovPropertyService propertyService;
+    
 	@RequestMapping(value="/login.do")
 	public String login(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
-		logger.debug("로그인 화면");
+		model.addAttribute("authInterval", propertyService.getInt("authInterval"));
+		
+		String uuid = EgovFormBasedUUID.randomUUID().toString();
+		model.addAttribute("UUID", uuid);
 		
 		return "usr/login";
 	}
 	
-	@RequestMapping(value="/loginAction.do")
+	@RequestMapping(value="/loginAction.ajax")
 	public String loginAction(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
 		UserVO userVO = loginService.selectUser(loginVO);
 		
 		if (userVO != null && userVO.getUserId() != null && !userVO.getUserId().equals("")) {
 			// 1차 로그인 세션 생성
+			loginVO.setLoginStep(CommonConst.LOGIN_STEP0);
 			request.getSession().setAttribute(ConstCode.loginVO.toString(), loginVO);
 			
 			HashMap<String, Object> loginInfo = new HashMap<String, Object>();
 			loginInfo.put("loginId", loginVO.getLoginId());
-			loginInfo.put("timestamp", loginVO.getTimestamp());
 
-			logger.debug("로그인 성공:{}", loginVO.getLoginId());
 			model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(loginInfo));
 		} else {
 			logger.info("로그인 실패: 계정을 찾을 수 없습니다.");
@@ -76,15 +78,45 @@ public class LoginController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(value="/otpAction.do")
+	@RequestMapping(value="/otpAction.ajax")
 	public String otpAction(@ModelAttribute("loginAuthHistVO") LoginAuthHistVO loginAuthHistVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
 		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		
-		// TODO 1차로그인 정보 비교
-		// TODO timestamp 비교
+		HashMap<String, Object> authInfo = new HashMap<String, Object>();
+		
+		if (getLoginVO != null) {	
+			if (getLoginVO.getLoginId().equals(loginAuthHistVO.getUserId())) {
+				if (loginService.loginAuthNum(loginAuthHistVO)) {
+					authInfo.put("auth", "T");
+					
+					getLoginVO.setLoginStep(CommonConst.LOGIN_STEP1);
+					request.getSession().setAttribute(ConstCode.loginVO.toString(), getLoginVO);
+				}
+			} else {
+				authInfo.put("auth", "F");
+				request.getSession().setAttribute(ConstCode.loginVO.toString(), null);
+			}
+		} else {
+			authInfo.put("auth", "F");
+			request.getSession().setAttribute(ConstCode.loginVO.toString(), null);
+		}
 
-		loginService.getAuthNum(loginAuthHistVO);
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(authInfo));
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/otpExpire.ajax")
+	public String otpExpire(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		LoginVO ssoLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+
+		if (ssoLoginVO != null) {
+			if (ssoLoginVO.getLoginId().equals(loginVO.getLoginId())) {
+				loginService.deleteAuthNum(loginVO);
+			}
+		}
 		
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
 		

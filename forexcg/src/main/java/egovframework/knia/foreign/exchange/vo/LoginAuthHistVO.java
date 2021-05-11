@@ -2,7 +2,7 @@ package egovframework.knia.foreign.exchange.vo;
 
 import java.io.Serializable;
 
-public class LoginAuthHistVO implements Serializable {
+public class LoginAuthHistVO extends CommonVO implements Serializable {
 
 	private static final long serialVersionUID = 3250262388224502053L;
 
@@ -14,10 +14,6 @@ public class LoginAuthHistVO implements Serializable {
 	
 	private String isExp;
 	
-	private String isDel;
-	
-	private String insrtDate;
-
 	public String getUserId() {
 		return userId;
 	}
@@ -48,21 +44,5 @@ public class LoginAuthHistVO implements Serializable {
 
 	public void setIsExp(String isExp) {
 		this.isExp = isExp;
-	}
-
-	public String getIsDel() {
-		return isDel;
-	}
-
-	public void setIsDel(String isDel) {
-		this.isDel = isDel;
-	}
-
-	public String getInsrtDate() {
-		return insrtDate;
-	}
-
-	public void setInsrtDate(String insrtDate) {
-		this.insrtDate = insrtDate;
 	}
 }

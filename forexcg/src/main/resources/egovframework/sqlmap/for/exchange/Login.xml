@@ -10,10 +10,14 @@
 		<result property="emlAddr" column="EML_ADDR" />
 		<result property="cellNum" column="CELL_NUM" />
 	</resultMap>
-
-<!-- 	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO"> -->
 	
+	<resultMap id="mapAuthHistVO" type="egovframework.knia.foreign.exchange.vo.LoginAuthHistVO">
+		<result property="authNum" column="AUTH_NUM" />
+		<result property="approveTimestamp" column="APPROVE_TIMESTAMP" />
+	</resultMap>
+
 	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO">
+		/** Login.selectUser */
 			SELECT
 				USER_ID, USER_NM, PASSWORD, 
 				INSUR_CD, EML_ADDR, CELL_NUM
@@ -28,6 +32,7 @@
 	</select>
 	
 	<select id="countUser" parameterType="loginVO" resultType="int">
+		/** Login.countUser */
 			SELECT
 				COUNT(USER_ID) FROM TB_FOR_USER
 			WHERE
@@ -39,33 +44,53 @@
 	</select>
 
 	<insert id="insertAuthHist" parameterType="loginAuthHistVO">
+		/** Login.insertAuthHist */
 			INSERT INTO TB_FOR_LOGIN_AUTH_HIST (
 				USER_ID, 
-				APPROVE_TIMESTAMP, 
 				AUTH_NUM,
 				IS_EXP, 
 				IS_DEL, 
-				INSRT_DATE
+				INSRT_ID, 
+				INSRT_DATE, 
+				UPDT_ID,
+				UPDT_DATE
 			) VALUES (
 				#{userId}, 
-				#{approveTimestamp}, 
 				#{authNum}, 
 				'N', 
 				'N',
-				#{insrtDate}
+				#{userId},
+				now(), 
+				#{userId},
+				now()
 			)
 	</insert>
 	
-	<select id="selectAuthNum" parameterType="loginAuthHistVO" resultType="String">
+	<update id="updateExpireOtp" parameterType="loginVO">
+		/** Login.updateExpireOtp */
+		UPDATE
+			TB_FOR_LOGIN_AUTH_HIST
+			SET
+				IS_EXP='Y'
+				, UPDT_ID=#{loginId}
+				, UPDT_DATE=now()
+		WHERE
+			USER_ID=#{loginId}
+			AND IS_EXP='N'
+			AND INSRT_DATE > DATE_SUB(now(), INTERVAL 10 MINUTE)
+	</update>
+	
+	<select id="selectAuthNum" parameterType="loginAuthHistVO" resultMap="mapAuthHistVO">
+		/** Login.selectAuthNum */
 			SELECT
-				AUTH_NUM
+				AUTH_NUM, APPROVE_TIMESTAMP
 			FROM
 				TB_FOR_LOGIN_AUTH_HIST
 			WHERE
 				USER_ID=#{userId}
 				AND IS_EXP='N'
 				AND IS_DEL='N'
-				AND INSRT_DATE > DATE_SUB(#{insrtDate}, INTERVAL 2 MINUTE)
+				AND INSRT_DATE > DATE_SUB(now(), INTERVAL 2 MINUTE)
 			ORDER BY
 				INSRT_DATE DESC LIMIT 1
 			

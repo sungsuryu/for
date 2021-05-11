@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -20,10 +21,12 @@
 	$(document).ready(function() {
 		
 		var loginstatus = false;
+		var authstatus = false;
 		
 		$("#btnLogin").click(function(event) {
 			var loginid = $("#loginId").val();
 			var password = $("#password").val();
+			var uuid = $("#viewUid").text();
 			
 			if (loginid == "") {
 				alert("아이디를 입력해주세요.");
@@ -40,10 +43,11 @@
 
 			$.ajax({
 		        type:"POST",
-		        url:"/loginAction.do",
+		        url:"/loginAction.ajax",
 		        data : {
 		        	"loginId":loginid, 
-		        	"password":password
+		        	"password":password, 
+		        	"uuId":uuid, 
 		        },
 		        beforeSend: function(xhr, opts) {
 		        	if (loginstatus)
@@ -52,53 +56,129 @@
 		        	loginstatus = true;
 		        }, 
 		        success: function(e){
-		            if (e.result.status == 'SUCCESS') {
-		            	authOTP(e.result.loginId, e.result.timestamp);
-		            } else {
-		            	alert("계정을 찾을 수 없습니다.");
-		            }
+		        	try {
+			            if (e.result.status == 'SUCCESS') {
+			            	requestOTP(e.result.loginId);
+			            } else {
+			            	alert("계정을 찾을 수 없습니다.");
+			            	loginFormClear();
+			            }
+		        	} catch (e) {
+		        		;
+		        	}
 		        },
 		        error: function(xhr, status, error) {
 		            alert(error);
 		        }, 
 		        complete : function() {
-		        	console.log('complete');
 		        	loginstatus = false;
 		        }
 		    });
 		});
 		
-		$("#linkOTPconfirm").click(function(event) {
+		$("#linkOTPlogin").click(function(event) {
+			var returnId = $("#returnLoginId").text();
+			var authNum = $("#authNum").val();
+			
+			if (authNum == "") {
+				alert('인증번호를 입려해주세요.');
+				return;
+			}
 	 		$.ajax({
 		        type:"POST",
-		        url:"/otpAction.do",
+		        url:"/otpAction.ajax",
 		        data : {
-		        	"loginId":$("#returnLoginId").text(), 
-		        	"authNum":$("#authNum").val()
+		        	"userId":returnId, 
+		        	"authNum":authNum
+		        },
+		        beforeSend: function(xhr, opts) {
+		        	if (authstatus)
+		        		xhr.abort();
+		        	
+		        	authstatus = true;
 		        },
 		        success: function(e){
+		        	authResult(e);
 		        },
-		        error: function(xhr, status, error) {
-		            alert(error);
+		        complete : function() {
+		        	authstatus = false;
 		        }
 	    	});
 		});
 		
 		$(".linkOTPcancel").click(function(event) {
-			alert('ok');
+			expireOTP($("#returnLoginId").text());
 		});
-		
-		
 	});
 
+	var authResult = function(e) {
+    	try {
+    		var status = e.result.status;
+    		var auth = e.result.auth;
+    		
+            if (status == 'SUCCESS' && auth == 'T') {
+            	clearInterval(interval);
+            	
+            	authNumDisplay('none');
+               	loginFormClear();
+               	
+            	location.href = "/setting/code.do";
+            } else {
+            	alert("인증번호가 틀립니다.");
+            	$("#authNum").val("");
+            	$("#authNum").focus();
+            }
+    	} catch (e) {
+    		alert('오류가 발생했습니다.\n처음부터 다시 시해도 주시기 바랍니다.');
+    		location.href = "/login.do";
+    	}
+	};
 	
-	var authOTP = function(loginid, timestamp) {
+	var expireOTP = function(e) {
+		$.ajax({
+	        type:"POST",
+	        url:"/otpExpire.ajax",
+	        data : {
+	        	"loginId":e
+	        },
+	        complete : function() {
+	        	$("#optExpTime").text(<c:out value="${authInterval}"/>);
+	        	authNumDisplay('none');
+	     		loginFormClear();
+	        }
+    	});
+	};
+	
+	// 인증번호 interval
+	var interval;
+	
+	var requestOTP = function(loginid, timestamp) {
+		var start = <c:out value="${authInterval}"/>;
 		$("#returnLoginId").text(loginid);
 		
-		$('#popLayerBg').css('display','block');
-       	$('.pop_otp').css('display','block');
+		interval = setInterval(function() {
+			if (start < 1) {
+				expireOTP(loginid);
+				clearInterval(interval);
+			} else {
+				$("#optExpTime").text(start--);
+			}	
+		}, 1000);
+		
+		authNumDisplay('block');
 	};
 
+	// 로그인 입력form Clear
+	var loginFormClear = function() {
+		$("#loginId").val("");
+		$("#password").val("");
+	};
+	
+	// 인증번호 입력form Clear
+	var authNumDisplay = function(e) {
+		$('#popLayerBg').css('display',e);
+       	$('.pop_otp').css('display',e);
+	};
 </script>
 </head>
 
@@ -110,8 +190,10 @@
 	<div id="login">	
 		<h1><img src="img/ci_s.png" alt="ci"><small>외환정보시스템</small></h1>
 			<form id="formLoginin" name="formLoginin" method="post" action="loginAction.do">
+			
 			<fieldset>
-				<div id="returnLoginId" style="display:none"></div>
+				<div id="viewUid" class="dispNon"><c:out value="${UUID}"/></div>
+				<div id="returnLoginId" class="dispNon"></div>
 				<input type="text" class="line" maxlength="20" name="loginId" id="loginId"  placeholder="아이디" />
 				<input type="password" class="line" maxlength="25" name="password" id="password" placeholder="비밀번호" />
 				
@@ -138,10 +220,10 @@
 		<p>*카카오알림톡으로 전송한 인증번호를 입력하세요.</p>
 		<dl>
 			<dt>입력 가능 시간</dt>
-			<dd><strong>90</strong>초</dd>
+			<dd><strong id="optExpTime">90</strong>초</dd>
 		</dl>
 		<div class="btn_area">
-			<a href="javascript:void(0)" class="btn btn-primary" id="linkOTPconfirm">확인</a>
+			<a href="javascript:void(0)" class="btn btn-primary" id="linkOTPlogin">확인</a>
 			<a href="javascript:void(0)" class="btn btn-default linkOTPcancel">취소</a>
 		</div>
 	</div>
