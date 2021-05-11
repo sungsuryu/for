@@ -46,7 +46,7 @@ public class LoginController {
     protected EgovPropertyService propertyService;
     
 	@RequestMapping(value="/login.do")
-	public String login(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String login(HttpServletRequest request, ModelMap model) throws Exception {
 		
 		model.addAttribute("authInterval", propertyService.getInt("authInterval"));
 		
@@ -54,6 +54,14 @@ public class LoginController {
 		model.addAttribute("UUID", uuid);
 		
 		return "usr/login";
+	}
+	
+	@RequestMapping(value="/logout.do")
+	public String login(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		request.getSession().setAttribute(ConstCode.loginVO.toString(), null);
+		
+		return "redirect:/login.do";
 	}
 	
 	@RequestMapping(value="/loginAction.ajax")
