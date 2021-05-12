@@ -23,4 +23,9 @@ public class JoinServiceImpl implements JoinService {
 		
 		userMapper.insertNewUser(userVO);
 	}
+	
+	@Override
+	public int countUser(String userId) throws Exception {
+		return (Integer)userMapper.countUser(userId);
+	}
 }

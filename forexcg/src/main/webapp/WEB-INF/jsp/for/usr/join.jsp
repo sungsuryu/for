@@ -31,7 +31,58 @@
 	
 	var gotoLogin = function() {
 		location.href = "login.do";
-	}
+	};
+	
+	// 아이디 중복확인
+	var checkstatus = false;
+	
+	var checkUserId = function(e) {
+		var getId = $("#userIdTxt").val();
+		
+		if (getId == "") {
+			alert("사용할 아이디를 입력해주세요.");
+			$("#userIdTxt").focus();
+			return;
+		}
+		// TODO 아이디 생성 rule 적용해야함. 6자이상 20자이하 영문/숫자만 허용
+		$.ajax({
+	        type:"POST",
+	        url:"/checkUserId.ajax",
+	        data : {
+	        	"userId":getId
+	        },
+	        beforeSend: function(xhr, opts) {
+	        	if (checkstatus)
+	        		xhr.abort();
+	        	
+	        	checkstatus = true;
+	        }, 
+	        success: function(e){
+	        	try {
+		            if (e.result.status == 'SUCCESS' && e.result.countUserId < 1) {
+		            	alert('사용가능한 아이디 입니다.');
+		            	
+		            	$("#userId").val(getId);
+		            	$("#userIdTxt").attr("disabled", true);
+		            	$("#userIdTxt").css("background", "#ccc");
+		            	$("#linkCheckUserId").css("display", "none");
+		            } else {
+		            	alert('이미사용중인 아이디 입니다.');
+		            }
+	        	} catch (e) {
+	        		;
+	        	}
+	        },
+	        error: function(xhr, status, error) {
+	        	console.log(xhr);
+	        	console.log(status);
+	        	console.log(error);
+	        }, 
+	        complete : function() {
+	        	checkstatus = false;
+	        }
+	    });
+	};
 </script>
 </head>
 <body>
@@ -41,6 +92,7 @@
 
 <div id="join">
 <form name="joinForm" id="joinForm" method="post" action="joinAction.do">
+<input type="hidden" name="userId" id="userId" />
 	<header class="contents_header">
 		<h2>회원가입</h2>
 	</header>
@@ -55,8 +107,8 @@
 				<tr>
 					<th>ID</th>
 					<td>
-						<input type="text" id="userId" name="userId" maxlength="30" />
-						<a href="javascript:;" class="btn btn-sm btn-info">중복확인</a>
+						<input type="text" id="userIdTxt" name="userIdTxt" maxlength="30" />
+						<a href="javascript:void(0)" class="btn btn-sm btn-info" onclick="checkUserId(this)" id="linkCheckUserId">중복확인</a>
 					</td>
 				</tr>
 				<tr>
@@ -100,7 +152,7 @@
 				<tr>
 					<th>부서명</th>
 					<td>
-						<input type="text" id="dptNm" name="dptNm">
+						<input type="text" id="dptNm" name="dptNm" maxlength="60" />
 					</td>
 				</tr>
 				<tr>

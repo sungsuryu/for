@@ -8,6 +8,8 @@
 		<result property="password" column="PASSWORD" />
 		<result property="acsIp" column="ACS_IP" />
 		<result property="insurCd" column="INSUR_CD" />
+		<result property="dptNm" column="DPT_NM" />
+		<result property="officeTelNum" column="OFFICE_TEL_NUM" />
 		<result property="emlAddr" column="EML_ADDR" />
 		<result property="cellNum" column="CELL_NUM" />
 		<result property="isRcvEml" column="IS_RCV_EML" />
@@ -21,9 +23,11 @@
 		<result property="updtDate" column="UPDT_DATE" />
 	</resultMap>
 	
-	<select id="countUser" resultType="int">
+	<select id="countUser" parameterType="String" resultType="int">
 			SELECT
-				COUNT(USER_ID) FROM TB_FOR_USER
+				COUNT(USER_ID) CNT FROM TB_FOR_USER
+			WHERE
+			USER_ID=#{value}
 	</select>
 
 	<select id="selectUser" parameterType="userVO" resultMap="mapUserVO">
@@ -40,17 +44,11 @@
 			TB_FOR_USER
 	</select>
 	
-	<select id="countUserId" parameterType="String" resultType="int">
-		SELECT COUNT(*) CNT
-		FROM TB_FOR_USER
-		WHERE
-			USER_ID=#{userId}
-	</select>
-	
 	<insert id="insertNewUser" parameterType="userVO">
 		INSERT INTO TB_FOR_USER (
 			USER_ID, USER_NM, 
 			PASSWORD, ACS_IP, 
+			DPT_NM, OFFICE_TEL_NUM,
 			INSUR_CD, EML_ADDR, 
 			IS_RCV_EML, CELL_NUM, 
 			IS_RCV_CELL, IS_APPROVE, 
@@ -60,6 +58,7 @@
 		) VALUES (
 			#{userId}, #{userNm}, 
 			#{password}, #{acsIp}, 
+			#{dptNm}, #{officeTelNum},
 			#{insurCd}, #{emlAddr}, 
 			#{isRcvEml}, #{cellNum},
 			#{isRcvCell}, 'N', 

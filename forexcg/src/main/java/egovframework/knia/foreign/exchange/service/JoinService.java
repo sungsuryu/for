@@ -6,4 +6,6 @@ public interface JoinService {
 
 	void UserJoin(UserVO userVO) throws Exception;
 
+	int countUser(String userId) throws Exception;
+
 }

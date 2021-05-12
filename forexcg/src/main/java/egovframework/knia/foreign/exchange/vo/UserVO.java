@@ -15,6 +15,10 @@ public class UserVO implements Serializable {
 	
 	private String insurCd;
 	
+	private String dptNm;
+	
+	private String officeTelNum;
+	
 	private String acsIp;
 	
 	private String emlAddr;
@@ -40,6 +44,22 @@ public class UserVO implements Serializable {
 	private String updtId;
 	
 	private String timestamp;
+
+	public String getDptNm() {
+		return dptNm;
+	}
+
+	public void setDptNm(String dptNm) {
+		this.dptNm = dptNm;
+	}
+
+	public String getOfficeTelNum() {
+		return officeTelNum;
+	}
+
+	public void setOfficeTelNum(String officeTelNum) {
+		this.officeTelNum = officeTelNum;
+	}
 
 	public String getAcsIp() {
 		return acsIp;

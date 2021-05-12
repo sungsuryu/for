@@ -7,11 +7,9 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper("userMapper")
 public interface UserMapper {
 
-	int countUser() throws Exception;
+	int countUser(String userId) throws Exception;
 	
 	UserVO selectUser(LoginVO loginVO) throws Exception;
-	
-	int countUserId(String userId) throws Exception;
 	
 	void insertNewUser(UserVO userVO) throws Exception;
 }
