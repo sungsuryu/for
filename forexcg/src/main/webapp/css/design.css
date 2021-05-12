@@ -260,14 +260,19 @@ span.space { display:inline-block; width:20px }
 #join .box01 h3 { margin-bottom:10px; font-size:1.1em }
 
 #header { border-bottom:1px solid #666; background:#fff; position:fixed; z-index:10; width:calc(100% - 2px); left:2px; min-width:1280px }
-#header .gnb { background:#f6f6f6; text-align:center; max-height:0; padding:0; overflow:hidden; transition:all .3s }
-#header.on .gnb { max-height:300px; padding:30px 0 }
+#header .gnb { background:#f6f6f6; text-align:center; max-height:0; padding:0; overflow:hidden; transition:all .5s }
+#header.on .gnb { max-height:600px; padding:30px 0 }
 #header .gnb .depth1 { display:inline-block; text-align:left; vertical-align:top; margin:0 50px }
 #header .gnb .depth1 > a { font-size:1.18em; font-weight:500; line-height:1; color:#0094cd }
-#header .gnb .depth1 ul { margin-top:15px }
-#header .gnb .depth1 li { margin-top:10px; line-height:1; font-size:1.05em }
-#header .gnb .depth1 li a { color:#666 }
-#header .gnb .depth1 li a:hover { color:#0094cd }
+#header .gnb .depth1 > ul { margin-top:15px }
+#header .gnb .depth2 { margin-top:13px; line-height:1; font-size:1.05em }
+#header .gnb .depth2 > a { color:#444; font-weight:400 }
+#header .gnb .depth2 > a:hover { color:#0094cd }
+#header .gnb .depth2 ul { margin-top:10px; }
+#header .gnb .depth3 { margin-top:7px }
+#header .gnb .depth3 > a { color:#666; }
+#header .gnb .depth3 > a:hover { color:#0094cd }
+#header .gnb .depth3 > a:before { content:"-"; display:inline-block; margin-right:5px }
 #header .top_con:after { content:""; display:block; clear:both }
 #header .top_con .btn_sh { float:left; display:block; width:40px; height:40px; line-height:40px; color:#fff; background:#333; text-align:center }
 #header .top_con .btn_sh i { font-size:2em; line-height:40px }
@@ -306,11 +311,18 @@ span.space { display:inline-block; width:20px }
 #aside_left .gnb .depth1:nth-child(2) > a { background-image:url(../img/gnb02.png) }
 #aside_left .gnb .depth1:nth-child(3) > a { background-image:url(../img/gnb03.png) }
 #aside_left .gnb .depth1:nth-child(4) > a { background-image:url(../img/gnb04.png) }
-#aside_left .gnb .depth1 li a { background:#007dbe;  display:block; border-bottom:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); height:44px; line-height:44px; padding:0 0 0 25px; position:relative }
-#aside_left .gnb .depth1 li.on a { background:#007dbe; font-weight:400; color:rgba(255,255,255,1) }
-#aside_left .gnb .depth1 li.on a:after { content:"\f138"; font-family:FontAwesome; display:block; position:absolute; right:18px; top:0; color:#fff }
+#aside_left .gnb .depth2 > a { background:#007dbe;  display:block; border-bottom:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); height:44px; line-height:44px; padding:0 0 0 25px; position:relative }
+#aside_left .gnb .depth2.on > a { background:#007dbe; font-weight:400; color:rgba(255,255,255,1) }
+#aside_left .gnb .depth2.on > a:after { content:"\f138"; font-family:FontAwesome; display:block; position:absolute; right:18px; top:0; color:#fff }
 #aside_left .gnb .depth1 ul { display:none }
 #aside_left .gnb .depth1.on ul { display:block }
+#aside_left .gnb .depth2 ul { padding:8px 0; background:#006fa8 }
+#aside_left .gnb .depth3 a { background:#006fa8 !important; height:28px !important; line-height:28px !important; border:0 !important; color:rgba(255,255,255,0.6) !important; font-weight:300 !important; padding:0 0 0 20px }
+#aside_left .gnb .depth3.on a { color:rgba(255,255,255,1) !important; font-weight:400 !important }
+#aside_left .gnb .depth3 a:after { display:none !important }
+#aside_left .gnb .depth3 a:before { content:"-"; display:inline-block; margin-right:10px }
+#aside_left .gnb .depth2 ul { display:none !important }
+#aside_left .gnb .depth2.on ul { display:block !important }
 
 #aside_right { position:fixed; height:100%; top:0; right:-300px; transition:all .2s; width:300px; background:#0094cd; z-index:20; box-shadow:3px 0 5px rgba(0,0,0,0.15) }
 #aside_right.on { right:0 }
@@ -406,19 +418,19 @@ tr.on td { background:#e7f4fd }
 .tab_menu.col7 li { width:calc(100%/7 + 1px) }
 .tab_menu.col8 li { width:calc(100%/8 + 1px) }
 
-.layout_for009 { height:calc(100% - 125px) }
+.layout_for009 { height:calc(100% - 50px) }
 .layout_for009 section { float:left; width:49%; height:100% }
 .layout_for009 section:last-child { float:right }
 .layout_for009 .basic_box { height:calc(100% - 50px) }
 
-.layout_for_011 { height:calc(100% - 295px); margin-left:-30px }
+.layout_for_011 { height:calc(100% - 220px); margin-left:-30px }
 .layout_for_011 .basic_box { float:left; width:calc(100%/3 - 30.1px); margin-left:30px; height:100% }
 .layout_for_011 .basic_box:last-child { float:right }
 .layout_for_011 .basic_box_con li a { display:block; line-height:32px; height:32px; padding:0 10px; position:relative }
 .layout_for_011 .basic_box_con li.on a { background:#e7f4fd; font-weight:400; padding-left:30px }
 .layout_for_011 .basic_box_con li.on a:before { content:"\f138"; font-family:FontAwesome; position:absolute; left:10px; top:0; color:#0094cd }
 
-.layout_for_012 { height:calc(100% - 203px) }
+.layout_for_012 { height:calc(100% - 128px) }
 .layout_for_012 .basic_box_con { height:100% }
 .layout_for_012 .basic_box_con ul { border:1px solid #ddd; height:calc(50% - 28px); overflow-y:auto }
 .layout_for_012 .basic_box_con .control_btn { text-align:center; margin:10px 0 }
@@ -441,6 +453,12 @@ tr.on td { background:#e7f4fd }
 .catg_area li.on a { background:#555; position:relative; z-index:1; color:#fff }
 
 a.link01 { color:#0094cd; text-decoration:underline }
+
+.add_file_list ul { border:1px solid #e0e0e0; display:inline-block; vertical-align:bottom; width:700px; margin-right:5px; max-height:81px; overflow-y:auto }
+.add_file_list ul li { border-top:1px dashed #eee; padding:5px; line-height:1.2; cursor:pointer }
+.add_file_list ul li.on { background:#f2f5f7 }
+.add_file_list ul li:first-child { border:0 }
+.add_file { margin-top:5px }
 
 .pop_otp { text-align:center; height:296px }
 .pop_otp input[type=text], .pop_otp input[type=password] { text-align:center; }
@@ -468,6 +486,13 @@ a.link01 { color:#0094cd; text-decoration:underline }
 .pop_result dd.overflow .table_h01 { width:2000px }
 .pop_result dd.overflow .table_h01 th { border:1px solid #0094cd }
 .pop_result dd.overflow .table_h01 td { border:1px solid #e0e0e0 }
+
+#popLayer { position:fixed; z-index:100; background:#fff; border:1px solid #666 }
+#popLayer .con { min-width:300px; min-height:300px }
+#popLayer .btn_area { padding:5px; background:#666 }
+#popLayer .btn_area:after { display:block; clear:both; content:"" }
+#popLayer .btn_area .btn { border:0; float:right }
+#popLayer .btn_area .btn_today { float:left }
 
 .dispNon {display:none}
 
