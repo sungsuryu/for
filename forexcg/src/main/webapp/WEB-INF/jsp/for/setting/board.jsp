@@ -17,62 +17,10 @@
 </head>
 <script>
 	$(document).ready(function() {
-		$.ajax({
-	        type:"POST",
-	        url:"/setting/noticelist.ajax",
-	        success: function(e){
-	            if (e.result.status == 'SUCCESS') {
-	            	alert("공지사항을 불러왔습니다");
-	            	console.log(e.result);
-	            	$("#notice_list").empty();
-	            	 $.each(e.result.notice_list, function (i, item) {
-	            		 $("#notice_list").append('<tr><td>1</td><td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td><td><a href="javascript:;" class="link01">abc.doc</a></td><td>관리자</td><td>2021-01-11</td><td>999</td></tr>');
-	                 });
-	            }
-	            else if(e.result.status == 'EMPTY'){
-	            	alert("공지사항 목록이  없습니다.");
-	            	$("#notice_list").empty();
-	            } 
-	            else {
-	            	alert("공지사항을 불러올 수  없습니다.");
-	            	$("#notice_list").empty();
-	            	
-	            }
-	        },
-	        error: function(xhr, status, error) {
-	            alert(error);
-	        }, 
-	        complete : function() {
-	        	console.log('complete');
-	        }
-	    });
+		getBoardList();
 	});
 	
-	var getBoardList = function(pagenum) {
-		$.ajax({
-	        type:"POST",
-	        url:"/setting/ajax/noticelist.do",
-	        data: {"page_num": 1 },
-	        success: function(e){
-	            if (e.result.status == 'SUCCESS') {
-	            	alert("공지사항을 불러왔습니다");
-	            	console.log(result);
-	            } else {
-	            	alert("공지사항을 불러울 수  없습니다.");
-	            }
-	        },
-	        error: function(xhr, status, error) {
-	            alert(error);
-	        }, 
-	        complete : function() {
-	        	console.log('complete');
-	        }
-	    });
-	};
-	
-	
 </script>
-
 <body>
 
 <div id="popLayerBg"></div>
@@ -84,18 +32,34 @@
 			<li class="depth1">
 				<a href="javascript:;">공통관리</a>
 				<ul>
-					<li><a href="for_007.htm">사용자 등록관리</a></li>
-					<li><a href="for_008.htm">내정보 관리</a></li>
-					<li><a href="for_009.htm">시스템 설정관리</a></li>
-					<li><a href="for_017.htm">통계 및 조회</a></li>
+					<li class="depth2"><a href="for_007.htm">사용자 등록관리</a></li>
+					<li class="depth2"><a href="for_008.htm">내정보 관리</a></li>
+					<li class="depth2"><a href="for_009.htm">시스템 설정관리</a>
+						<ul>
+							<li class="depth3"><a href="for_009.htm">공통코드 관리</a></li>
+							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
+							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
+							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
+							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
+							<li class="depth3"><a href="for_014.htm">게시판 관리</a></li>
+							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
+						</ul>
+					</li>
+					<li class="depth2"><a href="for_017.htm">통계 및 조회</a>
+						<ul>
+							<li class="depth3"><a href="for_017.htm">사용자 알림 조회</a></li>
+							<li class="depth3"><a href="for_018.htm">시스템 사용내역 조회</a></li>
+							<li class="depth3"><a href="for_019.htm">일괄배치 실행내역 조회</a></li>
+						</ul>
+					</li>
 				</ul>				
 			</li>
 			<li class="depth1">
 				<a href="javascript:;">게시판</a>
 				<ul>
-					<li><a href="for_020.htm">FAQ</a></li>
-					<li><a href="for_021.htm">공지사항</a></li>
-					<li><a href="for_022.htm">보고관련 자료실</a></li>
+					<li class="depth2"><a href="for_020.htm">FAQ</a></li>
+					<li class="depth2"><a href="for_021.htm">공지사항</a></li>
+					<li class="depth2"><a href="for_022.htm">보고관련 자료실</a></li>
 				</ul>				
 			</li>
 			<li class="depth1">
@@ -104,9 +68,9 @@
 			<li class="depth1">
 				<a href="javascript:;">조회</a>
 				<ul>
-					<li><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li><a href="for_025.htm">주요계수현황</a></li>
-					<li><a href="for_026.htm">차액상세표</a></li>
+					<li class="depth2"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
+					<li class="depth2"><a href="for_025.htm">주요계수현황</a></li>
+					<li class="depth2"><a href="for_026.htm">차액상세표</a></li>
 				</ul>				
 			</li>
 		</ul>
@@ -160,18 +124,36 @@
 				<a href="javascript:;">공통관리</a>
 				<ul>
 					<!-- 현재 메뉴 addClass="on" -->
-					<li><a href="for_007.htm">사용자 등록관리</a></li>
-					<li><a href="for_008.htm">내정보 관리</a></li>
-					<li class="on"><a href="for_009.htm">시스템 설정관리</a></li>
-					<li><a href="for_017.htm">통계 및 조회</a></li>
+					<li class="depth2"><a href="for_007.htm">사용자 등록관리</a></li>
+					<li class="depth2"><a href="for_008.htm">내정보 관리</a></li>
+					<li class="depth2 on"><a href="javascript:;">시스템 설정관리</a>
+						<ul>
+							<!-- 현재 메뉴 addClass="on" -->
+							<li class="depth3"><a href="for_009.htm">공통코드 관리</a></li>
+							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
+							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
+							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
+							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
+							<li class="depth3 on"><a href="for_014.htm">게시판 관리</a></li>
+							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
+						</ul>
+					</li>
+					<li class="depth2"><a href="javascript:;">통계 및 조회</a>
+						<ul>
+							<!-- 현재 메뉴 addClass="on" -->
+							<li class="depth3"><a href="for_017.htm">사용자 알림 조회</a></li>
+							<li class="depth3"><a href="for_018.htm">시스템 사용내역 조회</a></li>
+							<li class="depth3"><a href="for_019.htm">일괄배치 실행내역 조회</a></li>
+						</ul>
+					</li>
 				</ul>				
 			</li>
 			<li class="depth1">
 				<a href="javascript:;">게시판</a>
 				<ul>
-					<li><a href="for_020.htm">FAQ</a></li>
-					<li><a href="for_021.htm">공지사항</a></li>
-					<li><a href="for_022.htm">보고관련 자료실</a></li>
+					<li class="depth2"><a href="for_020.htm">FAQ</a></li>
+					<li class="depth2"><a href="for_021.htm">공지사항</a></li>
+					<li class="depth2"><a href="for_022.htm">보고관련 자료실</a></li>
 				</ul>				
 			</li>
 			<li class="depth1">
@@ -180,9 +162,9 @@
 			<li class="depth1">
 				<a href="javascript:;">조회</a>
 				<ul>
-					<li><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li><a href="for_025.htm">주요계수현황</a></li>
-					<li><a href="for_026.htm">차액상세표</a></li>
+					<li class="depth2"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
+					<li class="depth2"><a href="for_025.htm">주요계수현황</a></li>
+					<li class="depth2"><a href="for_026.htm">차액상세표</a></li>
 				</ul>				
 			</li>
 		</ul>
@@ -193,9 +175,8 @@
 <!--+++++ 컨텐츠 +++++-->
 <div id="contents">
 	
-	<div class="tab_menu col7">
+	<!--div class="tab_menu col7">
 		<ul>
-			<!-- 현재 메뉴 addClass="on" -->
 			<li><a href="for_009.htm">공통코드 관리</a></li>
 			<li><a href="for_010.htm">보고서 관리</a></li>
 			<li><a href="for_011.htm">메뉴 관리</a></li>
@@ -204,7 +185,7 @@
 			<li class="on"><a href="for_014.htm">게시판 관리</a></li>
 			<li><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
 		</ul>
-	</div>
+	</div-->
 	
 	<header class="contents_header">
 		<h2>게시판 관리</h2>
@@ -276,30 +257,7 @@
 				</tr>
 			</thead>
 			<tbody id="notice_list">
-				<tr>
-					<td>1</td>
-					<td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td>
-					<td><a href="javascript:;" class="link01">abc.doc</a></td>
-					<td>관리자</td>
-					<td>2021-01-11</td>
-					<td>999</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td>
-					<td><a href="javascript:;" class="link01">abc.doc</a></td>
-					<td>관리자</td>
-					<td>2021-01-11</td>
-					<td>999</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td>
-					<td><a href="javascript:;" class="link01">abc.doc</a></td>
-					<td>관리자</td>
-					<td>2021-01-11</td>
-					<td>999</td>
-				</tr>
+
 			</tbody>
 		</table>
 	</div>
@@ -307,25 +265,18 @@
 	<div class="tbl_btm">
 		<div class="f_left">
 			<div class="pagenum">
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+				<a href="javascript:movePageFirst()" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+				<a href="javascript:movePageLeft()" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
 				<!-- 현재위치 addClass="on" -->
-				<a href="javascript:" class="on">1</a>
-				<a href="javascript:">2</a>
-				<a href="javascript:">3</a>
-				<a href="javascript:">4</a>
-				<a href="javascript:">5</a>
-				<a href="javascript:">6</a>
-				<a href="javascript:">7</a>
-				<a href="javascript:">8</a>
-				<a href="javascript:">9</a>
-				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+				<div id="page_list" style="display:inline-block;">
+					<a href="javascript:" class="on">1</a>
+				</div>
+				<a href="javascript:movePageRight()" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+				<a href="javascript:movePageEnd()" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
 			</div>
 		</div>
 		<div class="f_right">
-			<!-- <a href="for_014_write.htm" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a> -->
-			<a href="#" class="btn btn-lg btn-primary" onclick="javascript:searchList();"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="for_014_write.htm" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	
@@ -346,26 +297,94 @@
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-$(function(){
-	//getBoardList();
-});
-
 function getBoardList(){
-	let formData = new FormData(document.getElementById('uploadForm'));
+	var text = $("#page_list > a.on").text();
 	$.ajax({
-		url: "/xxx/aaa/upload", //컨트롤러 URL
-        data: formData,
-        dataType: 'json',
-        processData: false, // 비동기 파일 업로드시 꼭 설정해줘야 하는 속성
-        contentType: false, // 비동기 파일 업로드시 꼭 설정해줘야 하는 속성
-        type: 'POST',
-        success: function (res) {
-        	alert("success");
-        },error: function (xhr) {
-            alert(xhr.responseText);
-        } 
+        type:"POST",
+        url:"/setting/noticelist.ajax",
+        data:{"page_num":text},
+        success: function(e){
+            if (e.result.status == 'SUCCESS') {
+            	alert("공지사항을 불러왔습니다");
+            	console.log(e.result);
+            	$("#total_cnt").text(e.result.total_cnt);
+            	$("#notice_list").empty();
+            	 $.each(e.result.notice_list, function (i, item) {
+            		 var notice_text = "";
+            		 notice_text += '<tr><td>' + item.list_num +'</td><td class="left"><a href="for_014_write.htm">' + item.board_title + '</a></td>';
+            		 if(item.file_cnt > 0){
+            			 notice_text += '<td><a href="javascript:;" class="link01">첨부파일</a></td>';
+            		 }
+            		 else{
+            			 notice_text += '<td></td>';
+            		 }
+            		 notice_text += '<td>' + item.user_nm + '</td><td>' + item.updt_date + '</td><td>' + item.view_cnt + '</td></tr>';
+            		 $("#notice_list").append(notice_text);
+                 });
+            	 makePageNavigator(e.result.page_num, e.result.total_page);
+            }
+            else if(e.result.status == 'EMPTY'){
+            	alert("공지사항 목록이  없습니다.");
+            	$("#notice_list").empty();
+            } 
+            else {
+            	alert("공지사항을 불러올 수  없습니다.");
+            	$("#notice_list").empty();
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(error);
+        }, 
+        complete : function() {
+        	console.log('complete');
+        }
     });
 }
+function makePageNavigator(page_num, total_page){
+	$("#page_list").empty();
+	 if(total_page > 5){
+		 var page_make = 5;
+	 }
+	 else{
+		 var page_make = total_page;
+	 }
+	 for(var i = 1; i <= page_make; i++){
+		 if(page_num == i){
+			 $("#page_list").append('<a id="page' + i + '" href="javascript:selectPage(' + i + ')" class = "on">' + i + '</a>');
+		 }
+		 else{
+			 $("#page_list").append('<a id="page' + i + '" href="javascript:selectPage(' + i + ')">' + i + '</a>');
+		 }
+	 }
+}
+
+function selectPage(page_num){
+	$("#page_list > a.on").removeClass("on");
+	$("#page" + page_num).addClass("on");
+	getBoardList();
+}
+
+function movePageLeft(){
+	var is_select_num = $("#page_list > a.on").text();
+	is_select_num = is_select_num - 1;
+	$("#page_list > a.on").removeClass("on");
+	$("#page" + is_select_num).addClass("on");
+	getBoardList();
+}
+
+function movePageRight(){
+	
+}
+
+function movePageFirst(){
+	
+}
+
+function movePageEnd(){
+	
+}
+
+
 </script>
 
 </body>

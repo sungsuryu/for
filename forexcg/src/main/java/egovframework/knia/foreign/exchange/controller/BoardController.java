@@ -38,15 +38,15 @@ public class BoardController {
 	@RequestMapping(value="/setting/noticelist.ajax")
 	public String noticeList(@ModelAttribute("boardVO") BoardVO boardVO1, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 리스트 가져오기");
-		int max_content = 10;
-		int max_page = 10;
+		int max_content = 2;
+		int max_page = 5;
 		int total_page = 0;
 		int start_num = 0;
 		int end_num = 0;
 		int cnt = boardService.selectListCnt("NOTICE");
-//		int page_num = Integer.parseInt(request.getAttribute("page_num").toString());
-		
-		int page_num = 1;
+		int page_num = Integer.parseInt(request.getParameter("page_num").toString());
+		System.out.println("KJWKJWKJW value chekc - " + page_num);
+//		int page_num = 1;
 		if(cnt == 0){
 			return null;
 		}
