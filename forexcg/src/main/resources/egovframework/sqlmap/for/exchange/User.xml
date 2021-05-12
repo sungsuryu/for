@@ -61,8 +61,8 @@
 			#{userId}, #{userNm}, 
 			#{password}, #{acsIp}, 
 			#{insurCd}, #{emlAddr}, 
-			#{isRcvEmail}, #{cellNum},
-			#{isRcvCell}, 'N' 
+			#{isRcvEml}, #{cellNum},
+			#{isRcvCell}, 'N', 
 			'N', 'Y', 
 			#{userId}, now(), 
 			#{userId}, now()

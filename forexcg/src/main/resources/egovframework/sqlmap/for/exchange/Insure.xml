@@ -9,18 +9,33 @@
 		<result property="useYn" column="USE_YN" />
 	</resultMap>
 
-	<select id="selectInsurList" parameterType="insureVO" resultMap="mapInsureVO">
+	<select id="selectInsureList" parameterType="HashMap" resultMap="mapInsureVO">
 		SELECT
 			INSUR_CD, 
 			ORG_CD, 
 			INSUR_NM
+		FROM TB_FOR_INSUR_CD
 		WHERE
-			1=1
+			IS_DEL='N'
 			<if test="useYn != null and useYn !=''">
 				AND USE_YN=#{useYn}
 			</if>
 		ORDER BY
 			INSUR_NM
 	</select>
-	
+
+	<select id="selectInsureCdList" parameterType="insureVO" resultMap="mapInsureVO">
+		SELECT
+			INSUR_CD, 
+			ORG_CD, 
+			INSUR_NM
+		FROM TB_FOR_INSUR_CD
+		WHERE
+			IS_DEL='N'
+			<if test="useYn != null and useYn !=''">
+				AND USE_YN=#{useYn}
+			</if>
+		ORDER BY
+			INSUR_NM
+	</select>
 </mapper>

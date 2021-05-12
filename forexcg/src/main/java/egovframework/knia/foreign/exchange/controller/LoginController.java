@@ -45,6 +45,13 @@ public class LoginController {
     @Resource(name="propertiesService")
     protected EgovPropertyService propertyService;
     
+    /**
+     * 로그인 화면
+     * @param request
+     * @param model
+     * @return
+     * @throws Exception
+     */
 	@RequestMapping(value="/login.do")
 	public String login(HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -56,6 +63,14 @@ public class LoginController {
 		return "usr/login";
 	}
 	
+	/**
+	 * 로그아웃
+	 * @param loginVO 로그아웃 대상 아이디
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/logout.do")
 	public String login(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -64,6 +79,14 @@ public class LoginController {
 		return "redirect:/login.do";
 	}
 	
+	/**
+	 * 로그인 처리
+	 * @param loginVO
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/loginAction.ajax")
 	public String loginAction(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -86,6 +109,14 @@ public class LoginController {
 		return "jsonView";
 	}
 	
+	/**
+	 * OTP - authNum 확인
+	 * @param loginAuthHistVO OTP번호
+	 * @param request
+	 * @param model
+	 * @return 확인결과
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/otpAction.ajax")
 	public String otpAction(@ModelAttribute("loginAuthHistVO") LoginAuthHistVO loginAuthHistVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -100,6 +131,9 @@ public class LoginController {
 					
 					getLoginVO.setLoginStep(CommonConst.LOGIN_STEP1);
 					request.getSession().setAttribute(ConstCode.loginVO.toString(), getLoginVO);
+					
+					// 사용완료된 인증번호 만료처리
+					loginService.deleteAuthNum(getLoginVO);
 				}
 			} else {
 				authInfo.put("auth", "F");
@@ -115,6 +149,14 @@ public class LoginController {
 		return "jsonView";
 	}
 	
+	/**
+	 * 유효시간 초과된 인증번호 만료처리
+	 * @param loginVO 만료처리 대상 아이디
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/otpExpire.ajax")
 	public String otpExpire(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
 		

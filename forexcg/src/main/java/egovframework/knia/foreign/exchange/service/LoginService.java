@@ -10,6 +10,11 @@ public interface LoginService {
 	
 //	LoginAuthHistVO getAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception;
 	
+	/**
+	 * 1시간 이내의 만료되지 않은 인증번호 만료처리
+	 * @param loginVO
+	 * @throws Exception
+	 */
 	void deleteAuthNum(LoginVO loginVO) throws Exception;
 	
 	boolean loginAuthNum(LoginAuthHistVO loginAuthHistVO) throws Exception;

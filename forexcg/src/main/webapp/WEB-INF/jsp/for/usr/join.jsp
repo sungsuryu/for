@@ -74,7 +74,15 @@
 				<tr>
 					<th>소속회사</th>
 					<td>
-						<input type="text" id="insurCd" name="insurCd" value="N01" />
+						<span class="styled_select" style="width:120px; min-width:inherit">
+							<select name="insurCd" id="insurCd">
+								<option value="">선택</option>
+							<c:forEach var="insureVO" items="${insureList}" varStatus="status">
+								<option value="<c:out value="${insureVO.insurCd}"/>"><c:out value="${insureVO.insurNm}"/></option>
+							</c:forEach>
+							</select>
+							<i class="fa fa-sort" aria-hidden="true"></i>
+						</span>
 					</td>
 				</tr>
 				<tr>
@@ -105,6 +113,8 @@
 					<th>e-mail</th>
 					<td>
 						<input type="text" id="emlAddr" name="emlAddr" maxlength="60" />
+						<span class="space"></span>
+						<input type="checkbox" name="isRcvEml" id="isRcvEml" value="Y"><i></i> <label for="isRcvEml">이메일 수신여부</label>
 					</td>
 				</tr>
 				<tr>
@@ -112,6 +122,8 @@
 					<td>
 						<input type="text" id="cellNum" name="cellNum" maxlength="20" />
 						<a href="javascript:;" class="btn btn-sm btn-info">인증받기</a>
+						<span class="space"></span>
+						<input type="checkbox" name="isRcvCell" id="isRcvCell" value="Y"><i></i> <label for="isRcvCell">문자 수신여부</label>
 					</td>
 				</tr>
 				<tr>
