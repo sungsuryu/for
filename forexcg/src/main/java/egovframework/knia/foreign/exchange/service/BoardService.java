@@ -27,5 +27,26 @@ public interface BoardService {
 	 * @throws Exception
 	 */
 	void updateBoardViewCnt(HashMap<String, Object> boardInfo) throws Exception;
+	
+	/**
+	 * 게시판 등록
+	 * @param BoardVO 게시판 등록 정보
+	 * @throws Exception
+	 */
+	void insertBoard(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * 게시판 수정
+	 * @param BoardVO 게시판 수정 정보
+	 * @throws Exception
+	 */
+	void updateBoard(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * 게시판 삭제
+	 * @param BoardVO 게시판 삭제 정보
+	 * @throws Exception
+	 */
+	void deleteBoard(BoardVO boardVO) throws Exception;
 
 }

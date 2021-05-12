@@ -99,6 +99,37 @@ public class BoardController {
 		return "jsonView";
 	}
 	
+	@RequestMapping(value="/boardWrite.do")
+	public String noticeWrite(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("게시판 글쓰기 화면");
+	
+		return "setting/board_write";
+	}
+	
+	@RequestMapping(value="/setting/boardInsert.ajax")
+	public String noticeInsert(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("게시판 추가");
+		
+		return null;
+		//return "jsonView";
+	}
+	
+	@RequestMapping(value="/setting/boardUpdate.ajax")
+	public String noticeUpdate(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("게시판 수정");
+		
+		return null;
+		//return "jsonView";
+	}
+	
+	@RequestMapping(value="/setting/boardDelete.ajax")
+	public String noticeDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("게시판 삭제");
+		
+		return null;
+		//return "jsonView";
+	}
+	
 	@RequestMapping(value="/setting/pds.do")
 	public String pds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 관리 화면");

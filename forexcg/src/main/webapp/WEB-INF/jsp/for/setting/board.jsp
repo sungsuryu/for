@@ -256,27 +256,29 @@
 					<th>조회</th>
 				</tr>
 			</thead>
-			<tbody id="notice_list">
+			<form id="noticeForm" name="noticeForm" method="post" action="/boardWrite.do">
+				<tbody id="notice_list">
 
-			</tbody>
+				</tbody>
+			</form>
 		</table>
 	</div>
 	
 	<div class="tbl_btm">
 		<div class="f_left">
 			<div class="pagenum">
-				<a href="javascript:movePageFirst()" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:movePageLeft()" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+				<a href="javascript:movePageFirst();" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+				<a href="javascript:movePageLeft();" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
 				<!-- 현재위치 addClass="on" -->
 				<div id="page_list" style="display:inline-block;">
 					<a href="javascript:" class="on">1</a>
 				</div>
-				<a href="javascript:movePageRight()" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:movePageEnd()" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+				<a href="javascript:movePageRight();" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+				<a href="javascript:movePageEnd();" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
 			</div>
 		</div>
 		<div class="f_right">
-			<a href="for_014_write.htm" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="javascript:goNoticeInsert()" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	
@@ -311,7 +313,7 @@ function getBoardList(){
             	$("#notice_list").empty();
             	 $.each(e.result.notice_list, function (i, item) {
             		 var notice_text = "";
-            		 notice_text += '<tr><td>' + item.list_num +'</td><td class="left"><a href="for_014_write.htm">' + item.board_title + '</a></td>';
+            		 notice_text += '<tr><td>' + item.list_num +'</td><td class="left" name="' + item.board_idx + '"><a href="for_014_write.htm">' + item.board_title + '</a></td>';
             		 if(item.file_cnt > 0){
             			 notice_text += '<td><a href="javascript:;" class="link01">첨부파일</a></td>';
             		 }
@@ -382,6 +384,10 @@ function movePageFirst(){
 
 function movePageEnd(){
 	
+}
+
+function goNoticeInsert(){
+	$("#noticeForm").submit();
 }
 
 

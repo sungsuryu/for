@@ -72,7 +72,7 @@
 	
 	</update>
 	
-	<insert id="insertAuthHist" parameterType="loginAuthHistVO">
+	<insert id="insertBoard" parameterType="boardVO">
 			INSERT INTO TB_FOR_LOGIN_AUTH_HIST (
 				USER_ID, 
 				APPROVE_TIMESTAMP, 
@@ -89,5 +89,11 @@
 				#{insrtDate}
 			)
 	</insert>
+	
+	<update id="updateBoard" parameterType="boardVO">
+	</update>
+	
+	<delete id="deleteBoard" parameterType="boardVO">
+	</delete>
 
 </mapper>
