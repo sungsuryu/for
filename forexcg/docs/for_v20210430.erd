@@ -777,7 +777,7 @@
           <columnName>FILE_NM</columnName>
           <logicalName>파일명</logicalName>
           <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel/columnType"/>
-          <size>256</size>
+          <size>128</size>
           <notNull>true</notNull>
           <primaryKey>false</primaryKey>
           <description></description>
@@ -788,7 +788,7 @@
           <columnName>FILE_EXT</columnName>
           <logicalName>파일확장자</logicalName>
           <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel/columnType"/>
-          <size>128</size>
+          <size>30</size>
           <notNull>false</notNull>
           <primaryKey>false</primaryKey>
           <description></description>
@@ -845,7 +845,7 @@
           <defaultValue></defaultValue>
         </net.java.amateras.db.visual.model.ColumnModel>
         <net.java.amateras.db.visual.model.ColumnModel>
-          <columnName>PHYSICAL_FILE_NM</columnName>
+          <columnName>PHY_FILE_NM</columnName>
           <logicalName>저장된파일명</logicalName>
           <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel/columnType"/>
           <size>256</size>
