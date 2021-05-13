@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -256,7 +261,8 @@
 					<th>조회</th>
 				</tr>
 			</thead>
-			<form id="noticeForm" name="noticeForm" method="post" action="/boardWrite.do">
+			<form id="noticeForm" name="noticeForm" method="post">
+				<input id="select_board_idx" name="board_idx" type="hidden">
 				<tbody id="notice_list">
 
 				</tbody>
@@ -278,7 +284,7 @@
 			</div>
 		</div>
 		<div class="f_right">
-			<a href="javascript:goNoticeInsert()" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="javascript:goBoardInsert();" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	
@@ -303,7 +309,7 @@ function getBoardList(){
 	var text = $("#page_list > a.on").text();
 	$.ajax({
         type:"POST",
-        url:"/setting/noticelist.ajax",
+        url:"/setting/noticeList.ajax",
         data:{"page_num":text},
         success: function(e){
             if (e.result.status == 'SUCCESS') {
@@ -313,7 +319,7 @@ function getBoardList(){
             	$("#notice_list").empty();
             	 $.each(e.result.notice_list, function (i, item) {
             		 var notice_text = "";
-            		 notice_text += '<tr><td>' + item.list_num +'</td><td class="left" name="' + item.board_idx + '"><a href="for_014_write.htm">' + item.board_title + '</a></td>';
+            		 notice_text += '<tr><td>' + item.list_num +'</td><td class="left"><a href="javascript:goBoardWrite(' + item.board_idx + ')">' + item.board_title + '</a></td>';
             		 if(item.file_cnt > 0){
             			 notice_text += '<td><a href="javascript:;" class="link01">첨부파일</a></td>';
             		 }
@@ -386,10 +392,18 @@ function movePageEnd(){
 	
 }
 
-function goNoticeInsert(){
-	$("#noticeForm").submit();
+function goBoardInsert(){
+	var form = $("#noticeForm");
+	form.attr("action", "/boardInsert.do");
+	form.submit();
 }
 
+function goBoardWrite(board_idx){
+	$("#select_board_idx").val(board_idx);
+	var form = $("#noticeForm");
+	form.attr("action", "/boardWrite.do");
+	form.submit();
+}
 
 </script>
 

@@ -1,5 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="java.util.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
+<%
+	request.setCharacterEncoding("utf-8");
+	Map<String, Object> dataMap = (Map) request.getAttribute("dataMap");
+	String is_write = "";
+	String board_title = "";
+	String board_content = "";
+	String board_usernm = "";
+	String board_idx = "";
+	if(dataMap.size() > 0){
+		is_write = "Y";
+		board_title = dataMap.get("board_title").toString();
+		board_content = dataMap.get("board_content").toString();
+		board_usernm = dataMap.get("board_usernm").toString();
+		board_idx = dataMap.get("board_idx").toString();
+	}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -16,6 +37,9 @@
 </head>
 <script>
 $(document).ready(function() {
+	if(<%=is_write%> == "Y"){
+		alert("업데이트에서 왔네요");
+	}
 });
 
 </script>
@@ -243,7 +267,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input name="board_alarm" type="checkbox"><i></i> <label for="">전송</label></td>
+						<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i> <label for="">전송</label></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
@@ -309,20 +333,30 @@ $(document).ready(function() {
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
+function setView(){
+	
+}
+
 function insertBoard(){
-	var formdata = $("#boardForm").serialize();
+	var formdata = $("#boardForm").serializeArray();
+	if(!$("#board_alarm").is(':checked')){
+		formdata.push({
+			name : $("#board_alarm").attr('name'),
+			value : "N"
+		});
+	}
 	$.ajax({
         type:"POST",
-        url:"/setting/boardInsert.ajax",
+        url:"/setting/insertBoard.ajax",
         cache:false,
         data:formdata,
         success: function(e){
             if (e.result.status == 'SUCCESS') {
+            	alert("공지사항 등록이 완료되었습니다.");
             	console.log(e.result);
             	history.back();
             }
             else {
-            	alert("공지사항을 불러올 수  없습니다.");
             }
         },
         error: function(xhr, status, error) {

@@ -3,22 +3,22 @@
 <mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.BoardMapper">
 
 	<resultMap id="mapBoardVO" type="egovframework.knia.foreign.exchange.vo.BoardVO">
-		<result property="boardidx" column="BOARD_IDX"/>
-		<result property="title" column="BOARD_TITLE"/>
-		<result property="content" column="BOARD_CONTENT"/>
-		<result property="insurcd" column="INSUR_CD"/>
-		<result property="user_id" column="USER_ID"/>
-		<result property="user_nm" column="USER_NM"/>
-		<result property="insrt_id" column="INSRT_ID"/>
-		<result property="insrtdate" column="INSRT_DATE"/>
-		<result property="updtid" column="UPDT_ID"/>
-		<result property="updtdate" column="UPDT_DATE"/>
-		<result property="viewcnt" column="VIEW_CNT"/>
-		<result property="isdel" column="IS_DEL"/>
-		<result property="alarmyn" column="ALARM_YN"/>
-		<result property="alarmdate" column="ALARM_DATE"/>
-		<result property="boardtype" column="BOARD_TYPE"/>
-		<result property="totalcnt" column="TOTAL_CNT"/>
+		<result property="boardIdx" column="BOARD_IDX"/>
+		<result property="boardTitle" column="BOARD_TITLE"/>
+		<result property="boardContent" column="BOARD_CONTENT"/>
+		<result property="insurCd" column="INSUR_CD"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="userName" column="USER_NM"/>
+		<result property="insrtId" column="INSRT_ID"/>
+		<result property="insrtDate" column="INSRT_DATE"/>
+		<result property="updtId" column="UPDT_ID"/>
+		<result property="updtDate" column="UPDT_DATE"/>
+		<result property="viewCnt" column="VIEW_CNT"/>
+		<result property="isDel" column="IS_DEL"/>
+		<result property="alarmYn" column="ALARM_YN"/>
+		<result property="alarmDate" column="ALARM_DATE"/>
+		<result property="boardType" column="BOARD_TYPE"/>
+		<result property="totalCnt" column="TOTAL_CNT"/>
 		<result property="listNum" column="LIST_NUM"/>
 		<result property="fileCnt" column="FILE_CNT"/>
 	</resultMap>
@@ -68,26 +68,84 @@
 		WHERE TB.LIST_NUM BETWEEN #{start_num} AND #{end_num}
 	</select>
 	
-	<update id="updateBoardViewCnt">
+	<select id="selectBoard" parameterType="int" resultMap="mapBoardVO">
+		SELECT 
+			 BOARD_IDX
+			,BOARD_TITLE
+			,BOARD_CONTENT
+			,USER_NM
+		FROM TB_FOR_BOARD
+		WHERE BOARD_IDX = #{board_idx};
+	</select>
 	
+	<update id="updateBoardViewCnt">
+		INSERT INTO TB_FOR_BOARD
+		(
+				BOARD_TITLE,
+				BOARD_CONTENT,
+				INSUR_CD,
+				USER_ID,
+				USER_NM,
+				INSRT_ID,
+				INSRT_DATE,
+				UPDT_ID,
+				UPDT_DATE,
+				VIEW_CNT,
+				IS_DEL,
+				ALARM_YN,
+				BOARD_TYPE
+				
+		)
+		VALUE(
+			'TEST21',
+			'TESTTEST',
+			'N00',
+			'admin',
+			'테스터',
+			'admin',
+			NOW(),
+			'admin',
+			NOW(),
+			1,
+			'Y',
+			'Y',
+			'NOTICE'
+		);
 	</update>
 	
 	<insert id="insertBoard" parameterType="boardVO">
-			INSERT INTO TB_FOR_LOGIN_AUTH_HIST (
-				USER_ID, 
-				APPROVE_TIMESTAMP, 
-				AUTH_NUM,
-				IS_EXP, 
-				IS_DEL, 
-				INSRT_DATE
-			) VALUES (
-				#{userId}, 
-				#{approveTimestamp}, 
-				#{authNum}, 
-				'N', 
-				'N',
-				#{insrtDate}
-			)
+		INSERT INTO TB_FOR_BOARD
+		(
+				BOARD_TITLE,
+				BOARD_CONTENT,
+				INSUR_CD,
+				USER_ID,
+				USER_NM,
+				INSRT_ID,
+				INSRT_DATE,
+				UPDT_ID,
+				UPDT_DATE,
+				VIEW_CNT,
+				IS_DEL,
+				ALARM_YN,
+				BOARD_TYPE
+				
+		)
+		VALUE(
+			#{boardTitle},
+			#{boardContent},
+			#{insurCd},
+			#{userId},
+			#{userName},
+			#{userId},
+			NOW(),
+			#{userId},
+			NOW(),
+			1,
+			#{isDel},
+			#{alarmYn},
+			#{boardType}
+		)
 	</insert>
 	
 	<update id="updateBoard" parameterType="boardVO">

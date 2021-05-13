@@ -29,6 +29,11 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	public BoardVO selectBoard(int boardIdx) throws Exception {
+		return boardMapper.selectBoard(boardIdx);
+	}
+	
+	@Override
 	public void updateBoardViewCnt(HashMap<String, Object> boardInfo) throws Exception {
 		boardMapper.updateBoardViewCnt(boardInfo);
 		
@@ -51,5 +56,7 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.deleteBoard(boardVO);
 		
 	}
+
+
 
 }
