@@ -106,7 +106,7 @@ public class BoardController {
 	public String boardInsert(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 글쓰기 화면");
 	
-		return "setting/board_write";
+		return "setting/board_insert";
 	}
 	
 	@RequestMapping(value="/setting/insertBoard.ajax")
@@ -164,9 +164,35 @@ public class BoardController {
 	@RequestMapping(value="/setting/updateBoard.ajax")
 	public String updateBoard(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 수정");
+		HttpSession session = request.getSession();
+		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
 		
-		return null;
-		//return "jsonView";
+		String alarm_yn = request.getParameter("board_alarm").toString();
+		boardVO.setBoardTitle(request.getParameter("board_title").toString());
+		boardVO.setBoardContent(request.getParameter("board_content").toString());
+		//boardVO.setContent(request.getParameter("board_content").toString());//운영용
+		boardVO.setInsurCd("N00");//개발용
+		boardVO.setUserId(loginVO.getLoginId().toString());
+		boardVO.setUserName(request.getParameter("board_usernm").toString());
+		boardVO.setUpdtId(loginVO.getLoginId().toString());
+		boardVO.setViewCnt(0);
+		boardVO.setIsDel("N");
+		if(alarm_yn.equals("on")){
+			boardVO.setAlarmYn("Y");
+		}
+		else{
+			boardVO.setAlarmYn(alarm_yn);
+		}
+		System.out.println("KJWKJW value check - " + boardVO.getAlarmYn());
+		//boardVO.setBoardtype(request.getParameter("board_type").toString());//운영용
+		boardVO.setBoardType("NOTICE");//개발용
+		boardService.updateBoard(boardVO);
+		
+		//return null;
+		HashMap<String, Object> boardInfo = new HashMap<String, Object>();
+		boardInfo.put("STATUS", "SUCCES");
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(boardInfo));
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/setting/boardDelete.ajax")
