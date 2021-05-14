@@ -867,4 +867,17 @@ public class EgovDateUtil {
 		SimpleDateFormat simpleFormat = new SimpleDateFormat(format);
 		return simpleFormat.format(new Date());
 	}
+	
+	public static String[] currentDateString() {
+
+		String[] cDateStr = new String[3];
+		
+		Calendar cal = Calendar.getInstance();
+
+		cDateStr[0] = String.valueOf(cal.get(Calendar.YEAR));
+		cDateStr[1] = String.valueOf(cal.get(Calendar.MONTH)+1);
+		cDateStr[2] = String.valueOf(cal.get(Calendar.DATE));
+		
+		return cDateStr;
+	}
 }

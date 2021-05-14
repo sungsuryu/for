@@ -63,10 +63,10 @@
     </bean>
 
     <!-- custom multi file resolver -->
-<!--     <bean id="local.MultiCommonsMultipartResolver" class="egovframework.com.cmm.web.EgovMultipartResolver"> -->
-<!--         <property name="maxUploadSize" value="100000000" /> -->
-<!--         <property name="maxInMemorySize" value="100000000" /> -->
-<!--     </bean> -->
+    <bean id="local.MultiCommonsMultipartResolver" class="egovframework.com.cmm.web.EgovMultipartResolver">
+        <property name="maxUploadSize" value="100000000" />
+        <property name="maxInMemorySize" value="100000000" />
+    </bean>
 
     <!-- choose one from above and alias it to the name Spring expects -->
     <!-- alias name="local.MultiCommonsMultipartResolver" alias="multipartResolver" /-->

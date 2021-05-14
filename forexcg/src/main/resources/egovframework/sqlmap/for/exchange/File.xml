@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.FileServiceMapper">
+
+	<resultMap id="mapFileVO" type="egovframework.knia.foreign.exchange.vo.FileVO">
+		<result property="fileId" column="FILE_ID"/>
+		<result property="fileNm" column="FILE_NM"/>
+		<result property="fileExt" column="FILE_EXT"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+		<result property="fileGrpCd" column="FILE_GRP_CD"/>
+		<result property="fileGrpNum" column="FILE_GRP_NUM"/>
+		<result property="fileGrpVal" column="FILE_GRP_VAL"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="phyFileNm" column="PHY_FILE_NM"/>
+	</resultMap>
+	
+	<sql id="sqlSelectFile">
+		SELECT
+			FILE_ID, FILE_NM, FILE_EXT, FILE_SIZE, 
+			FILE_GRP_CD, FILE_GRP_NUM, FILE_GRP_VAL, 
+			FILE_PATH, PHY_FILE_NM
+		FROM
+			TB_FOR_ATCH_FILES
+	</sql>
+	
+	<update id="deleteFile" parameterType="fileVO">
+		/** File.deleteFile */
+		UPDATE
+			TB_FOR_ATCH_FILES
+			SET
+				IS_DEL='Y', 
+				UPDT_ID=#{userId}, 
+				UPDT_DATE=now()
+		WHERE
+			FILE_GRP_CD=#{fileGrpCd}
+			<if test="fileId != null and fileId !=''">
+				AND FILE_ID=#{fileId}
+			</if> 
+			<if test="fileGrpNum &gt; 0">
+				AND FILE_GRP_NUM=#{fileGrpNum}
+			</if>
+			<if test="fileGrpVal != null and fileGrpVal !=''">
+				AND FILE_GRP_VAL=#{fileGrpVal}
+			</if>
+	</update>
+	
+	<select id="selectFileList" parameterType="fileVo" resultMap="mapFileVO">
+		/** File.selectFileList */
+			<include refid="sqlSelectFile" />
+		WHERE
+			FILE_GRP_CD=#{fileGrpCd} 
+			AND IS_DEL='N'
+			<if test="fileGrpNum &gt; 0">
+				AND FILE_GRP_NUM=#{fileGrpNum}
+			</if>
+			<if test="fileGrpVal != null and fileGrpVal !=''">
+				AND FILE_GRP_VAL=#{fileGrpVal}
+			</if>
+		ORDER BY
+			INSRT_DATE DESC
+	</select>
+
+	<insert id="insertFileInfo" parameterType="fileVO">
+		/** File.insertFileInfo */
+		INSERT INTO
+			TB_FOR_ATCH_FILES (
+				FILE_ID, FILE_NM, FILE_EXT, FILE_SIZE, 
+				FILE_GRP_CD, FILE_GRP_NUM, FILE_GRP_VAL, 
+				FILE_PATH, PHY_FILE_NM, IS_DEL, 
+				INSRT_ID, INSRT_DATE, UPDT_ID, UPDT_DATE
+			) VALUES (
+				#{fileId}, #{fileNm}, #{fileExt}, #{fileSize}, 
+				#{fileGrpCd}, #{fileGrpNum}, #{fileGrpVal}, 
+				#{filePath}, #{phyFileNm}, 'N', 
+				#{userId}, now(), #{userId}, now()
+			)
+	</insert>
+
+	<insert id="selectFileId" parameterType="fileVO">
+		/** File.selectFileId - 차후 시퀀스로 변경 */
+		INSERT INTO SEQ_ATCH_FILES(INSRT_DATE) VALUES(NOW())
+		<selectKey keyProperty="fileIdx" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+</mapper>
