@@ -52,9 +52,9 @@ public interface BoardService {
 	
 	/**
 	 * 게시판 삭제
-	 * @param BoardVO 게시판 삭제 정보
+	 * @param INT 게시판 등록번호
 	 * @throws Exception
 	 */
-	void deleteBoard(BoardVO boardVO) throws Exception;
+	void deleteBoard(int boardIdx) throws Exception;
 
 }

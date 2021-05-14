@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
@@ -144,7 +145,7 @@ public class BoardController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(value="/boardWrite.do")
+	@RequestMapping(value="/boardWrite.do", method=RequestMethod.GET)
 	public ModelAndView boardWrite(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 상세내용 화면");
 		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
@@ -168,15 +169,12 @@ public class BoardController {
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
 		
 		String alarm_yn = request.getParameter("board_alarm").toString();
+		boardVO.setBoardIdx(Integer.parseInt(request.getParameter("board_idx").toString()));
 		boardVO.setBoardTitle(request.getParameter("board_title").toString());
 		boardVO.setBoardContent(request.getParameter("board_content").toString());
 		//boardVO.setContent(request.getParameter("board_content").toString());//운영용
-		boardVO.setInsurCd("N00");//개발용
-		boardVO.setUserId(loginVO.getLoginId().toString());
 		boardVO.setUserName(request.getParameter("board_usernm").toString());
 		boardVO.setUpdtId(loginVO.getLoginId().toString());
-		boardVO.setViewCnt(0);
-		boardVO.setIsDel("N");
 		if(alarm_yn.equals("on")){
 			boardVO.setAlarmYn("Y");
 		}
@@ -198,9 +196,14 @@ public class BoardController {
 	@RequestMapping(value="/setting/boardDelete.ajax")
 	public String boardDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 삭제");
+		int boardIdx = Integer.parseInt(request.getParameter("board_idx").toString());
 		
-		return null;
-		//return "jsonView";
+		boardService.deleteBoard(boardIdx);
+		
+		HashMap<String, Object> boardInfo = new HashMap<String, Object>();
+		boardInfo.put("STATUS", "SUCCES");
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(boardInfo));
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/setting/pds.do")

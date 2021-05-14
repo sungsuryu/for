@@ -78,39 +78,17 @@
 		WHERE BOARD_IDX = #{board_idx};
 	</select>
 	
-	<update id="updateBoardViewCnt">
-		INSERT INTO TB_FOR_BOARD
-		(
-				BOARD_TITLE,
-				BOARD_CONTENT,
-				INSUR_CD,
-				USER_ID,
-				USER_NM,
-				INSRT_ID,
-				INSRT_DATE,
-				UPDT_ID,
-				UPDT_DATE,
-				VIEW_CNT,
-				IS_DEL,
-				ALARM_YN,
-				BOARD_TYPE
-				
-		)
-		VALUE(
-			'TEST21',
-			'TESTTEST',
-			'N00',
-			'admin',
-			'테스터',
-			'admin',
-			NOW(),
-			'admin',
-			NOW(),
-			1,
-			'Y',
-			'Y',
-			'NOTICE'
-		);
+	<update id="updateBoardViewCnt" parameterType="boardVO">
+		UPDATE
+			TB_FOR_BOARD
+		SET
+			 BOARD_TITLE = #{boardTitle}
+			,BOARD_CONTENT = #{boardContent}
+			,USER_NM = #{userName}
+			,UPDT_ID = #{updtId}
+			,UPDT_DATE = NOW()
+		WHERE
+			BOARD_IDX = #{boardIdx}
 	</update>
 	
 	<insert id="insertBoard" parameterType="boardVO">
@@ -149,9 +127,25 @@
 	</insert>
 	
 	<update id="updateBoard" parameterType="boardVO">
+		UPDATE
+			TB_FOR_BOARD
+		SET
+			 BOARD_TITLE = #{boardTitle}
+			,BOARD_CONTENT = #{boardContent}
+			,USER_NM = #{userName}
+			,UPDT_ID = #{updtId}
+			,UPDT_DATE = NOW()
+		WHERE
+			BOARD_IDX = #{boardIdx}
 	</update>
 	
-	<delete id="deleteBoard" parameterType="boardVO">
-	</delete>
+	<update id="deleteBoard" parameterType="int">
+		UPDATE
+			TB_FOR_BOARD
+		SET
+			IS_DEL = 'Y'
+		WHERE
+			BOARD_IDX = #{boardIdx}
+	</update>
 
 </mapper>

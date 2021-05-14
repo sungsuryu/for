@@ -261,12 +261,12 @@
 					<th>조회</th>
 				</tr>
 			</thead>
-			<form id="noticeForm" name="noticeForm" method="post">
+			<form id="noticeForm" name="noticeForm" method="get">
 				<input id="select_board_idx" name="board_idx" type="hidden">
-				<tbody id="notice_list">
-
-				</tbody>
 			</form>
+			<tbody id="notice_list">
+
+			</tbody>
 		</table>
 	</div>
 	
@@ -284,7 +284,7 @@
 			</div>
 		</div>
 		<div class="f_right">
-			<a href="javascript:goBoardInsert();" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="/boardInsert.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	
@@ -394,6 +394,8 @@ function movePageEnd(){
 
 function goBoardInsert(){
 	var form = $("#noticeForm");
+	form.removeAttr("action");
+	form.removeAttr("method");
 	form.attr("action", "/boardInsert.do");
 	form.submit();
 }

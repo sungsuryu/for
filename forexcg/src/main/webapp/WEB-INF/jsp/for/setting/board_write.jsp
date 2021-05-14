@@ -30,6 +30,7 @@
 </head>
 <script>
 $(document).ready(function() {
+	setView();
 });
 
 </script>
@@ -331,7 +332,7 @@ function setView(){
 	$("#board_usernm").val(<%=board_usernm%>);
 }
 function updateBoard(){
-	var formdata = $("#boardForm").serialize();
+	var formdata = $("#boardForm").serializeArray();
 	if(!$("#board_alarm").is(':checked')){
 		formdata.push({
 			name : $("#board_alarm").attr('name'),
@@ -340,13 +341,13 @@ function updateBoard(){
 	}
 	$.ajax({
         type:"POST",
-        url:"/setting/boardUpdate.ajax",
+        url:"/setting/updateBoard.ajax",
         cache:false,
         data:formdata,
         success: function(e){
             if (e.result.status == 'SUCCESS') {
-            	console.log(e.result);
-            	history.back();
+            	alert("수정 성공");
+            	location.href = "/notice.do";
             }
             else {
             	alert("공지사항을 불러올 수  없습니다.");
@@ -370,8 +371,8 @@ function deleteBoard(){
         data:formdata,
         success: function(e){
             if (e.result.status == 'SUCCESS') {
-            	console.log(e.result);
-            	history.back();
+            	alert("수정 성공");
+            	location.href = "/notice.do";
             }
             else {
             	alert("공지사항을 불러올 수  없습니다.");
