@@ -1,11 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
@@ -18,13 +12,11 @@
 <link rel="stylesheet" type="text/css" href="css/design.css" />
 <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="js/design.js"></script>
-
 </head>
 <script>
-	$(document).ready(function() {
-		getBoardList();
-	});
-	
+$(document).ready(function() {
+});
+
 </script>
 <body>
 
@@ -236,55 +228,66 @@
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
-	
-	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong>10</strong>건</p>
-	</div>
-	
-	<div class="table_h01">
-		<table>
-			<colgroup>
-				<col style="width:70px">
-				<col style="">
-				<col style="width:120px">
-				<col style="width:120px">
-				<col style="width:120px">
-				<col style="width:120px">
-			</colgroup>
-			<thead>
-				<tr>
-					<th>순번</th>
-					<th>제목</th>
-					<th>첨부파일</th>
-					<th>작성자</th>
-					<th>작성일자</th>
-					<th>조회</th>
-				</tr>
-			</thead>
-			<form id="noticeForm" name="noticeForm" method="post">
-				<input id="select_board_idx" name="board_idx" type="hidden">
-				<tbody id="notice_list">
-
+	<form id="boardForm" name="boardForm" method="post">
+		<div class="table_v01">
+			<table>
+				<colgroup>
+					<col style="width:150px">
+					<col style="">
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>제목</th>
+						<td><input name="board_title" type="text" style="width:100%"></td>
+					</tr>
+					<tr>
+						<th>알림톡</th>
+						<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i> <label for="">전송</label></td>
+					</tr>
+					<tr>
+						<th>작성자</th>
+						<td><input name="board_usernm" type="text"></td>
+					</tr>
+					<tr>
+						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
+						<td>
+							<div class="add_file_list">
+								<ul>
+									<!-- 선택한 파일 addClass="on" -->
+									<li class="on">업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+								</ul>
+								<a href="javascript:;" class="btn btn-sm">삭제</a>
+							</div>
+							<div class="add_file">
+								<input type="file">
+								<a href="javascript:;" class="btn btn-sm btn-info">업로드</a>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>내용</th>
+						<td>
+							<textarea name="board_content" rows="15"></textarea>
+						</td>
+					</tr>
 				</tbody>
-			</form>
-		</table>
-	</div>
+			</table>
+		</div>
+	</form>
 	
 	<div class="tbl_btm">
-		<div class="f_left">
-			<div class="pagenum">
-				<a href="javascript:movePageFirst();" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:movePageLeft();" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				<!-- 현재위치 addClass="on" -->
-				<div id="page_list" style="display:inline-block;">
-					<a href="javascript:" class="on">1</a>
-				</div>
-				<a href="javascript:movePageRight();" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:movePageEnd();" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-			</div>
-		</div>
 		<div class="f_right">
-			<a href="javascript:goBoardInsert();" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="javascript:insertBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
+			<a href="javascript:history.back();" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	
@@ -305,39 +308,26 @@
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-function getBoardList(){
-	var text = $("#page_list > a.on").text();
+function insertBoard(){
+	var formdata = $("#boardForm").serializeArray();
+	if(!$("#board_alarm").is(':checked')){
+		formdata.push({
+			name : $("#board_alarm").attr('name'),
+			value : "N"
+		});
+	}
 	$.ajax({
         type:"POST",
-        url:"/setting/noticeList.ajax",
-        data:{"page_num":text},
+        url:"/setting/insertBoard.ajax",
+        cache:false,
+        data:formdata,
         success: function(e){
             if (e.result.status == 'SUCCESS') {
-            	alert("공지사항을 불러왔습니다");
+            	alert("공지사항 등록이 완료되었습니다.");
             	console.log(e.result);
-            	$("#total_cnt").text(e.result.total_cnt);
-            	$("#notice_list").empty();
-            	 $.each(e.result.notice_list, function (i, item) {
-            		 var notice_text = "";
-            		 notice_text += '<tr><td>' + item.list_num +'</td><td class="left"><a href="javascript:goBoardWrite(' + item.board_idx + ')">' + item.board_title + '</a></td>';
-            		 if(item.file_cnt > 0){
-            			 notice_text += '<td><a href="javascript:;" class="link01">첨부파일</a></td>';
-            		 }
-            		 else{
-            			 notice_text += '<td></td>';
-            		 }
-            		 notice_text += '<td>' + item.user_nm + '</td><td>' + item.updt_date + '</td><td>' + item.view_cnt + '</td></tr>';
-            		 $("#notice_list").append(notice_text);
-                 });
-            	 makePageNavigator(e.result.page_num, e.result.total_page);
+            	history.back();
             }
-            else if(e.result.status == 'EMPTY'){
-            	alert("공지사항 목록이  없습니다.");
-            	$("#notice_list").empty();
-            } 
             else {
-            	alert("공지사항을 불러올 수  없습니다.");
-            	$("#notice_list").empty();
             }
         },
         error: function(xhr, status, error) {
@@ -348,63 +338,6 @@ function getBoardList(){
         }
     });
 }
-function makePageNavigator(page_num, total_page){
-	$("#page_list").empty();
-	 if(total_page > 5){
-		 var page_make = 5;
-	 }
-	 else{
-		 var page_make = total_page;
-	 }
-	 for(var i = 1; i <= page_make; i++){
-		 if(page_num == i){
-			 $("#page_list").append('<a id="page' + i + '" href="javascript:selectPage(' + i + ')" class = "on">' + i + '</a>');
-		 }
-		 else{
-			 $("#page_list").append('<a id="page' + i + '" href="javascript:selectPage(' + i + ')">' + i + '</a>');
-		 }
-	 }
-}
-
-function selectPage(page_num){
-	$("#page_list > a.on").removeClass("on");
-	$("#page" + page_num).addClass("on");
-	getBoardList();
-}
-
-function movePageLeft(){
-	var is_select_num = $("#page_list > a.on").text();
-	is_select_num = is_select_num - 1;
-	$("#page_list > a.on").removeClass("on");
-	$("#page" + is_select_num).addClass("on");
-	getBoardList();
-}
-
-function movePageRight(){
-	
-}
-
-function movePageFirst(){
-	
-}
-
-function movePageEnd(){
-	
-}
-
-function goBoardInsert(){
-	var form = $("#noticeForm");
-	form.attr("action", "/boardInsert.do");
-	form.submit();
-}
-
-function goBoardWrite(board_idx){
-	$("#select_board_idx").val(board_idx);
-	var form = $("#noticeForm");
-	form.attr("action", "/boardWrite.do");
-	form.submit();
-}
-
 </script>
 
 </body>

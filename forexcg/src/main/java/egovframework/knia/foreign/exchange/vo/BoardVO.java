@@ -10,56 +10,200 @@ public class BoardVO implements Serializable {
 	
 	private int listNum; 
 	
-	private int boardidx;
+	private int boardIdx;
 	
-	private String title;
+	private String boardTitle;
 	
-	private String content;
+	private String boardContent;
 
-	private String insurcd;
+	private String insurCd;
 	
-	private String user_id;
+	private String userId;
 	
-	private String user_nm;
+	private String userName;
 	
-	private String insrt_id;
+	private String insrtId;
 	
-	private Date insrtdate = null;
+	private Date insrtDate = null;
 	
-	private String updtid;
+	private String updtId;
 	
-	private Date updtdate = null;
+	private Date updtDate = null;
 	
-	private int viewcnt;
+	private int viewCnt;
 	
-	private String isdel;
+	private String isDel;
 	
-	private String alarmyn;
+	private String alarmYn;
 	
-	private Date alarmdate = null;
+	private Date alarmDate = null;
 	
-	private String boardtype;
+	private String boardType;
 	
 	private String timestamp;
 	
-	private int totalcnt;
+	private int totalCnt;
 	
 	private int rowNo;
 	
 	private int pageNo;
 	
-	private int StartNo;
+	private int startNo;
 	
-	private int EndNo;
+	private int endNo;
 	
 	private int fileCnt;
-	
-	public int getTotalcnt() {
-		return totalcnt;
+
+	public int getCnt() {
+		return cnt;
 	}
 
-	public void setTotalcnt(int totalcnt) {
-		this.totalcnt = totalcnt;
+	public void setCnt(int cnt) {
+		this.cnt = cnt;
+	}
+
+	public int getListNum() {
+		return listNum;
+	}
+
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
+
+	public int getBoardIdx() {
+		return boardIdx;
+	}
+
+	public void setBoardIdx(int boardIdx) {
+		this.boardIdx = boardIdx;
+	}
+
+	public String getBoardTitle() {
+		return boardTitle;
+	}
+
+	public void setBoardTitle(String boardTitle) {
+		this.boardTitle = boardTitle;
+	}
+
+	public String getBoardContent() {
+		return boardContent;
+	}
+
+	public void setBoardContent(String boardContent) {
+		this.boardContent = boardContent;
+	}
+
+	public String getInsurCd() {
+		return insurCd;
+	}
+
+	public void setInsurCd(String insurCd) {
+		this.insurCd = insurCd;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getInsrtId() {
+		return insrtId;
+	}
+
+	public void setInsrtId(String insrtId) {
+		this.insrtId = insrtId;
+	}
+
+	public Date getInsrtDate() {
+		return insrtDate;
+	}
+
+	public void setInsrtDate(Date insrtDate) {
+		this.insrtDate = insrtDate;
+	}
+
+	public String getUpdtId() {
+		return updtId;
+	}
+
+	public void setUpdtId(String updtId) {
+		this.updtId = updtId;
+	}
+
+	public Date getUpdtDate() {
+		return updtDate;
+	}
+
+	public void setUpdtDate(Date updtDate) {
+		this.updtDate = updtDate;
+	}
+
+	public int getViewCnt() {
+		return viewCnt;
+	}
+
+	public void setViewCnt(int viewCnt) {
+		this.viewCnt = viewCnt;
+	}
+
+	public String getIsDel() {
+		return isDel;
+	}
+
+	public void setIsDel(String isDel) {
+		this.isDel = isDel;
+	}
+
+	public String getAlarmYn() {
+		return alarmYn;
+	}
+
+	public void setAlarmYn(String alarmYn) {
+		this.alarmYn = alarmYn;
+	}
+
+	public Date getAlarmDate() {
+		return alarmDate;
+	}
+
+	public void setAlarmDate(Date alarmDate) {
+		this.alarmDate = alarmDate;
+	}
+
+	public String getBoardType() {
+		return boardType;
+	}
+
+	public void setBoardType(String boardType) {
+		this.boardType = boardType;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public int getTotalCnt() {
+		return totalCnt;
+	}
+
+	public void setTotalCnt(int totalCnt) {
+		this.totalCnt = totalCnt;
 	}
 
 	public int getRowNo() {
@@ -79,159 +223,19 @@ public class BoardVO implements Serializable {
 	}
 
 	public int getStartNo() {
-		return StartNo;
+		return startNo;
 	}
 
 	public void setStartNo(int startNo) {
-		StartNo = startNo;
+		this.startNo = startNo;
 	}
 
 	public int getEndNo() {
-		return EndNo;
+		return endNo;
 	}
 
 	public void setEndNo(int endNo) {
-		EndNo = endNo;
-	}
-	
-	public Date getInsrtdate() {
-		return insrtdate;
-	}
-
-	public void setInsrtdate(Date insrtdate) {
-//		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
-//		return sdf.format(insrtdate);
-		this.insrtdate = insrtdate;
-	}
-
-	public Date getUpdtdate() {
-		return updtdate;
-	}
-
-	public void setUpdtdate(Date updtdate) {
-		this.updtdate = updtdate;
-	}
-
-	public Date getAlarmdate() {
-		return alarmdate;
-	}
-
-	public void setAlarmdate(Date alarmdate) {
-		this.alarmdate = alarmdate;
-	}
-
-	public String getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public int getBoardidx() {
-		return boardidx;
-	}
-
-	public void setBoardidx(int boardidx) {
-		this.boardidx = boardidx;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getInsurcd() {
-		return insurcd;
-	}
-
-	public void setInsurcd(String insurcd) {
-		this.insurcd = insurcd;
-	}
-
-	public String getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
-	}
-
-	public String getUser_nm() {
-		return user_nm;
-	}
-
-	public void setUser_nm(String user_nm) {
-		this.user_nm = user_nm;
-	}
-
-	public String getInsrt_id() {
-		return insrt_id;
-	}
-
-	public void setInsrt_id(String insrt_id) {
-		this.insrt_id = insrt_id;
-	}
-
-
-	public String getUpdtid() {
-		return updtid;
-	}
-
-	public void setUpdtid(String updtid) {
-		this.updtid = updtid;
-	}
-
-
-	public int getViewcnt() {
-		return viewcnt;
-	}
-
-	public void setViewcnt(int viewcnt) {
-		this.viewcnt = viewcnt;
-	}
-
-	public String getIsdel() {
-		return isdel;
-	}
-
-	public void setIsdel(String isdel) {
-		this.isdel = isdel;
-	}
-
-	public String getAlarmyn() {
-		return alarmyn;
-	}
-
-	public void setAlarmyn(String alarmyn) {
-		this.alarmyn = alarmyn;
-	}
-
-	public String getBoardtype() {
-		return boardtype;
-	}
-
-	public void setBoardtype(String boardtype) {
-		this.boardtype = boardtype;
-	}
-
-	public int getListNum() {
-		return listNum;
-	}
-
-	public void setListNum(int listNum) {
-		this.listNum = listNum;
+		this.endNo = endNo;
 	}
 
 	public int getFileCnt() {
@@ -242,6 +246,4 @@ public class BoardVO implements Serializable {
 		this.fileCnt = fileCnt;
 	}
 	
-	
-	
-}
+	}

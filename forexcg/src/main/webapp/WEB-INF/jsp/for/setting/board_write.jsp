@@ -1,5 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="java.util.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
+<%
+	request.setCharacterEncoding("utf-8");
+	Map<String, Object> dataMap = (Map) request.getAttribute("dataMap");
+	String board_title = dataMap.get("board_title").toString();
+	String board_content = dataMap.get("board_content").toString();
+	String board_usernm = dataMap.get("board_usernm").toString();
+	String board_idx = dataMap.get("board_idx").toString();
+
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -230,6 +244,7 @@ $(document).ready(function() {
 		</ul>
 	</div>
 	<form id="boardForm" name="boardForm" method="post">
+		<input id="board_idx" name="board_idx" type="hidden"/>
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -239,15 +254,15 @@ $(document).ready(function() {
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><input name="board_title" type="text" style="width:100%"></td>
+						<td><input id="board_title" name="board_title" type="text" style="width:100%"></td>
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input name="board_alarm" type="checkbox"><i></i> <label for="">전송</label></td>
+						<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i> <label for="">전송</label></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><input name="board_usernm" type="text"></td>
+						<td><input id="board_usernm" name="board_usernm" type="text"></td>
 					</tr>
 					<tr>
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
@@ -276,7 +291,7 @@ $(document).ready(function() {
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea name="board_content" rows="15"></textarea>
+							<textarea id="board_content" name="board_content" rows="15"></textarea>
 						</td>
 					</tr>
 				</tbody>
@@ -286,7 +301,7 @@ $(document).ready(function() {
 	
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:insertBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a href="javascript:updateBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
 			<a href="javascript:history.back();" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
@@ -309,33 +324,20 @@ $(document).ready(function() {
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-function insertBoard(){
-	var formdata = $("#boardForm").serialize();
-	$.ajax({
-        type:"POST",
-        url:"/setting/boardInsert.ajax",
-        cache:false,
-        data:formdata,
-        success: function(e){
-            if (e.result.status == 'SUCCESS') {
-            	console.log(e.result);
-            	history.back();
-            }
-            else {
-            	alert("공지사항을 불러올 수  없습니다.");
-            }
-        },
-        error: function(xhr, status, error) {
-            alert(error);
-        }, 
-        complete : function() {
-        	console.log('complete');
-        }
-    });
+function setView(){
+	$("#board_idx").val(<%=board_idx%>);
+	$("#board_title").val(<%=board_title%>);
+	$("#board_content").val(<%=board_content%>);
+	$("#board_usernm").val(<%=board_usernm%>);
 }
-
 function updateBoard(){
 	var formdata = $("#boardForm").serialize();
+	if(!$("#board_alarm").is(':checked')){
+		formdata.push({
+			name : $("#board_alarm").attr('name'),
+			value : "N"
+		});
+	}
 	$.ajax({
         type:"POST",
         url:"/setting/boardUpdate.ajax",
