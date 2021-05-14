@@ -22,7 +22,7 @@ public interface BoardMapper {
 	 * @return List<?> 게시판정보
 	 * @throws Exception
 	 */
-	List<?> selectBoardList(HashMap<String, Object> boardInfo) throws Exception;
+	List<?> selectBoardList(BoardVO boardVO) throws Exception;
 	
 	/**
 	 * 게시판 관리 문서  조회

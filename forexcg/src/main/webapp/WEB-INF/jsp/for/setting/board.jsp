@@ -18,13 +18,29 @@
 <link rel="stylesheet" type="text/css" href="css/design.css" />
 <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="js/design.js"></script>
-
 </head>
 <script>
-	$(document).ready(function() {
-		getBoardList();
-	});
+	//페이지 전환 함수
+	function fn_egov_link_page(pageNo){
+		document.listForm.pageIndex.value = pageNo;
+		document.listForm.action = "<c:url value='/board.do'/>";
+	   	document.listForm.submit();
+	}
 	
+	function goBoardInsert(){
+		var form = $("#noticeForm");
+		form.removeAttr("action");
+		form.removeAttr("method");
+		form.attr("action", "/boardInsert.do");
+		form.submit();
+	}
+	
+	function goBoardWrite(board_idx){
+		$("#select_board_idx").val(board_idx);
+		var form = $("#noticeForm");
+		form.attr("action", "/boardWrite.do");
+		form.submit();
+	}
 </script>
 <body>
 
@@ -261,11 +277,20 @@
 					<th>조회</th>
 				</tr>
 			</thead>
-			<form id="noticeForm" name="noticeForm" method="get">
-				<input id="select_board_idx" name="board_idx" type="hidden">
-			</form>
-			<tbody id="notice_list">
-
+			<tbody>
+				<c:forEach var="result" items="${boardList}" varStatus="status">
+					<tr>
+						<td><c:out value="${result.listNum}" /></td>
+						<td class="left"><a href="for_014_write.htm"><c:out value="${result.boardTitle}" /></a></td>
+						<td>
+							<c:if test = "${result.fileCnt > 0}">
+								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+							</c:if>
+						<td><c:out value="${result.userName}" /></td>
+						<td><c:out value="${result.updtDate}" /></td>
+						<td><c:out value="${result.viewCnt}" /></td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>
@@ -273,18 +298,26 @@
 	<div class="tbl_btm">
 		<div class="f_left">
 			<div class="pagenum">
-				<a href="javascript:movePageFirst();" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:movePageLeft();" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				<!-- 현재위치 addClass="on" -->
-				<div id="page_list" style="display:inline-block;">
-					<a href="javascript:" class="on">1</a>
-				</div>
-				<a href="javascript:movePageRight();" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:movePageEnd();" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+				<!-- <a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+				현재위치 addClass="on"
+				<a href="javascript:" class="on">1</a>
+				<a href="javascript:">2</a>
+				<a href="javascript:">3</a>
+				<a href="javascript:">4</a>
+				<a href="javascript:">5</a>
+				<a href="javascript:">6</a>
+				<a href="javascript:">7</a>
+				<a href="javascript:">8</a>
+				<a href="javascript:">9</a>
+				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
+				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+				<form:hidden path="pageIndex" />
 			</div>
 		</div>
 		<div class="f_right">
-			<a href="/boardInsert.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="for_014_write.htm" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	
@@ -305,108 +338,8 @@
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-function getBoardList(){
-	var text = $("#page_list > a.on").text();
-	$.ajax({
-        type:"POST",
-        url:"/setting/noticeList.ajax",
-        data:{"page_num":text},
-        success: function(e){
-            if (e.result.status == 'SUCCESS') {
-            	alert("공지사항을 불러왔습니다");
-            	console.log(e.result);
-            	$("#total_cnt").text(e.result.total_cnt);
-            	$("#notice_list").empty();
-            	 $.each(e.result.notice_list, function (i, item) {
-            		 var notice_text = "";
-            		 notice_text += '<tr><td>' + item.list_num +'</td><td class="left"><a href="javascript:goBoardWrite(' + item.board_idx + ')">' + item.board_title + '</a></td>';
-            		 if(item.file_cnt > 0){
-            			 notice_text += '<td><a href="javascript:;" class="link01">첨부파일</a></td>';
-            		 }
-            		 else{
-            			 notice_text += '<td></td>';
-            		 }
-            		 notice_text += '<td>' + item.user_nm + '</td><td>' + item.updt_date + '</td><td>' + item.view_cnt + '</td></tr>';
-            		 $("#notice_list").append(notice_text);
-                 });
-            	 makePageNavigator(e.result.page_num, e.result.total_page);
-            }
-            else if(e.result.status == 'EMPTY'){
-            	alert("공지사항 목록이  없습니다.");
-            	$("#notice_list").empty();
-            } 
-            else {
-            	alert("공지사항을 불러올 수  없습니다.");
-            	$("#notice_list").empty();
-            }
-        },
-        error: function(xhr, status, error) {
-            alert(error);
-        }, 
-        complete : function() {
-        	console.log('complete');
-        }
-    });
-}
-function makePageNavigator(page_num, total_page){
-	$("#page_list").empty();
-	 if(total_page > 5){
-		 var page_make = 5;
-	 }
-	 else{
-		 var page_make = total_page;
-	 }
-	 for(var i = 1; i <= page_make; i++){
-		 if(page_num == i){
-			 $("#page_list").append('<a id="page' + i + '" href="javascript:selectPage(' + i + ')" class = "on">' + i + '</a>');
-		 }
-		 else{
-			 $("#page_list").append('<a id="page' + i + '" href="javascript:selectPage(' + i + ')">' + i + '</a>');
-		 }
-	 }
-}
-
-function selectPage(page_num){
-	$("#page_list > a.on").removeClass("on");
-	$("#page" + page_num).addClass("on");
-	getBoardList();
-}
-
-function movePageLeft(){
-	var is_select_num = $("#page_list > a.on").text();
-	is_select_num = is_select_num - 1;
-	$("#page_list > a.on").removeClass("on");
-	$("#page" + is_select_num).addClass("on");
-	getBoardList();
-}
-
-function movePageRight(){
-	
-}
-
-function movePageFirst(){
-	
-}
-
-function movePageEnd(){
-	
-}
-
-function goBoardInsert(){
-	var form = $("#noticeForm");
-	form.removeAttr("action");
-	form.removeAttr("method");
-	form.attr("action", "/boardInsert.do");
-	form.submit();
-}
-
-function goBoardWrite(board_idx){
-	$("#select_board_idx").val(board_idx);
-	var form = $("#noticeForm");
-	form.attr("action", "/boardWrite.do");
-	form.submit();
-}
-
+$(function(){
+});
 </script>
 
 </body>

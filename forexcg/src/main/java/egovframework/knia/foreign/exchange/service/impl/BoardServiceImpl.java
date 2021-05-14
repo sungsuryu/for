@@ -24,8 +24,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<?> selectBoardList(HashMap<String, Object> boardInfo) throws Exception {
-		return boardMapper.selectBoardList(boardInfo);
+	public List<?> selectBoardList(BoardVO boardVO) throws Exception {
+		return boardMapper.selectBoardList(boardVO);
 	}
 
 	@Override

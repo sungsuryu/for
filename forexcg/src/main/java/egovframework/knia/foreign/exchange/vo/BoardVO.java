@@ -30,6 +30,22 @@ public class BoardVO implements Serializable {
 	
 	private Date updtDate = null;
 	
+	public int getFirstIndex() {
+		return firstIndex;
+	}
+
+	public void setFirstIndex(int firstIndex) {
+		this.firstIndex = firstIndex;
+	}
+
+	public int getRecordCountPerPage() {
+		return recordCountPerPage;
+	}
+
+	public void setRecordCountPerPage(int recordCountPerPage) {
+		this.recordCountPerPage = recordCountPerPage;
+	}
+
 	private int viewCnt;
 	
 	private String isDel;
@@ -44,13 +60,11 @@ public class BoardVO implements Serializable {
 	
 	private int totalCnt;
 	
-	private int rowNo;
-	
 	private int pageNo;
 	
-	private int startNo;
+	private int firstIndex;
 	
-	private int endNo;
+	private int recordCountPerPage;
 	
 	private int fileCnt;
 
@@ -206,36 +220,12 @@ public class BoardVO implements Serializable {
 		this.totalCnt = totalCnt;
 	}
 
-	public int getRowNo() {
-		return rowNo;
-	}
-
-	public void setRowNo(int rowNo) {
-		this.rowNo = rowNo;
-	}
-
 	public int getPageNo() {
 		return pageNo;
 	}
 
 	public void setPageNo(int pageNo) {
 		this.pageNo = pageNo;
-	}
-
-	public int getStartNo() {
-		return startNo;
-	}
-
-	public void setStartNo(int startNo) {
-		this.startNo = startNo;
-	}
-
-	public int getEndNo() {
-		return endNo;
-	}
-
-	public void setEndNo(int endNo) {
-		this.endNo = endNo;
 	}
 
 	public int getFileCnt() {
@@ -246,4 +236,4 @@ public class BoardVO implements Serializable {
 		this.fileCnt = fileCnt;
 	}
 	
-	}
+}

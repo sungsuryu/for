@@ -33,7 +33,7 @@
 			AND IS_DEL = 'N'
 	</select>
 
-	<select id="selectBoardList" resultMap="mapBoardVO">
+	<!-- <select id="selectBoardList" resultMap="mapBoardVO">
 		SELECT 
 			 TB.LIST_NUM
 			,TB.BOARD_IDX
@@ -66,6 +66,41 @@
 			AND TB.IS_DEL = 'N'
 		ORDER BY TB.BOARD_IDX DESC) TB
 		WHERE TB.LIST_NUM BETWEEN #{start_num} AND #{end_num}
+	</select> -->
+	
+	<select id="selectBoardList" parameterType="boardVO" resultMap="mapBoardVO">
+		SELECT 
+			 TB.LIST_NUM
+			,TB.BOARD_IDX
+			,TB.BOARD_TITLE
+			,TB.USER_ID
+			,TB.USER_NM
+			,TB.UPDT_DATE
+			,TB.VIEW_CNT
+			,TB.FILE_CNT
+		FROM
+		(SELECT
+			@ROWNUM:=@ROWNUM+1 AS LIST_NUM,
+			 TB.BOARD_IDX
+			,TB.BOARD_TITLE
+			,TB.USER_ID
+			,TB.USER_NM
+			,TB.UPDT_DATE
+			,TB.VIEW_CNT
+			,TB.FILE_CNT
+		FROM
+			(SELECT
+				TB.*,
+				COUNT(TBF.BOARD_IDX) AS FILE_CNT
+			FROM
+				TB_FOR_BOARD TB LEFT OUTER JOIN TB_FOR_BOARD_FILES TBF ON TB.BOARD_IDX = TBF.BOARD_IDX
+			WHERE 1=1
+			GROUP BY TB.BOARD_IDX) TB, (SELECT @rownum:=0) temp
+		WHERE
+			TB.BOARD_TYPE = #{boardType}
+			AND TB.IS_DEL = 'N'
+		ORDER BY TB.BOARD_IDX DESC) TB
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
 	
 	<select id="selectBoard" parameterType="int" resultMap="mapBoardVO">

@@ -24,6 +24,7 @@ import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.BoardService;
 import egovframework.knia.foreign.exchange.vo.BoardVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
 public class BoardController {
@@ -32,76 +33,32 @@ public class BoardController {
 	@Resource(name = "boardService")
 	private BoardService boardService;
 	
-	@RequestMapping(value="/notice.do")
-	public String notice(@ModelAttribute("boardVO") BoardVO boardVO1, HttpServletRequest request, ModelMap model) throws Exception {
+	@RequestMapping(value="/board.do")
+	public String notice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 관리 화면");
-	
+		
+		PaginationInfo paginationInfo = new PaginationInfo();
+
+		paginationInfo.setCurrentPageNo(1);//개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(10);//개발용:표시할 페이지 갯수
+		paginationInfo.setPageSize(10);//개발용:페이지 사이즈
+		
+		int total_cnt = boardService.selectListCnt("NOTICE");//개발용
+		
+		boardVO.setBoardType("NOTICE");//개발용
+		boardVO.setRecordCountPerPage(10);//개발용:한번에 조회할 데이터 수
+		boardVO.setFirstIndex(0);//개발용:조회할 첫번째 데이터 번호
+		
+		List<?> boardList = boardService.selectBoardList(boardVO);
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("total_cnt", total_cnt);
+		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+		
 		return "setting/board";
 	}
 	
-	@RequestMapping(value="/setting/noticeList.ajax")
-	public String noticeList(@ModelAttribute("boardVO") BoardVO boardVO1, HttpServletRequest request, ModelMap model) throws Exception {
-		logger.debug("공지사항 리스트 가져오기");
-		int max_content = 2;
-		int max_page = 5;
-		int total_page = 0;
-		int start_num = 0;
-		int end_num = 0;
-		int cnt = boardService.selectListCnt("NOTICE");
-		int page_num = Integer.parseInt(request.getParameter("page_num").toString());
-		System.out.println("KJWKJWKJW value chekc - " + page_num);
-//		int page_num = 1;
-		if(cnt == 0){
-			return null;
-		}
-		total_page = cnt/max_content;//총 표출 페이지 개수
-		if(total_page % max_content > 0){
-			total_page++;
-		}
-		
-		start_num = (page_num - 1) * max_content + 1;
-		end_num = start_num + max_content - 1;
-		
-		HashMap<String, Object> boardInfo = new HashMap<String, Object>();
-		boardInfo.put("boardtype", "NOTICE");
-		boardInfo.put("start_num", start_num);
-		boardInfo.put("end_num", end_num);
-		List<?> boardList = boardService.selectBoardList(boardInfo);
-		ArrayList <HashMap<String, Object>> notice_list = new ArrayList<HashMap<String, Object>>();
-
-		if (boardList.size() > 0) {
-			for(int i = 0; i < boardList.size(); i++){
-				BoardVO boardVO = (BoardVO) boardList.get(i);
-				HashMap<String, Object> notice = new HashMap<String, Object>();
-				notice.put("list_num", boardVO.getListNum());
-				notice.put("board_idx", boardVO.getBoardIdx());
-				notice.put("board_title", boardVO.getBoardTitle());
-				notice.put("user_id", boardVO.getUserId());
-				notice.put("user_nm", boardVO.getUserName());
-				notice.put("updt_date", boardVO.getUpdtDate());
-				notice.put("view_cnt", boardVO.getViewCnt());
-				notice.put("file_cnt", boardVO.getFileCnt());
-				notice_list.add(notice);
-			}
-			
-			HashMap<String, Object> noticeInfo = new HashMap<String, Object>();
-			noticeInfo.put("page_num", page_num);
-			noticeInfo.put("total_page", total_page);
-			noticeInfo.put("total_cnt", cnt);
-			noticeInfo.put("notice_list", notice_list);
-			noticeInfo.put("status", "SUCCESS");
-
-			logger.debug("공지사항 : 공지사항 목록을 불러옵니다.");
-			model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(noticeInfo));
-		} else {
-			HashMap<String, Object> noticeInfo = new HashMap<String, Object>();
-			noticeInfo.put("status", "EMPTY");
-			logger.info("공지사항 : 공지사항 목록이 없습니다.");
-			model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(noticeInfo));
-		}
-		
-		return "jsonView";
-	}
+	
 	
 	@RequestMapping(value="/boardInsert.do")
 	public String boardInsert(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
