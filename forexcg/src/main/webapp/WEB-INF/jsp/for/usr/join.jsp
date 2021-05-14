@@ -20,6 +20,46 @@
 	$(document).ready(function() {
 		$(".btn-primary").click(function() {
 			
+			var getId = $("#userIdTxt").val();
+			
+			if (getId == "") {
+				alert("사용할 아이디를 입력해주세요.");
+				$("#userIdTxt").focus();
+				return;
+			}
+			if ($("#userId").val() == "") {
+				alert("아이디 중복확인을 해주세요.");
+				return;
+			}
+			if ($("#password").val() == "") {
+				alert("비밀번호를 입력해주세요.");
+				$("#password").focus();
+				return;
+			}
+			if ($("#passwordRe").val() == "") {
+				alert("비밀번호를 한번 더 입력해주세요.");
+				$("#passwordRe").focus();
+				return;
+			}
+			if ($("#password").val() != $("#passwordRe").val()) {
+				alert("비밀번호가 일치하지 않습니다.");
+				$("#passwordRe").focus();
+				return;
+			}
+			if ($("#insurCd").val() == "") {
+				alert("소속회사를 선택해주세요.");
+				return;
+			}
+			if ($("#cellNum").val() == "") {
+				alert("휴대폰번호를 입력해주세요.");
+				$("#cellNum").focus();
+				return;
+			}
+			
+			
+			
+			
+			
 			$("#joinForm").submit();
 		});
 		
@@ -67,7 +107,7 @@
 		            	$("#userIdTxt").css("background", "#ccc");
 		            	$("#linkCheckUserId").css("display", "none");
 		            } else {
-		            	alert('이미사용중인 아이디 입니다.');
+		            	alert('이미 사용중인 아이디 입니다.');
 		            }
 	        	} catch (e) {
 	        		;
@@ -91,7 +131,7 @@
 
 
 <div id="join">
-<form name="joinForm" id="joinForm" method="post" action="joinAction.do">
+<form name="joinForm" id="joinForm" method="post" action="joinAction.do" enctype="multipart/form-data">
 <input type="hidden" name="userId" id="userId" />
 	<header class="contents_header">
 		<h2>회원가입</h2>
@@ -211,7 +251,7 @@
 				<tr>
 					<th>계정등록신청서</th>
 					<td>
-						<input type="file2">
+						<input type="file" name="file_1" id="file_1" />
 					</td>
 					<td class="right"><a href="javascript:;" class="btn btn-sm btn-default"><i class="fa fa-download" aria-hidden="true"></i> 신청서 다운로드</a></td>
 				</tr>

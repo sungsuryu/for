@@ -2,22 +2,31 @@ package egovframework.knia.foreign.exchange.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+//import egovframework.com.cmm.service.EgovFileMngService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.InsureService;
 import egovframework.knia.foreign.exchange.service.JoinService;
-import egovframework.knia.foreign.exchange.service.LoginService;
+import egovframework.knia.foreign.exchange.service.FileService;
+import egovframework.knia.foreign.exchange.vo.FileVO;
 import egovframework.knia.foreign.exchange.vo.InsureVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
 
@@ -29,8 +38,17 @@ public class JoinController {
 	@Resource(name = "joinService")
 	private JoinService joinService;
 	
+	@Resource(name = "fileService")
+	private FileService fileService;
+	
 	@Resource(name="insureService")
 	private InsureService insureService;
+	
+	@Resource(name="EgovFileMngUtil")
+	private EgovFileMngUtil fileUtil;
+	
+	@Autowired
+    private DefaultBeanValidator beanValidator;
 	
 	/**
 	 * 회원가입 화면
@@ -86,11 +104,23 @@ public class JoinController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/joinAction.do")
-	public String joinAction(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String joinAction(final MultipartHttpServletRequest multiRequest, @ModelAttribute("userVO") UserVO userVO, BindingResult bindingResult, HttpServletRequest request, ModelMap model) throws Exception {
 		
-		
-		
-		
+		beanValidator.validate(userVO, bindingResult);
+        if (bindingResult.hasErrors()) {
+        	throw new Exception();
+        }
+        
+		List<FileVO> result = null;
+	    
+	    final Map<String, MultipartFile> files = multiRequest.getFileMap();
+	    if (!files.isEmpty()) {
+			result = fileUtil.parseFileInf(files, "APPLI", 0, 0, "");
+			
+			int insertFileCnt = fileService.insertFileInfo(result, userVO.getUserId());
+	    }
+	    
+		// 신규사용자 등록
 		joinService.UserJoin(userVO);
 		
 		return "redirect:/index.do";
