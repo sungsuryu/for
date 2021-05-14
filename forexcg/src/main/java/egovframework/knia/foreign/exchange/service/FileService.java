@@ -8,8 +8,8 @@ public interface FileService {
 
 	/**
 	 * 첨부파일 등록
-	 * @param fileVO 첨부파일 목록
-	 * @param grpVal 파일그룹 식별 값
+	 * @param fileVO &lt;List&gt;첨부파일 
+	 * @param grpVal 그룹 식별값 - 불필요시 Empty전송
 	 * @return int 등록된 파일 갯수
 	 * @throws Exception
 	 */

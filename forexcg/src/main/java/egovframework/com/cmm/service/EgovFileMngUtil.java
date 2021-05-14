@@ -63,11 +63,11 @@ public class EgovFileMngUtil {
 	/**
 	 * 첨부파일 세부정보 조회
 	 * @param files 첨부파일
-	 * @param KeyStr 파일 접두어-prefix
-	 * @param fileKeyParam 파일시퀀스 - 1씩 증가
-	 * @param fileGrpNum - 원문 번호
-	 * @param storePath - 저장경로
-	 * @return FileVO 파일 세부정보
+	 * @param KeyStr 파일 접두어
+	 * @param fileKeyParam 파일시퀀스 - 0으로 지정
+	 * @param fileGrpNum 원문 식별번호
+	 * @param storePath 저장경로 - 지정하지 않을경우 default경로 사용
+	 * @return FileVO 파일세부정보
 	 * @throws Exception
 	 */
 	public List<FileVO> parseFileInf(Map<String, MultipartFile> files, String KeyStr, int fileKeyParam, int fileGrpNum, String storePath) throws Exception {
