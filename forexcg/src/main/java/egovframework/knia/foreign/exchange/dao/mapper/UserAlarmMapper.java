@@ -8,9 +8,13 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper("userAlarmMapper")
 public interface UserAlarmMapper {
 
-	List<?> selectUserAlarmList(UserAlarmVO userAlarmVO) throws Exception;
+	List<?> selecUserAlarmList(UserAlarmVO userAlarmVO) throws Exception;
+	
+	UserAlarmVO selecUserAlarm(UserAlarmVO userAlarmVO) throws Exception;
 	
 	void insertUserAlarm(UserAlarmVO userAlarmVO) throws Exception;
 	
 	void updateUserAlarm(UserAlarmVO userAlarmVO) throws Exception;
+	
+	void deleteUserAlarm(UserAlarmVO userAlarmVO) throws Exception;
 }

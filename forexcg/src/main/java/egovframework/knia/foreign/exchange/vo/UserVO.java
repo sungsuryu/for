@@ -44,6 +44,26 @@ public class UserVO implements Serializable {
 	private String updtId;
 	
 	private String timestamp;
+	
+	private String[] alrmType;
+
+	private String joinAgree = "Y";
+	
+	public String getJoinAgree() {
+		return joinAgree;
+	}
+
+	public void setJoinAgree(String joinAgree) {
+		this.joinAgree = joinAgree;
+	}
+
+	public String[] getAlrmType() {
+		return alrmType;
+	}
+
+	public void setAlrmType(String[] alrmType) {
+		this.alrmType = alrmType;
+	}
 
 	public String getDptNm() {
 		return dptNm;

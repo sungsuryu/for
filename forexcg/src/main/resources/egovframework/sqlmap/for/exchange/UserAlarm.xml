@@ -10,7 +10,7 @@
 		<result property="updtDate" column="UPDT_DATE" />
 	</resultMap>
 
-	<select id="selecUserAlarmList" parameterType="userAlarmVO" resultMap="mapUserAlarm">
+	<sql id="sqlUserAlarm">
 		SELECT
 			USER_ID, ALRM_TYPE, IS_RCV_ALRM, 
 			UPDT_ID, UPDT_DATE
@@ -22,6 +22,14 @@
 		<if test="alrmType != null and alrmType !=''">
 			AND ALRM_TYPE=#{alrmType}
 		</if>
+	</sql>
+	<select id="selecUserAlarmList" parameterType="userAlarmVO" resultMap="mapUserAlarm">
+		<include refid="sqlUserAlarm" />
+	</select>
+	
+	<select id="selecUserAlarm" parameterType="userAlarmVO" resultMap="mapUserAlarm">
+		<include refid="sqlUserAlarm" />
+		LIMIT 1
 	</select>
 	
 	<insert id="insertUserAlarm" parameterType="userAlarmVO">
@@ -47,4 +55,14 @@
 			AND ALRM_TYPE=#{alrmType}
 	</update>
 	
+	<delete id="deleteUserAlarm" parameterType="userAlarmVO">
+		UPDATE
+			TB_FOR_USER_ALRM
+			SET
+				IS_DEL='Y', 
+				UPDT_ID=#{userId}, 
+				UPDT_DATE=now()
+		WHERE
+			USER_ID=#{userId}
+	</delete>
 </mapper>
