@@ -27,19 +27,8 @@
 	   	document.listForm.submit();
 	}
 	
-	function goBoardInsert(){
-		var form = $("#noticeForm");
-		form.removeAttr("action");
-		form.removeAttr("method");
-		form.attr("action", "/boardInsert.do");
-		form.submit();
-	}
-	
 	function goBoardWrite(board_idx){
-		$("#select_board_idx").val(board_idx);
-		var form = $("#noticeForm");
-		form.attr("action", "/boardWrite.do");
-		form.submit();
+		location.href = "/boardWrite.do?board_idx=" + board_idx;
 	}
 </script>
 <body>
@@ -281,7 +270,7 @@
 				<c:forEach var="result" items="${boardList}" varStatus="status">
 					<tr>
 						<td><c:out value="${result.listNum}" /></td>
-						<td class="left"><a href="for_014_write.htm"><c:out value="${result.boardTitle}" /></a></td>
+						<td class="left"><a href="javascript:goBoardWrite(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
 						<td>
 							<c:if test = "${result.fileCnt > 0}">
 								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
@@ -313,11 +302,10 @@
 				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
 				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
 				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-				<form:hidden path="pageIndex" />
 			</div>
 		</div>
 		<div class="f_right">
-			<a href="for_014_write.htm" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="/boardInsert.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	

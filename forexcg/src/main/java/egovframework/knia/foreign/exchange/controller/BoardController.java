@@ -41,12 +41,12 @@ public class BoardController {
 
 		paginationInfo.setCurrentPageNo(1);//개발용:현재 페이지 번호
 		paginationInfo.setRecordCountPerPage(10);//개발용:표시할 페이지 갯수
-		paginationInfo.setPageSize(10);//개발용:페이지 사이즈
+		paginationInfo.setPageSize(5);//개발용:페이지 사이즈
 		
 		int total_cnt = boardService.selectListCnt("NOTICE");//개발용
 		
 		boardVO.setBoardType("NOTICE");//개발용
-		boardVO.setRecordCountPerPage(10);//개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(2);//개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(0);//개발용:조회할 첫번째 데이터 번호
 		
 		List<?> boardList = boardService.selectBoardList(boardVO);
@@ -103,20 +103,18 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/boardWrite.do", method=RequestMethod.GET)
-	public ModelAndView boardWrite(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String boardWrite(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 상세내용 화면");
 		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
-		System.out.println("KJWKJW value check - " + board_idx);
 		boardVO = boardService.selectBoard(board_idx);
 		
-		HashMap<String, Object> dataMap = new HashMap<String, Object>();
+		model.addAttribute("board_idx", board_idx);
+		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
+		model.addAttribute("board_content", boardVO.getBoardContent().toString());
+		model.addAttribute("is_del", boardVO.getBoardContent().toString());
+		model.addAttribute("board_usernm", boardVO.getUserName().toString());
 		
-		dataMap.put("board_idx", board_idx);
-		dataMap.put("board_title", boardVO.getBoardTitle().toString());
-		dataMap.put("board_content", boardVO.getBoardContent().toString());
-		dataMap.put("board_usernm", boardVO.getUserName().toString());
-		
-		return new ModelAndView("setting/board_write", "dataMap", dataMap);
+		return "setting/board_write";
 	}
 	
 	@RequestMapping(value="/setting/updateBoard.ajax")
@@ -124,8 +122,9 @@ public class BoardController {
 		logger.debug("게시판 수정");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
-		
+		System.out.println("KJWKJW value check - 1");
 		String alarm_yn = request.getParameter("board_alarm").toString();
+		System.out.println("KJWKJW value check - 1" + alarm_yn);
 		boardVO.setBoardIdx(Integer.parseInt(request.getParameter("board_idx").toString()));
 		boardVO.setBoardTitle(request.getParameter("board_title").toString());
 		boardVO.setBoardContent(request.getParameter("board_content").toString());
@@ -145,7 +144,7 @@ public class BoardController {
 		
 		//return null;
 		HashMap<String, Object> boardInfo = new HashMap<String, Object>();
-		boardInfo.put("STATUS", "SUCCES");
+		boardInfo.put("status", "SUCCESS");
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(boardInfo));
 		return "jsonView";
 	}

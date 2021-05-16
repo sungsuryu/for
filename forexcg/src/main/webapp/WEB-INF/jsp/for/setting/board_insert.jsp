@@ -324,7 +324,7 @@ function insertBoard(){
             if (e.result.status == 'SUCCESS') {
             	alert("공지사항 등록이 완료되었습니다.");
             	console.log(e.result);
-            	location.href = "/notice.do";
+            	location.href = "/board.do";
             }
             else {
             }

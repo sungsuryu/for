@@ -5,15 +5,6 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
-<%
-	request.setCharacterEncoding("utf-8");
-	Map<String, Object> dataMap = (Map) request.getAttribute("dataMap");
-	String board_title = dataMap.get("board_title").toString();
-	String board_content = dataMap.get("board_content").toString();
-	String board_usernm = dataMap.get("board_usernm").toString();
-	String board_idx = dataMap.get("board_idx").toString();
-
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -30,7 +21,6 @@
 </head>
 <script>
 $(document).ready(function() {
-	setView();
 });
 
 </script>
@@ -245,7 +235,7 @@ $(document).ready(function() {
 		</ul>
 	</div>
 	<form id="boardForm" name="boardForm" method="post">
-		<input id="board_idx" name="board_idx" type="hidden"/>
+		<input id="board_idx" name="board_idx" type="hidden" value="<c:out value="${board_idx}" />">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -255,7 +245,7 @@ $(document).ready(function() {
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><input id="board_title" name="board_title" type="text" style="width:100%"></td>
+						<td><input id="board_title" name="board_title" type="text" style="width:100%" value="<c:out value="${board_title}" />"></td>
 					</tr>
 					<tr>
 						<th>알림톡</th>
@@ -263,7 +253,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><input id="board_usernm" name="board_usernm" type="text"></td>
+						<td><input id="board_usernm" name="board_usernm" type="text" value="<c:out value="${board_usernm}" />"></td>
 					</tr>
 					<tr>
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
@@ -292,7 +282,7 @@ $(document).ready(function() {
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea id="board_content" name="board_content" rows="15"></textarea>
+							<textarea id="board_content" name="board_content" rows="15"><c:out value="${board_content}"/></textarea>
 						</td>
 					</tr>
 				</tbody>
@@ -325,12 +315,6 @@ $(document).ready(function() {
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-function setView(){
-	$("#board_idx").val(<%=board_idx%>);
-	$("#board_title").val(<%=board_title%>);
-	$("#board_content").val(<%=board_content%>);
-	$("#board_usernm").val(<%=board_usernm%>);
-}
 function updateBoard(){
 	var formdata = $("#boardForm").serializeArray();
 	if(!$("#board_alarm").is(':checked')){
@@ -347,7 +331,7 @@ function updateBoard(){
         success: function(e){
             if (e.result.status == 'SUCCESS') {
             	alert("수정 성공");
-            	location.href = "/notice.do";
+            	location.href = "/board.do";
             }
             else {
             	alert("공지사항을 불러올 수  없습니다.");
@@ -372,7 +356,7 @@ function deleteBoard(){
         success: function(e){
             if (e.result.status == 'SUCCESS') {
             	alert("수정 성공");
-            	location.href = "/notice.do";
+            	location.href = "/board.do";
             }
             else {
             	alert("공지사항을 불러올 수  없습니다.");

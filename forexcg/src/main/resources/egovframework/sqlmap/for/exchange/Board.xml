@@ -108,6 +108,7 @@
 			 BOARD_IDX
 			,BOARD_TITLE
 			,BOARD_CONTENT
+			,IS_DEL
 			,USER_NM
 		FROM TB_FOR_BOARD
 		WHERE BOARD_IDX = #{board_idx};
