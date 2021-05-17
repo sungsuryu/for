@@ -26,7 +26,7 @@ public interface BoardMapper {
 	
 	/**
 	 * 게시판 관리 문서  조회
-	 * @param HashMap 게시판 조회정보
+	 * @param int 게시글 번호
 	 * @return BoardVO 게시판정보
 	 * @throws Exception
 	 */
@@ -34,9 +34,10 @@ public interface BoardMapper {
 	
 	/**
 	 * 게시판 관리 조회수 증가
+	 * @param int 게시글 번호
 	 * @throws Exception
 	 */
-	void updateBoardViewCnt(HashMap<String, Object> boardInfo) throws Exception;
+	void updateBoardViewCnt(int boardIdx) throws Exception;
 	
 	/**
 	 * 게시판 등록

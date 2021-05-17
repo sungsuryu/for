@@ -16,8 +16,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.util.EgovStringUtil;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
@@ -37,17 +39,24 @@ public class BoardController {
 	public String notice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 관리 화면");
 		
+		int pageIndex;
+		if(EgovStringUtil.isEmpty(request.getParameter("pageIndex"))){
+			pageIndex = 1;
+		}else{
+			pageIndex = Integer.parseInt(request.getParameter("pageIndex").toString());
+		}
+		System.out.println("KJW pageIdex - " + pageIndex);
 		PaginationInfo paginationInfo = new PaginationInfo();
 
-		paginationInfo.setCurrentPageNo(1);//개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(10);//개발용:표시할 페이지 갯수
-		paginationInfo.setPageSize(5);//개발용:페이지 사이즈
+		paginationInfo.setCurrentPageNo(pageIndex);//개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(2);//개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(3);//개발용:페이지 리스트에 게시되는 페이지 건수
 		
 		int total_cnt = boardService.selectListCnt("NOTICE");//개발용
 		
 		boardVO.setBoardType("NOTICE");//개발용
 		boardVO.setRecordCountPerPage(2);//개발용:한번에 조회할 데이터 수
-		boardVO.setFirstIndex(0);//개발용:조회할 첫번째 데이터 번호
+		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());//개발용:조회할 첫번째 데이터 번호
 		
 		List<?> boardList = boardService.selectBoardList(boardVO);
 		model.addAttribute("boardList", boardList);
@@ -108,17 +117,18 @@ public class BoardController {
 		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
 		boardVO = boardService.selectBoard(board_idx);
 		
+		boardService.updateBoardViewCnt(board_idx);
 		model.addAttribute("board_idx", board_idx);
 		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
 		model.addAttribute("board_content", boardVO.getBoardContent().toString());
-		model.addAttribute("is_del", boardVO.getBoardContent().toString());
+		model.addAttribute("alarm_yn", boardVO.getAlarmYn().toString());
 		model.addAttribute("board_usernm", boardVO.getUserName().toString());
 		
 		return "setting/board_write";
 	}
 	
 	@RequestMapping(value="/setting/updateBoard.ajax")
-	public String updateBoard(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String updateBoard(final MultipartHttpServletRequest multiRequest, @ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 수정");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());

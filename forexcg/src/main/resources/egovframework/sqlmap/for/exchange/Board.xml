@@ -75,7 +75,7 @@
 			,TB.BOARD_TITLE
 			,TB.USER_ID
 			,TB.USER_NM
-			,TB.UPDT_DATE
+			,DATE_FORMAT(TB.UPDT_DATE, '%Y-%m-%d %H:%i:%s') AS UPDT_DATE
 			,TB.VIEW_CNT
 			,TB.FILE_CNT
 		FROM
@@ -93,7 +93,7 @@
 				TB.*,
 				COUNT(TBF.BOARD_IDX) AS FILE_CNT
 			FROM
-				TB_FOR_BOARD TB LEFT OUTER JOIN TB_FOR_BOARD_FILES TBF ON TB.BOARD_IDX = TBF.BOARD_IDX
+				TB_FOR_BOARD TB LEFT OUTER JOIN TB_FOR_ATCH_FILES TBF ON TB.BOARD_IDX = TBF.BOARD_IDX
 			WHERE 1=1
 			GROUP BY TB.BOARD_IDX) TB, (SELECT @rownum:=0) temp
 		WHERE
@@ -108,7 +108,7 @@
 			 BOARD_IDX
 			,BOARD_TITLE
 			,BOARD_CONTENT
-			,IS_DEL
+			,ALARM_YN
 			,USER_NM
 		FROM TB_FOR_BOARD
 		WHERE BOARD_IDX = #{board_idx};
@@ -118,11 +118,7 @@
 		UPDATE
 			TB_FOR_BOARD
 		SET
-			 BOARD_TITLE = #{boardTitle}
-			,BOARD_CONTENT = #{boardContent}
-			,USER_NM = #{userName}
-			,UPDT_ID = #{updtId}
-			,UPDT_DATE = NOW()
+			VIEW_CNT = IFNULL(VIEW_CNT, 0) +1
 		WHERE
 			BOARD_IDX = #{boardIdx}
 	</update>
@@ -155,7 +151,7 @@
 			NOW(),
 			#{userId},
 			NOW(),
-			1,
+			0,
 			#{isDel},
 			#{alarmYn},
 			#{boardType}
@@ -171,6 +167,7 @@
 			,USER_NM = #{userName}
 			,UPDT_ID = #{updtId}
 			,UPDT_DATE = NOW()
+			,ALARM_YN = #{alarmYn}
 		WHERE
 			BOARD_IDX = #{boardIdx}
 	</update>

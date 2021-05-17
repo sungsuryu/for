@@ -249,7 +249,14 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i> <label for="">전송</label></td>
+						<c:choose>
+							<c:when test="${alarm_yn eq 'Y'}">
+								<td><input id="board_alarm" name="board_alarm" type="checkbox" checked="checked"><i></i><label for="">전송</label></td>
+							</c:when>
+							<c:otherwise>
+								<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i><label for="">전송</label></td>
+							</c:otherwise>
+							</c:choose>
 					</tr>
 					<tr>
 						<th>작성자</th>
@@ -294,7 +301,7 @@ $(document).ready(function() {
 		<div class="f_right">
 			<a href="javascript:updateBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
-			<a href="javascript:history.back();" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="/board.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	

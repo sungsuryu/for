@@ -24,28 +24,12 @@ public class BoardVO implements Serializable {
 	
 	private String insrtId;
 	
-	private Date insrtDate = null;
+	private String insrtDate = null;
 	
 	private String updtId;
 	
-	private Date updtDate = null;
+	private String updtDate = null;
 	
-	public int getFirstIndex() {
-		return firstIndex;
-	}
-
-	public void setFirstIndex(int firstIndex) {
-		this.firstIndex = firstIndex;
-	}
-
-	public int getRecordCountPerPage() {
-		return recordCountPerPage;
-	}
-
-	public void setRecordCountPerPage(int recordCountPerPage) {
-		this.recordCountPerPage = recordCountPerPage;
-	}
-
 	private int viewCnt;
 	
 	private String isDel;
@@ -67,6 +51,22 @@ public class BoardVO implements Serializable {
 	private int recordCountPerPage;
 	
 	private int fileCnt;
+	
+	public int getFirstIndex() {
+		return firstIndex;
+	}
+
+	public void setFirstIndex(int firstIndex) {
+		this.firstIndex = firstIndex;
+	}
+
+	public int getRecordCountPerPage() {
+		return recordCountPerPage;
+	}
+
+	public void setRecordCountPerPage(int recordCountPerPage) {
+		this.recordCountPerPage = recordCountPerPage;
+	}
 
 	public int getCnt() {
 		return cnt;
@@ -140,11 +140,11 @@ public class BoardVO implements Serializable {
 		this.insrtId = insrtId;
 	}
 
-	public Date getInsrtDate() {
+	public String getInsrtDate() {
 		return insrtDate;
 	}
 
-	public void setInsrtDate(Date insrtDate) {
+	public void setInsrtDate(String insrtDate) {
 		this.insrtDate = insrtDate;
 	}
 
@@ -156,11 +156,11 @@ public class BoardVO implements Serializable {
 		this.updtId = updtId;
 	}
 
-	public Date getUpdtDate() {
+	public String getUpdtDate() {
 		return updtDate;
 	}
 
-	public void setUpdtDate(Date updtDate) {
+	public void setUpdtDate(String updtDate) {
 		this.updtDate = updtDate;
 	}
 

@@ -228,7 +228,7 @@ $(document).ready(function() {
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
-	<form id="boardForm" name="boardForm" method="post">
+	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -286,7 +286,7 @@ $(document).ready(function() {
 	<div class="tbl_btm">
 		<div class="f_right">
 			<a href="javascript:insertBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-			<a href="javascript:history.back();" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="/board.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	
@@ -337,6 +337,11 @@ function insertBoard(){
         }
     });
 }
+
+function addFile(){}
+	
+function removeFile(){}
+
 </script>
 
 </body>

@@ -34,8 +34,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public void updateBoardViewCnt(HashMap<String, Object> boardInfo) throws Exception {
-		boardMapper.updateBoardViewCnt(boardInfo);
+	public void updateBoardViewCnt(int boardIdx) throws Exception {
+		boardMapper.updateBoardViewCnt(boardIdx);
 		
 	}
 

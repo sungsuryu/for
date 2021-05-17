@@ -443,8 +443,10 @@ tr.on td { background:#e7f4fd }
 
 .pagenum { text-align:center; font-size:0; margin-top:5px }
 .pagenum a { display:inline-block; width:32px; height:30px; line-height:28px; background:#fff; border:1px solid #e0e0e0; text-align:center; color:#888; font-size:13px; margin-left:-1px }
+.pagenum strong { display:inline-block; width:32px; height:30px; line-height:28px; background:#fff; border:1px solid #e0e0e0; text-align:center; color:#888; font-size:13px; margin-left:-1px }
 .pagenum a:hover { background:#f4f4f4 }
 .pagenum a.on  { background:#666; color:#eee; border-color:#555 }
+.pagenum strong.on  { background:#666; color:#eee; border-color:#555 }
 
 .catg_area { margin-bottom:10px }
 .catg_area li { display:inline-block }

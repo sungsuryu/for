@@ -919,4 +919,8 @@ public class EgovStringUtil {
         }
         return cs1.equals(cs2);
 	}
+	
+    public static String defaultString(String str, String defaultStr) {
+        return (str == null || str.length() == 0 ? defaultStr : str);
+    }
 }

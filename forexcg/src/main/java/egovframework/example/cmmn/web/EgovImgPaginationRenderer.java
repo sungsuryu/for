@@ -50,7 +50,7 @@ public class EgovImgPaginationRenderer extends AbstractPaginationRenderer implem
 	*
 	* @see 개발프레임웍크 실행환경 개발팀
 	*/
-	public void initVariables() {
+/*	public void initVariables() {
 
 		firstPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\">" + "<image src='" + servletContext.getContextPath() + "/images/egovframework/cmmn/btn_page_pre10.gif' border=0/></a>&#160;";
 		previousPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\">" + "<image src='" + servletContext.getContextPath() + "/images/egovframework/cmmn/btn_page_pre1.gif' border=0/></a>&#160;";
@@ -58,6 +58,17 @@ public class EgovImgPaginationRenderer extends AbstractPaginationRenderer implem
 		otherPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\">{2}</a>&#160;";
 		nextPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\">" + "<image src='" + servletContext.getContextPath() + "/images/egovframework/cmmn/btn_page_next1.gif' border=0/></a>&#160;";
 		lastPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\">" + "<image src='" + servletContext.getContextPath() + "/images/egovframework/cmmn/btn_page_next10.gif' border=0/></a>&#160;";
+	}*/
+	
+	//커스텀 -KJW- 21.05.17
+	public void initVariables() {
+
+		firstPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-double-left\" aria-hidden=\"true\"></i>" + "</a>&#160;";
+		previousPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-left\" aria-hidden=\"true\"></i>" + "</a>&#160;";
+		currentPageLabel = "<strong class=\"on\">{0}</strong>&#160;";
+		otherPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\">{2}</a>&#160;";
+		nextPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-right\" aria-hidden=\"true\"></i>" + "</a>&#160;";
+		lastPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-double-right\" aria-hidden=\"true\"></i>" + "</a>&#160;";
 	}
 
 	@Override

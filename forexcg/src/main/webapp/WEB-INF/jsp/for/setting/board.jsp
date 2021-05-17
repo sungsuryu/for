@@ -22,9 +22,11 @@
 <script>
 	//페이지 전환 함수
 	function fn_egov_link_page(pageNo){
-		document.listForm.pageIndex.value = pageNo;
+		$("#pageIndex").val(pageNo);
+		$("#pagingForm").submit();
+/* 		document.listForm.pageIndex.value = pageNo;
 		document.listForm.action = "<c:url value='/board.do'/>";
-	   	document.listForm.submit();
+	   	document.listForm.submit(); */
 	}
 	
 	function goBoardWrite(board_idx){
@@ -276,7 +278,7 @@
 								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
 							</c:if>
 						<td><c:out value="${result.userName}" /></td>
-						<td><c:out value="${result.updtDate}" /></td>
+						<td><c:out value="${result.updtDate}"/></td>
 						<td><c:out value="${result.viewCnt}" /></td>
 					</tr>
 				</c:forEach>
@@ -289,7 +291,6 @@
 			<div class="pagenum">
 				<!-- <a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
 				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				현재위치 addClass="on"
 				<a href="javascript:" class="on">1</a>
 				<a href="javascript:">2</a>
 				<a href="javascript:">3</a>
@@ -302,6 +303,9 @@
 				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
 				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
 				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+				<form id="pagingForm" name="pagingForm" method="post" action="/board.do">
+					<input type="hidden" id = "pageIndex" name = "pageIndex">
+				</form>
 			</div>
 		</div>
 		<div class="f_right">
