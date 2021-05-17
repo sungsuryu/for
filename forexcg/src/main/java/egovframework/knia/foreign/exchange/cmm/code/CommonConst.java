@@ -9,4 +9,8 @@ public final class CommonConst {
 	public static final int LOGIN_STEP2 = 2;
 	
 	public static final int LOGIN_STEP9 = 9;
+	
+	public static final String AJX_FAIL = "FAIL";
+	
+	public static final String AJX_SUCCESS = "SUCCESS";
 }
