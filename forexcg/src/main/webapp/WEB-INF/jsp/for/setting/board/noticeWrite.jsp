@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -9,9 +15,9 @@
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="css/design.css" />
-<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
-<script type="text/javascript" src="js/design.js"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
+<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 </head>
 <script>
 $(document).ready(function() {
@@ -286,7 +292,7 @@ $(document).ready(function() {
 	<div class="tbl_btm">
 		<div class="f_right">
 			<a href="javascript:insertBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-			<a href="/board.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	
@@ -317,14 +323,14 @@ function insertBoard(){
 	}
 	$.ajax({
         type:"POST",
-        url:"/setting/insertBoard.ajax",
+        url:"/setting/board/noticeWriteAction.ajax",
         cache:false,
         data:formdata,
         success: function(e){
             if (e.result.status == 'SUCCESS') {
             	alert("공지사항 등록이 완료되었습니다.");
             	console.log(e.result);
-            	location.href = "/board.do";
+            	location.href = "/setting/board/notice.do";
             }
             else {
             }

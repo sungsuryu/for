@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
@@ -15,23 +15,14 @@
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="css/design.css" />
-<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
-<script type="text/javascript" src="js/design.js"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
+<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 </head>
 <script>
-	//페이지 전환 함수
-	function fn_egov_link_page(pageNo){
-		$("#pageIndex").val(pageNo);
-		$("#pagingForm").submit();
-/* 		document.listForm.pageIndex.value = pageNo;
-		document.listForm.action = "<c:url value='/board.do'/>";
-	   	document.listForm.submit(); */
-	}
-	
-	function goBoardWrite(board_idx){
-		location.href = "/boardWrite.do?board_idx=" + board_idx;
-	}
+$(document).ready(function() {
+});
+
 </script>
 <body>
 
@@ -243,73 +234,67 @@
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
-	
-	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong>10</strong>건</p>
-	</div>
-	
-	<div class="table_h01">
-		<table>
-			<colgroup>
-				<col style="width:70px">
-				<col style="">
-				<col style="width:120px">
-				<col style="width:120px">
-				<col style="width:120px">
-				<col style="width:120px">
-			</colgroup>
-			<thead>
-				<tr>
-					<th>순번</th>
-					<th>제목</th>
-					<th>첨부파일</th>
-					<th>작성자</th>
-					<th>작성일자</th>
-					<th>조회</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="result" items="${boardList}" varStatus="status">
+	<form id="boardForm" name="boardForm" method="post">
+		<input id="board_idx" name="board_idx" type="hidden" value="<c:out value="${board_idx}" />">
+		<div class="table_v01">
+			<table>
+				<colgroup>
+					<col style="width:150px">
+					<col style="">
+				</colgroup>
+				<tbody>
 					<tr>
-						<td><c:out value="${result.listNum}" /></td>
-						<td class="left"><a href="javascript:goBoardWrite(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
-						<td>
-							<c:if test = "${result.fileCnt > 0}">
-								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
-							</c:if>
-						<td><c:out value="${result.userName}" /></td>
-						<td><c:out value="${result.updtDate}"/></td>
-						<td><c:out value="${result.viewCnt}" /></td>
+						<th>제목</th>
+						<td><input id="board_title" name="board_title" type="text" style="width:100%" value="<c:out value="${board_title}" />"></td>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</div>
+					<tr>
+						<th>알림톡</th>
+						<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i><label for="">전송</label></td>
+					</tr>
+					<tr>
+						<th>작성자</th>
+						<td><input id="board_usernm" name="board_usernm" type="text" value="<c:out value="${board_usernm}" />"></td>
+					</tr>
+					<tr>
+						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
+						<td>
+							<div class="add_file_list">
+								<ul>
+									<!-- 선택한 파일 addClass="on" -->
+									<li class="on">업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li>
+								</ul>
+								<a href="javascript:;" class="btn btn-sm">삭제</a>
+							</div>
+							<div class="add_file">
+								<input type="file">
+								<a href="javascript:;" class="btn btn-sm btn-info">업로드</a>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>내용</th>
+						<td>
+							<textarea id="board_content" name="board_content" rows="15"><c:out value="${board_content}"/></textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</form>
 	
 	<div class="tbl_btm">
-		<div class="f_left">
-			<div class="pagenum">
-				<!-- <a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				<a href="javascript:" class="on">1</a>
-				<a href="javascript:">2</a>
-				<a href="javascript:">3</a>
-				<a href="javascript:">4</a>
-				<a href="javascript:">5</a>
-				<a href="javascript:">6</a>
-				<a href="javascript:">7</a>
-				<a href="javascript:">8</a>
-				<a href="javascript:">9</a>
-				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
-				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-				<form id="pagingForm" name="pagingForm" method="post" action="/board.do">
-					<input type="hidden" id = "pageIndex" name = "pageIndex">
-				</form>
-			</div>
-		</div>
 		<div class="f_right">
-			<a href="/boardInsert.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="javascript:updateBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
+			<a href="/board.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	
@@ -330,8 +315,62 @@
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-$(function(){
-});
+function updateBoard(){
+	var formdata = $("#boardForm").serializeArray();
+	if(!$("#board_alarm").is(':checked')){
+		formdata.push({
+			name : $("#board_alarm").attr('name'),
+			value : "N"
+		});
+	}
+	$.ajax({
+        type:"POST",
+        url:"/setting/updateBoard.ajax",
+        cache:false,
+        data:formdata,
+        success: function(e){
+            if (e.result.status == 'SUCCESS') {
+            	alert("수정 성공");
+            	location.href = "/board.do";
+            }
+            else {
+            	alert("공지사항을 불러올 수  없습니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(error);
+        }, 
+        complete : function() {
+        	console.log('complete');
+        }
+    });
+}
+
+function deleteBoard(){
+	var formdata = $("#boardForm").serialize();
+	$.ajax({
+        type:"POST",
+        url:"/setting/boardDelete.ajax",
+        cache:false,
+        data:formdata,
+        success: function(e){
+            if (e.result.status == 'SUCCESS') {
+            	alert("수정 성공");
+            	location.href = "/board.do";
+            }
+            else {
+            	alert("공지사항을 불러올 수  없습니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(error);
+        }, 
+        complete : function() {
+        	console.log('complete');
+        }
+    });
+}
+
 </script>
 
 </body>
