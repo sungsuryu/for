@@ -6,10 +6,15 @@ import org.springframework.stereotype.Service;
 
 import egovframework.com.cmm.service.EgovSmsInfoService;
 import egovframework.com.cmm.util.EgovFileScrty;
+import egovframework.com.cmm.util.EgovNumberUtil;
+import egovframework.knia.foreign.exchange.dao.mapper.AuthNumMapper;
+import egovframework.knia.foreign.exchange.dao.mapper.LoginMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.TermsAgreeHistMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.UserAlarmMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.UserMapper;
 import egovframework.knia.foreign.exchange.service.JoinService;
+import egovframework.knia.foreign.exchange.vo.CellAuthVO;
+import egovframework.knia.foreign.exchange.vo.LoginAuthHistVO;
 import egovframework.knia.foreign.exchange.vo.TermsAgreeHistVO;
 import egovframework.knia.foreign.exchange.vo.UserAlarmVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
@@ -23,11 +28,17 @@ public class JoinServiceImpl implements JoinService {
 	@Resource(name = "userAlarmMapper")
 	UserAlarmMapper userAlarmMapper;
 	
+	@Resource(name = "authNumMapper")
+	AuthNumMapper authNumMapper;
+	
 	@Resource(name = "termsAgreeHistMapper")
 	TermsAgreeHistMapper termsAgreeHistMapper;
 	
 	@Resource(name = "EgovSmsInfoService")
 	EgovSmsInfoService egovSmsInfoService;
+	
+	@Resource(name="loginMapper")
+	private LoginMapper loginMapper;
 	
 	@Override
 	public void UserJoin(UserVO userVO) throws Exception {
@@ -35,6 +46,7 @@ public class JoinServiceImpl implements JoinService {
 		String encPassword = EgovFileScrty.encryptPassword(userVO.getPassword(), userVO.getUserId());
 		userVO.setPassword(encPassword);
 		
+		// 전화번호 형식 렌더링
 		userVO.setOfficeTelNum(egovSmsInfoService.phoneNumber(userVO.getOfficeTelNum()));
 		userVO.setCellNum(egovSmsInfoService.phoneNumber(userVO.getCellNum()));
 		
@@ -69,5 +81,36 @@ public class JoinServiceImpl implements JoinService {
 	@Override
 	public int countUser(String userId) throws Exception {
 		return (Integer)userMapper.countUser(userId);
+	}
+	
+	@Override
+	public CellAuthVO generateAuthNum(CellAuthVO cellAuthVO) throws Exception {
+		
+		// 2차인증번호 생성
+		String authNum = EgovNumberUtil.getRandomNum(100000, 999999) + "";
+		cellAuthVO.setAuthNum(authNum);
+		// 검증문자열생성
+		String encAuthNum = EgovFileScrty.encryptPassword(authNum, cellAuthVO.getCellNum());
+		cellAuthVO.setEncAuthVal(encAuthNum);
+		
+		authNumMapper.insertAuthNum(cellAuthVO);
+
+		return cellAuthVO;
+	}
+	
+	@Override
+	public CellAuthVO compareAuthNum(CellAuthVO cellAuthVO) throws Exception {
+		
+		CellAuthVO reqAuthInfo = authNumMapper.selectLastAuthNum(cellAuthVO);
+		if (reqAuthInfo == null)
+			return null;
+		
+		if (cellAuthVO.getAuthNum().equals(reqAuthInfo.getAuthNum())) {
+			return reqAuthInfo;
+		} else {
+			authNumMapper.updateExpireAuthNum(cellAuthVO);
+			
+			return null;
+		}
 	}
 }

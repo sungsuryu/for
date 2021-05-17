@@ -33,6 +33,7 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		UserVO userVO = loginMapper.selectUser(loginVO);
 		
 		if (userVO != null && !userVO.getUserId().equals("") && !userVO.getPassword().equals("")) {
+			// 인증번호 생성
 			this.insertAuthHist(userVO);
 			
 			return userVO;
@@ -50,7 +51,7 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 	 */
 	private void insertAuthHist(UserVO userVO) throws Exception {
 		// 2차인증번호 생성
-		String authNum = EgovNumberUtil.getRandomNum(1000, 9999) + "";
+		String authNum = EgovNumberUtil.getRandomNum(100000, 999999) + "";
 
 		LoginAuthHistVO loginAuthHistVO = new LoginAuthHistVO();
 		loginAuthHistVO.setUserId(userVO.getUserId());

@@ -32,5 +32,11 @@
 				<arg0 key="title.login.joinAgree" />
 			</field>
 		</form>
+		
+		<form name="cellAuthVO">
+			<field property="cellNum" depends="required">
+				<arg0 key="title.auth.cellNum" />
+			</field>
+		</form>
 	</formset>
 </form-validation>

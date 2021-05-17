@@ -215,7 +215,7 @@
 		<a href="javascript:void(0)" class="btn_close linkOTPcancel">창닫기</a>
 	</header>
 	<div class="pop_con">
-		<input type="text" placeholder="인증번호" class="line" maxlength="4" id="authNum" name="authNum" />
+		<input type="text" placeholder="인증번호" class="line" maxlength="6" id="authNum" name="authNum" />
 		<p>*카카오알림톡으로 전송한 인증번호를 입력하세요.</p>
 		<dl>
 			<dt>입력 가능 시간</dt>

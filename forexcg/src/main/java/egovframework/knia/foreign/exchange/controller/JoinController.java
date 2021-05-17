@@ -26,6 +26,7 @@ import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.InsureService;
 import egovframework.knia.foreign.exchange.service.JoinService;
 import egovframework.knia.foreign.exchange.service.FileService;
+import egovframework.knia.foreign.exchange.vo.CellAuthVO;
 import egovframework.knia.foreign.exchange.vo.FileVO;
 import egovframework.knia.foreign.exchange.vo.InsureVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
@@ -124,5 +125,49 @@ public class JoinController {
 		joinService.UserJoin(userVO);
 		
 		return "redirect:/index.do";
+	}
+	
+	@RequestMapping(value="reqCellAuth.ajax")
+	public String requestCellAuth(@ModelAttribute("CellAuthVO") CellAuthVO cellAuthVO, BindingResult bindingResult, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		beanValidator.validate(cellAuthVO, bindingResult);
+        if (bindingResult.hasErrors()) {
+        	throw new Exception();
+        }
+		
+        CellAuthVO authInfo = joinService.generateAuthNum(cellAuthVO);
+        logger.debug("gen authNum:{}", authInfo.getAuthNum());
+        
+        model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
+        
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="resCellAuth.ajax")
+	public String responseCellAuth(@ModelAttribute("CellAuthVO") CellAuthVO cellAuthVO, BindingResult bindingResult, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		beanValidator.validate(cellAuthVO, bindingResult);
+        if (bindingResult.hasErrors()) {
+        	throw new Exception();
+        }
+		
+        String reqAuthNum = cellAuthVO.getAuthNum();
+        if (reqAuthNum == null || reqAuthNum.equals("")) {
+        	logger.error("인증번호 누락");
+        	throw new Exception("인증번호 없음.");
+        }
+        
+        CellAuthVO getAuthInfo = joinService.compareAuthNum(cellAuthVO);
+        
+        HashMap<String, Object> authResult = new HashMap<String, Object>();
+        if (getAuthInfo == null) {
+        	authResult.put("authResult", "FAIL");
+        } else {
+        	authResult.put("authResult", "SUCCESS");
+        }
+        
+        model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(authResult));
+        
+		return "jsonView";
 	}
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.AuthNumMapper">
+
+	<resultMap id="mapAuthNum" type="egovframework.knia.foreign.exchange.vo.CellAuthVO">
+		<result property="cellNum" column="CELL_NUM" />
+		<result property="authNum" column="AUTH_NUM" />
+		<result property="authType" column="AUTH_TYPE" />
+		<result property="encAuthVal" column="ENC_AUTH_VAL" />
+	</resultMap>
+	
+	<insert id="insertAuthNum" parameterType="cellAuthVO">
+		/** AuthNum.insertAuthNum */
+		INSERT INTO TB_FOR_CELL_AUTH (
+			CELL_NUM, INSRT_DATE, AUTH_NUM, AUTH_TYPE, IS_EXP, UPDT_DATE
+		) VALUES (
+			#{cellNum}, now(), #{authNum}, #{authType}, 'N', now()
+		)
+	</insert>
+
+	<select id="selectLastAuthNum" parameterType="cellAuthVO" resultMap="mapAuthNum">
+		/** AuthNum.selectLastAuthNum */
+		SELECT
+			CELL_NUM, AUTH_NUM, AUTH_TYPE, ENC_AUTH_VAL
+		FROM TB_FOR_CELL_AUTH
+		WHERE
+			CELL_NUM=#{cellNum}
+			AND IS_EXP='N'
+			AND INSRT_DATE > DATE_SUB(now(), INTERVAL 10 MINUTE)
+		ORDER BY INSRT_DATE DESC
+		LIMIT 1
+	</select>
+
+	<update id="updateExpireAuthNum" parameterType="cellAuthVO">
+		UPDATE
+			TB_FOR_CELL_AUTH
+			SET
+				IS_EXP='Y', 
+				UPDT_DATE=now()
+		WHERE
+			CELL_NUM=${cellNum}
+	</update>
+</mapper>

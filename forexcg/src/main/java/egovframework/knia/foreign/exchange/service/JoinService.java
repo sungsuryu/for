@@ -1,5 +1,6 @@
 package egovframework.knia.foreign.exchange.service;
 
+import egovframework.knia.foreign.exchange.vo.CellAuthVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
 
 public interface JoinService {
@@ -8,4 +9,7 @@ public interface JoinService {
 
 	int countUser(String userId) throws Exception;
 
+	CellAuthVO generateAuthNum(CellAuthVO cellAuthVO) throws Exception;
+	
+	CellAuthVO compareAuthNum(CellAuthVO cellAuthVO) throws Exception;
 }

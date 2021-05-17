@@ -17,9 +17,106 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 <script type="text/javascript">
+	$(function() {
+		var authrequest = false;
+		// 휴대폰번호 인증 받기
+	 	$('#btnReqAuth').click(function(){
+	 		var cellNumTxt = $("#cellNumTxt").val();
+	 		if (cellNumTxt == "") {
+	 			alert("휴대폰번호를 입력해주세요.");
+	 			$("#cellNumTxt").focus();
+	 			return;
+	 		}
+	 		var chkStyle = /[0-9]{9,12}$/;
+	 		if (!chkStyle.test(cellNumTxt)) {
+	 			alert("휴대폰번호는 숫자만 입력해주세요.");
+	 			$("#cellNumTxt").focus();
+	 			return;
+	 		}
+	 		if (cellNumTxt.length < 9) {
+	 			alert("휴대폰번호를 확인해주세요.");
+	 			$("#cellNumTxt").focus();
+	 			return;
+	 		}
+
+	 		$.ajax({
+		        type:"POST",
+		        url:"/reqCellAuth.ajax",
+		        data : {
+		        	"cellNum":cellNumTxt
+		        },
+		        beforeSend: function(xhr, opts) {
+		        	if (authrequest)
+		        		xhr.abort();
+		        	
+		        	authrequest = true;
+		        },
+		        success: function(e){
+		        	console.log(e);	
+		        	
+		        	$("#cellNum").val($("#cellNumTxt").val());
+		        	
+		        	$("#btnReqAuth").hide();
+		        	$("#cellNumTxt").attr("disabled", true);
+		        	
+		        	$("#authInputNum").show();
+		    		$("#btnAuthCfm").show();
+		        },
+		        complete : function() {
+		        	authrequest = false;
+		        }
+	    	});
+		});
+		
+		var authresponse = false;
+		$("#btnAuthCfm").click(function() {
+			var authNum = $("#authInputNum").val();
+	 		if (authNum == "") {
+	 			alert("인증번호를 입력해주세요.");
+	 			$("#authNum").focus();
+	 			return;
+	 		}
+	 		var chkStyle = /[0-9]{6}$/;
+	 		if (!chkStyle.test(authNum)) {
+	 			alert("인증번호는6자리  숫자만 입력해주세요.");
+	 			$("#authNum").focus();
+	 			return;
+	 		}
+	 		
+	 		$.ajax({
+		        type:"POST",
+		        url:"/resCellAuth.ajax",
+		        data : {
+		        	"cellNum":cellNum, 
+		        	"authNum":authNum
+		        },
+		        beforeSend: function(xhr, opts) {
+		        	if (authrequest)
+		        		xhr.abort();
+		        	
+		        	authrequest = true;
+		        },
+		        success: function(e){
+		        	console.log(e);
+		        	$("#btnReqAuth").hide();
+		        	$("#cellNumTxt").attr("disabled", true);
+		        	
+		        	$("#btnAuthCfm").show();
+		        },
+		        complete : function() {
+		        	authrequest = false;
+		        }
+	    	});
+		})
+	});
+
 	$(document).ready(function() {
+		$("#authInputNum").hide();
+		$("#btnAuthCfm").hide();
+		
+		// 회원가입
 		$(".btn-primary").click(function() {
-			
+
 			var getId = $("#userIdTxt").val();
 			
 			if (getId == "") {
@@ -50,32 +147,44 @@
 				alert("소속회사를 선택해주세요.");
 				return;
 			}
+			if ($("#acsIp").val() == "") {
+				alert("접속 IP를 입력해주세요.");
+				$("#acsIp").focus();
+				return;
+			}
+			if ($("#acsIp").val() == "") {
+				alert("접속 IP를 입력해주세요.");
+				$("#acsIp").focus();
+				return;
+			}
+			if ($("#emlAddr").val() == "") {
+				alert("이메일 주소를 입력해주세요.");
+				$("#emlAddr").focus();
+				return;
+			}
 			if ($("#cellNum").val() == "") {
-				alert("휴대폰번호를 입력해주세요.");
-				$("#cellNum").focus();
+				alert("휴대폰번호를 입려해주세요.");
+				return;
+			}
+			if ($("input[name=joinAgree]:checked").val() != "Y") {
+				alert("개인정보 수집(이용)에 동의 해주세요.");
+				return;
+			}
+			if ($("#file_1").val() == "") {
+				alert("계정등록신청서를 선택해주세요.");
 				return;
 			}
 			
-			
-			
-			
-			
 			$("#joinForm").submit();
 		});
-		
-// 		$("#target").submit(function(event) {
-// 			alert( "Handler for .submit() called." );
-// 			event.preventDefault();
-// 		});
 	});
 	
 	var gotoLogin = function() {
 		location.href = "login.do";
 	};
 	
-	// 아이디 중복확인
 	var checkstatus = false;
-	
+	// 아이디 중복확인
 	var checkUserId = function(e) {
 		var getId = $("#userIdTxt").val();
 		
@@ -129,10 +238,10 @@
 
 <div id="popLayerBg"></div>
 
-
 <div id="join">
 <form name="joinForm" id="joinForm" method="post" action="joinAction.do" enctype="multipart/form-data">
 <input type="hidden" name="userId" id="userId" />
+<input type="hidden" name="cellNum" id="cellNum" />
 	<header class="contents_header">
 		<h2>회원가입</h2>
 	</header>
@@ -212,8 +321,10 @@
 				<tr>
 					<th>휴대폰번호</th>
 					<td>
-						<input type="text" id="cellNum" name="cellNum" maxlength="20" />
-						<a href="javascript:;" class="btn btn-sm btn-info">인증받기</a>
+						<input type="text" id="cellNumTxt" name="cellNumTxt" maxlength="12" />
+						<a href="javascript:void(0)" class="btn btn-sm btn-info" id="btnReqAuth">인증받기</a>
+						<input type="text" id="authInputNum" name="authInputNum" maxlength="6" placeholder="인증번호"/>
+						<a href="javascript:void(0)" class="btn btn-sm btn-info" id="btnAuthCfm">확인</a>
 						<span class="space"></span>
 						<input type="checkbox" name="isRcvCell" id="isRcvCell" value="Y"><i></i> <label for="isRcvCell">문자 수신여부</label>
 					</td>
@@ -236,9 +347,9 @@
 		<p>상기 본인은 손해보험협회에서 상기 신청내용을 처리하기 위한 목적으로 본인의 개인정보를 수집·이용하며, 동 목적 달성 후 증빙을 위하여 1년간 보유 및 이용하는 것에 동의합니다. </p>
 	</div>
 	<div class="succession right paragraph">
-		<input type="radio" name="joinAgree" id="joinAgree"><i></i> <label for="joinAgree">동의함</label>
+		<input type="radio" name="joinAgree" id="joinAgree1" value="Y"><i></i> <label for="joinAgree1">동의함</label>
 		<span class="space"></span>
-		<input type="radio" name="joinAgree" id="joinAgree2" checked><i></i> <label for="joinAgree2">동의하지 않음</label>
+		<input type="radio" name="joinAgree" id="joinAgree2" value="N" checked><i></i> <label for="joinAgree2">동의하지 않음</label>
 	</div>
 	<div class="table_v01">
 		<table>
@@ -266,10 +377,7 @@
 </form>
 </div>
 
-<script>
-$(function(){
-});
-</script>
-
 </body>
+
+
 </html>
