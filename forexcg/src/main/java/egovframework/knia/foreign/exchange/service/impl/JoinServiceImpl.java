@@ -46,14 +46,14 @@ public class JoinServiceImpl implements JoinService {
 		String encPassword = EgovFileScrty.encryptPassword(userVO.getPassword(), userVO.getUserId());
 		userVO.setPassword(encPassword);
 		
-		String encAuthVal = EgovFileScrty.encryptPassword(userVO., userVO.getCellNum());
+		String encAuthVal = EgovFileScrty.encryptPassword(userVO.getAuthNum(), userVO.getCellNum());
+		if (!userVO.getAuthKey().equals(encAuthVal)) {
+			throw new Exception("휴대폰인증 실패");
+		}
 		
 		// 전화번호 형식 렌더링
 		userVO.setOfficeTelNum(egovSmsInfoService.phoneNumber(userVO.getOfficeTelNum()));
 		userVO.setCellNum(egovSmsInfoService.phoneNumber(userVO.getCellNum()));
-		
-		
-		if ()
 		
 		// 신규사용자 등록
 		userMapper.insertNewUser(userVO);

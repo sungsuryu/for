@@ -51,6 +51,8 @@ public class UserVO implements Serializable {
 	
 	private String authNum;
 	
+	private String authKey;
+	
 	public String getJoinAgree() {
 		return joinAgree;
 	}
@@ -217,5 +219,21 @@ public class UserVO implements Serializable {
 
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getAuthNum() {
+		return authNum;
+	}
+
+	public void setAuthNum(String authNum) {
+		this.authNum = authNum;
+	}
+
+	public String getAuthKey() {
+		return authKey;
+	}
+
+	public void setAuthKey(String authKey) {
+		this.authKey = authKey;
 	}
 }
