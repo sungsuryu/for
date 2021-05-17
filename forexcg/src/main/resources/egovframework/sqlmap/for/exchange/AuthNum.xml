@@ -12,9 +12,9 @@
 	<insert id="insertAuthNum" parameterType="cellAuthVO">
 		/** AuthNum.insertAuthNum */
 		INSERT INTO TB_FOR_CELL_AUTH (
-			CELL_NUM, INSRT_DATE, AUTH_NUM, AUTH_TYPE, IS_EXP, UPDT_DATE
+			CELL_NUM, INSRT_DATE, AUTH_NUM, AUTH_TYPE, ENC_AUTH_VAL, IS_EXP, UPDT_DATE
 		) VALUES (
-			#{cellNum}, now(), #{authNum}, #{authType}, 'N', now()
+			#{cellNum}, now(), #{authNum}, #{authType}, #{encAuthVal}, 'N', now()
 		)
 	</insert>
 
@@ -26,6 +26,7 @@
 		WHERE
 			CELL_NUM=#{cellNum}
 			AND IS_EXP='N'
+			AND AUTH_TYPE=#{authType}
 			AND INSRT_DATE > DATE_SUB(now(), INTERVAL 10 MINUTE)
 		ORDER BY INSRT_DATE DESC
 		LIMIT 1
@@ -38,6 +39,7 @@
 				IS_EXP='Y', 
 				UPDT_DATE=now()
 		WHERE
-			CELL_NUM=${cellNum}
+			CELL_NUM=#{cellNum}, 
+			AND AUTH_TYPE=#{authType}
 	</update>
 </mapper>

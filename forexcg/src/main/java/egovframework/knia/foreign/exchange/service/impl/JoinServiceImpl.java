@@ -46,9 +46,14 @@ public class JoinServiceImpl implements JoinService {
 		String encPassword = EgovFileScrty.encryptPassword(userVO.getPassword(), userVO.getUserId());
 		userVO.setPassword(encPassword);
 		
+		String encAuthVal = EgovFileScrty.encryptPassword(userVO., userVO.getCellNum());
+		
 		// 전화번호 형식 렌더링
 		userVO.setOfficeTelNum(egovSmsInfoService.phoneNumber(userVO.getOfficeTelNum()));
 		userVO.setCellNum(egovSmsInfoService.phoneNumber(userVO.getCellNum()));
+		
+		
+		if ()
 		
 		// 신규사용자 등록
 		userMapper.insertNewUser(userVO);
@@ -86,14 +91,16 @@ public class JoinServiceImpl implements JoinService {
 	@Override
 	public CellAuthVO generateAuthNum(CellAuthVO cellAuthVO) throws Exception {
 		
-		// 2차인증번호 생성
-		String authNum = EgovNumberUtil.getRandomNum(100000, 999999) + "";
-		cellAuthVO.setAuthNum(authNum);
-		// 검증문자열생성
-		String encAuthNum = EgovFileScrty.encryptPassword(authNum, cellAuthVO.getCellNum());
-		cellAuthVO.setEncAuthVal(encAuthNum);
+		CellAuthVO setInfo = new CellAuthVO();
+		setInfo.setCellNum(cellAuthVO.getCellNum());
+		setInfo.setAuthNum(EgovNumberUtil.getRandomNum(100000, 999999) + "");	// 인증번호
+		setInfo.setAuthType(cellAuthVO.getAuthType());
 		
-		authNumMapper.insertAuthNum(cellAuthVO);
+		// 검증문자열 생성
+		String encAuthNum = EgovFileScrty.encryptPassword(setInfo.getAuthNum(), setInfo.getCellNum());
+		setInfo.setEncAuthVal(encAuthNum);
+		
+		authNumMapper.insertAuthNum(setInfo);
 
 		return cellAuthVO;
 	}

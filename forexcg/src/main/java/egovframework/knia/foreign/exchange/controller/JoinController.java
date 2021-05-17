@@ -22,6 +22,7 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
+import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.InsureService;
 import egovframework.knia.foreign.exchange.service.JoinService;
@@ -51,6 +52,7 @@ public class JoinController {
 	@Autowired
     private DefaultBeanValidator beanValidator;
 	
+	private final String joinType = "APPLI";
 	/**
 	 * 회원가입 화면
 	 * @param request
@@ -116,7 +118,7 @@ public class JoinController {
 	    
 	    final Map<String, MultipartFile> files = multiRequest.getFileMap();
 	    if (!files.isEmpty()) {
-			result = fileUtil.parseFileInf(files, "APPLI", 0, 0, "");
+			result = fileUtil.parseFileInf(files, joinType, 0, 0, "");
 			
 			int insertFileCnt = fileService.insertFileInfo(result, userVO.getUserId());
 	    }
@@ -135,7 +137,9 @@ public class JoinController {
         	throw new Exception();
         }
 		
+        cellAuthVO.setAuthType(joinType);
         CellAuthVO authInfo = joinService.generateAuthNum(cellAuthVO);
+        
         logger.debug("gen authNum:{}", authInfo.getAuthNum());
         
         model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
@@ -157,13 +161,15 @@ public class JoinController {
         	throw new Exception("인증번호 없음.");
         }
         
+        cellAuthVO.setAuthType(joinType);
         CellAuthVO getAuthInfo = joinService.compareAuthNum(cellAuthVO);
         
         HashMap<String, Object> authResult = new HashMap<String, Object>();
         if (getAuthInfo == null) {
-        	authResult.put("authResult", "FAIL");
+        	authResult.put("authResult", CommonConst.AJX_FAIL);
         } else {
-        	authResult.put("authResult", "SUCCESS");
+        	authResult.put("authResult", CommonConst.AJX_SUCCESS);
+        	authResult.put("authKey", getAuthInfo.getEncAuthVal());
         }
         
         model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(authResult));

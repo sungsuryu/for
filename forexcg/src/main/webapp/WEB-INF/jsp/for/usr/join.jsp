@@ -17,99 +17,127 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 <script type="text/javascript">
-	$(function() {
-		var authrequest = false;
-		// 휴대폰번호 인증 받기
-	 	$('#btnReqAuth').click(function(){
-	 		var cellNumTxt = $("#cellNumTxt").val();
-	 		if (cellNumTxt == "") {
-	 			alert("휴대폰번호를 입력해주세요.");
-	 			$("#cellNumTxt").focus();
-	 			return;
-	 		}
-	 		var chkStyle = /[0-9]{9,12}$/;
-	 		if (!chkStyle.test(cellNumTxt)) {
-	 			alert("휴대폰번호는 숫자만 입력해주세요.");
-	 			$("#cellNumTxt").focus();
-	 			return;
-	 		}
-	 		if (cellNumTxt.length < 9) {
-	 			alert("휴대폰번호를 확인해주세요.");
-	 			$("#cellNumTxt").focus();
-	 			return;
-	 		}
 
-	 		$.ajax({
-		        type:"POST",
-		        url:"/reqCellAuth.ajax",
-		        data : {
-		        	"cellNum":cellNumTxt
-		        },
-		        beforeSend: function(xhr, opts) {
-		        	if (authrequest)
-		        		xhr.abort();
-		        	
-		        	authrequest = true;
-		        },
-		        success: function(e){
-		        	console.log(e);	
-		        	
-		        	$("#cellNum").val($("#cellNumTxt").val());
-		        	
-		        	$("#btnReqAuth").hide();
-		        	$("#cellNumTxt").attr("disabled", true);
-		        	
-		        	$("#authInputNum").show();
-		    		$("#btnAuthCfm").show();
-		        },
-		        complete : function() {
-		        	authrequest = false;
-		        }
-	    	});
-		});
+	var PhNumber = function(msg, numTxt) {
+		if (numTxt == "") {
+				alert(msg+"번호를 입력해주세요.");
+				return false;
+			}
+			var chkStyle = /[0-9]{9,12}$/;
+			if (!chkStyle.test(numTxt)) {
+				alert(msg+"번호는 숫자만 입력해주세요.");
+				return false;
+			}
+			if (numTxt.length < 9) {
+				alert(msg+"번호를 확인해주세요.");
+				return false;
+			}
+			return true;
+	};
+
+	var CnkEmail = function(e) {
+		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		var eml = e;
+		if (eml == '' || !re.test(eml)) {
+			return false;
+		}
+		return true;
+	}
+	var authrequest = false;
+	// 휴대폰번호 인증 받기
+ 	var btnReqAuth = function(){
+ 		var cellNumTxt = $("#cellNumTxt").val();
+
+ 		if (!PhNumber('휴대폰', cellNumTxt)) {
+ 			$("#cellNumTxt").focus();
+ 			return;
+ 		}
+
+ 		$.ajax({
+	        type:"POST",
+	        url:"/reqCellAuth.ajax",
+	        data : {
+	        	"cellNum":cellNumTxt
+	        },
+	        beforeSend: function(xhr, opts) {
+	        	if (authrequest)
+	        		xhr.abort();
+	        	
+	        	authrequest = true;
+	        },
+	        success: function(e){
+	        	try {
+	        		if (e.result.status == 'SUCCESS') {
+	        			$("#cellNum").val($("#cellNumTxt").val());
+			        	
+			        	$("#btnReqAuth").hide();
+			        	$("#cellNumTxt").attr("disabled", true);
+			        	
+			        	$("#authInputNum").show();
+			    		$("#btnAuthCfm").show();
+	        		}
+	        	} catch (e) {;}
+	        },
+	        complete : function() {
+	        	authrequest = false;
+	        }
+    	});
+	};
+	
+	var authresponse = false;
+	var btnAuthCfm = function() {
+		var cellNum = $("#cellNum").val();		var authNum = $("#authInputNum").val();
 		
-		var authresponse = false;
-		$("#btnAuthCfm").click(function() {
-			var authNum = $("#authInputNum").val();
-	 		if (authNum == "") {
-	 			alert("인증번호를 입력해주세요.");
-	 			$("#authNum").focus();
-	 			return;
-	 		}
-	 		var chkStyle = /[0-9]{6}$/;
-	 		if (!chkStyle.test(authNum)) {
-	 			alert("인증번호는6자리  숫자만 입력해주세요.");
-	 			$("#authNum").focus();
-	 			return;
-	 		}
-	 		
-	 		$.ajax({
-		        type:"POST",
-		        url:"/resCellAuth.ajax",
-		        data : {
-		        	"cellNum":cellNum, 
-		        	"authNum":authNum
-		        },
-		        beforeSend: function(xhr, opts) {
-		        	if (authrequest)
-		        		xhr.abort();
-		        	
-		        	authrequest = true;
-		        },
-		        success: function(e){
-		        	console.log(e);
-		        	$("#btnReqAuth").hide();
-		        	$("#cellNumTxt").attr("disabled", true);
-		        	
-		        	$("#btnAuthCfm").show();
-		        },
-		        complete : function() {
-		        	authrequest = false;
-		        }
-	    	});
-		})
-	});
+		if (authNum == "") {
+ 			alert("인증번호를 입력해주세요.");
+ 			$("#authNum").focus();
+ 			return;
+ 		}
+ 		var chkStyle = /[0-9]{6}$/;
+ 		if (!chkStyle.test(authNum)) {
+ 			alert("인증번호는6자리  숫자만 입력해주세요.");
+ 			$("#authNum").focus();
+ 			return;
+ 		}
+ 		
+ 		$.ajax({
+	        type:"POST",
+	        url:"/resCellAuth.ajax",
+	        data : {
+	        	"cellNum":cellNum, 
+	        	"authNum":authNum
+	        },
+	        beforeSend: function(xhr, opts) {
+	        	if (authresponse)
+	        		xhr.abort();
+	        	
+	        	authresponse = true;
+	        },
+	        success: function(e){
 
+	        },
+	        complete : function() {
+	        	authresponse = false;
+	        }
+    	});
+	};
+
+	var ChkPwd = function(e) {
+		var regPwd = /(?=.*\d{1,20})(?=.*[~`!@#$%\^&*()-+=]{1,20})(?=.*[a-zA-Z]{1,20}).{8,20}$/;
+		if (e == '' || !regPwd.test(e)) {
+			return false;
+		}
+		return true;
+	};
+	
+	var ChkId = function(e) {
+		var regId = /^[a-zA-z][a-zA-z0-9]{7,19}$/gi;
+		if (e == '' || !regId.test(e)) {
+			return false;
+		}
+		return true;
+	};
+	
 	$(document).ready(function() {
 		$("#authInputNum").hide();
 		$("#btnAuthCfm").hide();
@@ -118,7 +146,7 @@
 		$(".btn-primary").click(function() {
 
 			var getId = $("#userIdTxt").val();
-			
+
 			if (getId == "") {
 				alert("사용할 아이디를 입력해주세요.");
 				$("#userIdTxt").focus();
@@ -131,6 +159,10 @@
 			if ($("#password").val() == "") {
 				alert("비밀번호를 입력해주세요.");
 				$("#password").focus();
+				return;
+			}
+			if (!ChkPwd($("#password").val())) {
+				alert("비밀번호는 영소ㆍ대, 숫자, 특수문자 3종류 이상으로 8자이상 20자 이하로 구성되어야 합니다.");
 				return;
 			}
 			if ($("#passwordRe").val() == "") {
@@ -152,13 +184,22 @@
 				$("#acsIp").focus();
 				return;
 			}
-			if ($("#acsIp").val() == "") {
-				alert("접속 IP를 입력해주세요.");
-				$("#acsIp").focus();
+			if ($("#userNm").val() == "") {
+				alert("이름을 입력해주세요.");
+				$("#userNm").focus();
 				return;
 			}
-			if ($("#emlAddr").val() == "") {
-				alert("이메일 주소를 입력해주세요.");
+			if ($("#dptNm").val() == "") {
+				alert("부서명을 입력해주세요.");
+				$("#dptNm").focus();
+				return;
+			}
+			if (!PhNumber('사무실 전화', $("#officeTelNum").val())) {
+				$("#officeTelNum").focus();
+	 			return;
+	 		}
+			if (!CnkEmail($("#emlAddr").val())) {
+				alert("올바른 이메일 주소를 입력해주세요.");
 				$("#emlAddr").focus();
 				return;
 			}
@@ -190,6 +231,11 @@
 		
 		if (getId == "") {
 			alert("사용할 아이디를 입력해주세요.");
+			$("#userIdTxt").focus();
+			return;
+		}
+		if (!ChkId(getId)) {
+			alert("아이디는 영문/숫자 조합으로 8자이상 20자이하로 입력해주세요.");
 			$("#userIdTxt").focus();
 			return;
 		}
@@ -242,6 +288,8 @@
 <form name="joinForm" id="joinForm" method="post" action="joinAction.do" enctype="multipart/form-data">
 <input type="hidden" name="userId" id="userId" />
 <input type="hidden" name="cellNum" id="cellNum" />
+<input type="hidden" name="authNum" id="authNum" />
+<input type="hidden" name="authKey" id="authKey" />
 	<header class="contents_header">
 		<h2>회원가입</h2>
 	</header>
@@ -293,7 +341,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th>성명</th>
+					<th>이름</th>
 					<td>
 						<input type="text" id="userNm" name="userNm" maxlength="30" />
 					</td>
@@ -322,9 +370,9 @@
 					<th>휴대폰번호</th>
 					<td>
 						<input type="text" id="cellNumTxt" name="cellNumTxt" maxlength="12" />
-						<a href="javascript:void(0)" class="btn btn-sm btn-info" id="btnReqAuth">인증받기</a>
+						<a href="javascript:void(0)" class="btn btn-sm btn-info" onclick="btnReqAuth()" id="btnReqAuth">인증받기</a>
 						<input type="text" id="authInputNum" name="authInputNum" maxlength="6" placeholder="인증번호"/>
-						<a href="javascript:void(0)" class="btn btn-sm btn-info" id="btnAuthCfm">확인</a>
+						<a href="javascript:void(0)" class="btn btn-sm btn-info" onclick="btnAuthCfm()" id="btnAuthCfm">확인</a>
 						<span class="space"></span>
 						<input type="checkbox" name="isRcvCell" id="isRcvCell" value="Y"><i></i> <label for="isRcvCell">문자 수신여부</label>
 					</td>

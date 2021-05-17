@@ -49,6 +49,8 @@ public class UserVO implements Serializable {
 
 	private String joinAgree = "Y";
 	
+	private String authNum;
+	
 	public String getJoinAgree() {
 		return joinAgree;
 	}
