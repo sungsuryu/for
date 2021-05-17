@@ -325,13 +325,13 @@ function updateBoard(){
 	}
 	$.ajax({
         type:"POST",
-        url:"/setting/updateBoard.ajax",
+        url:"/setting/board/noticeEditAction.ajax",
         cache:false,
         data:formdata,
         success: function(e){
             if (e.result.status == 'SUCCESS') {
             	alert("수정 성공");
-            	location.href = "/board.do";
+            	location.href = "/setting/board/notice.do";
             }
             else {
             	alert("공지사항을 불러올 수  없습니다.");
@@ -350,13 +350,13 @@ function deleteBoard(){
 	var formdata = $("#boardForm").serialize();
 	$.ajax({
         type:"POST",
-        url:"/setting/boardDelete.ajax",
+        url:"/setting/board/noticeDeleteAction.ajax",
         cache:false,
         data:formdata,
         success: function(e){
             if (e.result.status == 'SUCCESS') {
             	alert("수정 성공");
-            	location.href = "/board.do";
+            	location.href = "/setting/board/notice.do";
             }
             else {
             	alert("공지사항을 불러올 수  없습니다.");
