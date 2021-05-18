@@ -21,6 +21,7 @@
 </head>
 <script>
 $(document).ready(function() {
+	
 });
 
 </script>
@@ -274,8 +275,8 @@ $(document).ready(function() {
 								<a href="javascript:;" class="btn btn-sm">삭제</a>
 							</div>
 							<div class="add_file">
-								<input type="file">
-								<a href="javascript:;" class="btn btn-sm btn-info">업로드</a>
+								<input type="file" id="uploadFile" name="uploadFile" multiple>
+								<a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a>
 							</div>
 						</td>
 					</tr>
@@ -315,6 +316,7 @@ $(document).ready(function() {
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
+var fileStore = [];
 function updateBoard(){
 	var formdata = $("#boardForm").serializeArray();
 	if(!$("#board_alarm").is(':checked')){
@@ -369,6 +371,14 @@ function deleteBoard(){
         	console.log('complete');
         }
     });
+}
+
+function doUploadFileList(){
+	var upfile = ("#uploadFile").files;
+	console.log(upfile);
+	/* for(var i = 0; i < upfile.length; i++){
+		fileStore.push(upfile[i]);			
+	} */
 }
 
 </script>

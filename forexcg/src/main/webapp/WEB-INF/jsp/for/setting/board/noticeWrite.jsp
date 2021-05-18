@@ -258,7 +258,7 @@ $(document).ready(function() {
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
 						<td>
 							<div class="add_file_list">
-								<ul>
+								<ul id="uploadFileList" name="uploadFileList">
 									<!-- 선택한 파일 addClass="on" -->
 									<li class="on">업로드파일명.doc</li>
 									<li>업로드파일명.doc</li>
@@ -273,8 +273,8 @@ $(document).ready(function() {
 								<a href="javascript:;" class="btn btn-sm">삭제</a>
 							</div>
 							<div class="add_file">
-								<input type="file">
-								<a href="javascript:;" class="btn btn-sm btn-info">업로드</a>
+								<input type="file" id="uploadFile" name="uploadFile" multiple>
+								<a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a>
 							</div>
 						</td>
 					</tr>
@@ -313,6 +313,7 @@ $(document).ready(function() {
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
+var fileStore = [];
 function insertBoard(){
 	var formdata = $("#boardForm").serializeArray();
 	if(!$("#board_alarm").is(':checked')){
@@ -344,9 +345,30 @@ function insertBoard(){
     });
 }
 
-function addFile(){}
+function doUploadFileList(){
+	var upFileUi = $("#uploadFileList");
+	var upFile = $("#uploadFile")[0].files;
 	
-function removeFile(){}
+	//upFileUi.empty();
+	 	for(var i = 0; i < upFile.length; i++){
+		fileStore.push(upFile[i]);
+	}
+ 	upFileUi.empty();
+	for(var i = 0; i < fileStore.length; i++){
+		var li = '<li name="" onclick="chooseFile(' + i + ');">업로드파일명.doc</li>';
+		upFileUi.append(li);
+	}
+ 	console.log(fileStore.length);
+	
+}
+
+function chooseFile(){
+	$("").attr('class', 'on');
+}
+
+function removeFile(){
+	$("").attr('class', 'on');
+}
 
 </script>
 
