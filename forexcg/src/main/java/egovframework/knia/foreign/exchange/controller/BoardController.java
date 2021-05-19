@@ -169,18 +169,42 @@ public class BoardController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(value="/setting/pds.do")
+	@RequestMapping(value="/setting/board/pds.do")
 	public String pds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 관리 화면");
 		
-		return "setting/board";
+		return "setting/board/pds";
 	}
 	
-	@RequestMapping(value="/setting/faq.do")
+	@RequestMapping(value="/setting/board/faq.do")
 	public String faq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("FAQ 관리  화면");
+		int pageIndex;
+		if(EgovStringUtil.isEmpty(request.getParameter("pageIndex"))){
+			pageIndex = 1;
+		}else{
+			pageIndex = Integer.parseInt(request.getParameter("pageIndex").toString());
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+
+		paginationInfo.setCurrentPageNo(pageIndex);//개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(10);//개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(10);//개발용:페이지 리스트에 게시되는 페이지 건수
 		
-		return "setting/faq";
+		boardVO.setBoardType(BoardCode.NOTICE.toString());//개발용
+		boardVO.setRecordCountPerPage(10);//개발용:한번에 조회할 데이터 수
+		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());//개발용:조회할 첫번째 데이터 번호
+		
+		int total_cnt = boardService.selectBoardCnt(boardVO);//개발용
+		
+		List<?> boardList = boardService.selectBoardList(boardVO);
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("total_cnt", total_cnt);
+		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+		
+		
+		return "setting/board/faq";
 	}
 	
 	@RequestMapping(value="/board/notice.do")
@@ -291,6 +315,12 @@ public class BoardController {
 		model.addAttribute("board_usernm", boardVO.getUserName().toString());
 		
 		return "board/pdsView";
+	}
+	
+	@RequestMapping(value="/board/faq.do", method=RequestMethod.GET)
+	public String boardFaq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("자료실 상세내용 화면");
+		return "board/faq";
 	}
 	
 }
