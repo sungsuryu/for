@@ -1,6 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
@@ -10,10 +15,26 @@
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="css/design.css" />
-<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
-<script type="text/javascript" src="js/design.js"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
+<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 </head>
+<script>
+	//페이지 전환 함수
+	function fn_egov_link_page(pageNo){
+		$("#pageIndex").val(pageNo);
+		$("#pagingForm").submit();
+	}
+	
+	function goBoardView(board_idx){
+		var searchName = $("#searchName").val();
+		location.href = "/board/noticeView.do?board_idx=" + board_idx;
+	}
+	
+	function doSearchList(){
+		$("#searchForm").submit();
+	}
+</script>
 
 <body>
 
@@ -26,18 +47,34 @@
 			<li class="depth1">
 				<a href="javascript:;">공통관리</a>
 				<ul>
-					<li><a href="for_007.htm">사용자 등록관리</a></li>
-					<li><a href="for_008.htm">내정보 관리</a></li>
-					<li><a href="for_009.htm">시스템 설정관리</a></li>
-					<li><a href="for_017.htm">통계 및 조회</a></li>
+					<li class="depth2"><a href="for_007.htm">사용자 등록관리</a></li>
+					<li class="depth2"><a href="for_008.htm">내정보 관리</a></li>
+					<li class="depth2"><a href="for_009.htm">시스템 설정관리</a>
+						<ul>
+							<li class="depth3"><a href="for_009.htm">공통코드 관리</a></li>
+							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
+							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
+							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
+							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
+							<li class="depth3"><a href="for_014.htm">게시판 관리</a></li>
+							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
+						</ul>
+					</li>
+					<li class="depth2"><a href="for_017.htm">통계 및 조회</a>
+						<ul>
+							<li class="depth3"><a href="for_017.htm">사용자 알림 조회</a></li>
+							<li class="depth3"><a href="for_018.htm">시스템 사용내역 조회</a></li>
+							<li class="depth3"><a href="for_019.htm">일괄배치 실행내역 조회</a></li>
+						</ul>
+					</li>
 				</ul>				
 			</li>
 			<li class="depth1">
 				<a href="javascript:;">게시판</a>
 				<ul>
-					<li><a href="for_020.htm">FAQ</a></li>
-					<li><a href="for_021.htm">공지사항</a></li>
-					<li><a href="for_022.htm">보고관련 자료실</a></li>
+					<li class="depth2"><a href="for_020.htm">FAQ</a></li>
+					<li class="depth2"><a href="/board/notice.do">공지사항</a></li>
+					<li class="depth2"><a href="for_022.htm">보고관련 자료실</a></li>
 				</ul>				
 			</li>
 			<li class="depth1">
@@ -46,9 +83,9 @@
 			<li class="depth1">
 				<a href="javascript:;">조회</a>
 				<ul>
-					<li><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li><a href="for_025.htm">주요계수현황</a></li>
-					<li><a href="for_026.htm">차액상세표</a></li>
+					<li class="depth2"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
+					<li class="depth2"><a href="for_025.htm">주요계수현황</a></li>
+					<li class="depth2"><a href="for_026.htm">차액상세표</a></li>
 				</ul>				
 			</li>
 		</ul>
@@ -98,22 +135,40 @@
 	<nav class="gnb">
 		<ul>
 			<!-- 현재 메뉴 addClass="on" -->
-			<li class="depth1 on">
+			<li class="depth1">
 				<a href="javascript:;">공통관리</a>
 				<ul>
 					<!-- 현재 메뉴 addClass="on" -->
-					<li><a href="for_007.htm">사용자 등록관리</a></li>
-					<li><a href="for_008.htm">내정보 관리</a></li>
-					<li class="on"><a href="for_009.htm">시스템 설정관리</a></li>
-					<li><a href="for_017.htm">통계 및 조회</a></li>
+					<li class="depth2"><a href="for_007.htm">사용자 등록관리</a></li>
+					<li class="depth2"><a href="for_008.htm">내정보 관리</a></li>
+					<li class="depth2"><a href="javascript:;">시스템 설정관리</a>
+						<ul>
+							<!-- 현재 메뉴 addClass="on" -->
+							<li class="depth3"><a href="for_009.htm">공통코드 관리</a></li>
+							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
+							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
+							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
+							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
+							<li class="depth3"><a href="for_014.htm">게시판 관리</a></li>
+							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
+						</ul>
+					</li>
+					<li class="depth2"><a href="javascript:;">통계 및 조회</a>
+						<ul>
+							<!-- 현재 메뉴 addClass="on" -->
+							<li class="depth3"><a href="for_017.htm">사용자 알림 조회</a></li>
+							<li class="depth3"><a href="for_018.htm">시스템 사용내역 조회</a></li>
+							<li class="depth3"><a href="for_019.htm">일괄배치 실행내역 조회</a></li>
+						</ul>
+					</li>
 				</ul>				
 			</li>
-			<li class="depth1">
+			<li class="depth1 on">
 				<a href="javascript:;">게시판</a>
 				<ul>
-					<li><a href="for_020.htm">FAQ</a></li>
-					<li><a href="for_021.htm">공지사항</a></li>
-					<li><a href="for_022.htm">보고관련 자료실</a></li>
+					<li class="depth2"><a href="for_020.htm">FAQ</a></li>
+					<li class="depth2 on"><a href="for_021.htm">공지사항</a></li>
+					<li class="depth2"><a href="for_022.htm">보고관련 자료실</a></li>
 				</ul>				
 			</li>
 			<li class="depth1">
@@ -122,9 +177,9 @@
 			<li class="depth1">
 				<a href="javascript:;">조회</a>
 				<ul>
-					<li><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li><a href="for_025.htm">주요계수현황</a></li>
-					<li><a href="for_026.htm">차액상세표</a></li>
+					<li class="depth2"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
+					<li class="depth2"><a href="for_025.htm">주요계수현황</a></li>
+					<li class="depth2"><a href="for_026.htm">차액상세표</a></li>
 				</ul>				
 			</li>
 		</ul>
@@ -135,27 +190,14 @@
 <!--+++++ 컨텐츠 +++++-->
 <div id="contents">
 	
-	<div class="tab_menu col7">
-		<ul>
-			<!-- 현재 메뉴 addClass="on" -->
-			<li><a href="for_009.htm">공통코드 관리</a></li>
-			<li><a href="for_010.htm">보고서 관리</a></li>
-			<li><a href="for_011.htm">메뉴 관리</a></li>
-			<li><a href="for_012.htm">그룹별 메뉴 관리</a></li>
-			<li><a href="for_013.htm">팝업 관리</a></li>
-			<li class="on"><a href="for_014.htm">게시판 관리</a></li>
-			<li><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
-		</ul>
-	</div>
-	
 	<header class="contents_header">
-		<h2>게시판 관리</h2>
+		<h2>공지사항</h2>
 		<div class="navi">
 			<a href="main.htm" class="btn_home" title="홈"><i class="fa fa-home" aria-hidden="true"></i></a>
 			<span class="styled_select">
 				<select>
-					<option>공통관리</option>
 					<option>게시판</option>
+					<option>공통관리</option>					
 					<option>보고서 전송 및 결과확인</option>
 					<option>조회</option>
 				</select>
@@ -163,45 +205,33 @@
 			</span>
 			<span class="styled_select">
 				<select>
-					<option>시스템 설정관리</option>
-					<option>사용자 등록관리</option>
-					<option>내정보 관리</option>					
-					<option>통계 및 조회</option>
-				</select>
-				<i class="fa fa-chevron-down" aria-hidden="true"></i>
-			</span>
-			<span class="styled_select">
-				<select>					
-					<option>게시판 관리</option>											
-					<option>공통코드 관리</option>
-					<option>보고서 관리</option>
-					<option>메뉴 관리</option>	
-					<option>그룹별 메뉴 관리</option>		
-					<option>팝업 관리</option>		
-					<option>한국은행 시스템 정보 관리</option>
+					<option>공지사항</option>
+					<option>FAQ</option>
+					<option>보고관련 자료실</option>
 				</select>
 				<i class="fa fa-chevron-down" aria-hidden="true"></i>
 			</span>
 		</div>
 	</header>
 	
-	<div class="catg_area">
-		<ul>
-			<li class="on"><a href="javascript:;">공지사항</a></li>
-			<li><a href="javascript:;">자료실</a></li>
-			<li><a href="for_014_faq.htm">FAQ</a></li>
-		</ul>
+	<div class="top_search_area">
+		<form id="searchForm" name="searchForm" method="post" action="/board/notice.do">
+			<span class="label">제목</span>
+			<input id="searchName" name="searchName" type="text" style="width:500px" value="<c:out value="${searchName}" />">
+			<a href="javascript:doSearchList();" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
+		</form>
 	</div>
 	
 	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong>10</strong>건</p>
+		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${total_cnt}" /></strong>건</p>
 	</div>
 	
 	<div class="table_h01">
 		<table>
 			<colgroup>
-				<col style="width:70px">
+				<col style="width:80px">
 				<col style="">
+				<col style="width:120px">
 				<col style="width:120px">
 				<col style="width:120px">
 				<col style="width:120px">
@@ -214,34 +244,25 @@
 					<th>첨부파일</th>
 					<th>작성자</th>
 					<th>작성일자</th>
-					<th>조회</th>
+					<th>조회여부</th>
+					<th>조회수</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>1</td>
-					<td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td>
-					<td><a href="javascript:;" class="link01">abc.doc</a></td>
-					<td>관리자</td>
-					<td>2021-01-11</td>
-					<td>999</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td>
-					<td><a href="javascript:;" class="link01">abc.doc</a></td>
-					<td>관리자</td>
-					<td>2021-01-11</td>
-					<td>999</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td class="left"><a href="for_014_write.htm">제목이 들어갑니다.</a></td>
-					<td><a href="javascript:;" class="link01">abc.doc</a></td>
-					<td>관리자</td>
-					<td>2021-01-11</td>
-					<td>999</td>
-				</tr>
+				<c:forEach var="result" items="${boardList}" varStatus="status">
+					<tr>
+						<td><c:out value="${result.listNum}" /></td>
+						<td class="left"><a href="javascript:goBoardView(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
+						<td>
+							<c:if test = "${result.fileCnt > 0}">
+								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+							</c:if>
+						<td><c:out value="${result.userName}" /></td>
+						<td><c:out value="${result.updtDate}"/></td>
+						<td><strong>열람</strong></td>
+						<td><c:out value="${result.viewCnt}" /></td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>
@@ -249,9 +270,9 @@
 	<div class="tbl_btm">
 		<div class="f_left">
 			<div class="pagenum">
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+				<!-- <a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
 				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				<!-- 현재위치 addClass="on" -->
+				현재위치 addClass="on"
 				<a href="javascript:" class="on">1</a>
 				<a href="javascript:">2</a>
 				<a href="javascript:">3</a>
@@ -262,11 +283,13 @@
 				<a href="javascript:">8</a>
 				<a href="javascript:">9</a>
 				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
+				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+				<form id="pagingForm" name="pagingForm" method="post" action="/board/notice.do">
+					<input type="hidden" id = "pageIndex" name = "pageIndex">
+					<input type="hidden" id = "searchInfo" name = "searchName" value="<c:out value="${searchName}" />">
+				</form>
 			</div>
-		</div>
-		<div class="f_right">
-			<a href="for_014_write.htm" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	

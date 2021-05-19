@@ -21,6 +21,7 @@
 </head>
 <script>
 $(document).ready(function() {
+	fileDropDown();
 });
 
 </script>
@@ -234,7 +235,8 @@ $(document).ready(function() {
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
-	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
+	<form id="boardForm" name="boardForm" method="post" action="/setting/board/noticeWriteAction.ajax" enctype="multipart/form-data">
+		<input id="board_alarm" name="board_alarm" type="hidden">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -244,22 +246,22 @@ $(document).ready(function() {
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><input name="board_title" type="text" style="width:100%"></td>
+						<td><input id="board_title" name="board_title" type="text" style="width:100%"></td>
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i> <label for="">전송</label></td>
+						<td><input id="alarm" name="alarm" type="checkbox"><i></i> <label for="">전송</label></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><input name="board_usernm" type="text"></td>
+						<td><input id="board_usernm" name="board_usernm" type="text"></td>
 					</tr>
 					<tr>
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
 						<td>
 							<div class="add_file_list">
 								<ul id="uploadFileList" name="uploadFileList">
-									<!-- 선택한 파일 addClass="on" -->
+									<!-- 선택한 파일 addClass="on"
 									<li class="on">업로드파일명.doc</li>
 									<li>업로드파일명.doc</li>
 									<li>업로드파일명.doc</li>
@@ -268,20 +270,19 @@ $(document).ready(function() {
 									<li>업로드파일명.doc</li>
 									<li>업로드파일명.doc</li>
 									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
+									<li>업로드파일명.doc</li> -->
+									<li><input type="file" id="uploadFile" name="uploadFile"><a href="javascript:removeFile();" class="btn btn-sm">삭제</a></li>
 								</ul>
-								<a href="javascript:;" class="btn btn-sm">삭제</a>
 							</div>
 							<div class="add_file">
-								<input type="file" id="uploadFile" name="uploadFile" multiple>
-								<a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a>
+								<a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">파일추가</a>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea name="board_content" rows="15"></textarea>
+							<textarea id="board_content" name="board_content" rows="15"></textarea>
 						</td>
 					</tr>
 				</tbody>
@@ -291,7 +292,7 @@ $(document).ready(function() {
 	
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:insertBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
@@ -314,16 +315,25 @@ $(document).ready(function() {
 
 <script>
 var fileStore = [];
+var fileStoreTemp = [];
 function insertBoard(){
-	var formdata = $("#boardForm").serializeArray();
-	if(!$("#board_alarm").is(':checked')){
-		formdata.push({
-			name : $("#board_alarm").attr('name'),
-			value : "N"
-		});
+	console.log(fileStore);
+	
+//	var formdata = $("#boardForm").serializeArray();
+//	formdata.push({
+//		name : "fileList",
+//		value : fileStore
+//	});
+	if(!$("#alarm").is(':checked')){
+		$("#board_alarm").val("N");
 	}
-	$.ajax({
+	else{
+		$("#board_alarm").val("Y");
+	}
+	 $("#boardForm").submit();
+/*	$.ajax({
         type:"POST",
+        enctype: 'multipart/form-data',
         url:"/setting/board/noticeWriteAction.ajax",
         cache:false,
         data:formdata,
@@ -331,7 +341,7 @@ function insertBoard(){
             if (e.result.status == 'SUCCESS') {
             	alert("공지사항 등록이 완료되었습니다.");
             	console.log(e.result);
-            	location.href = "/setting/board/notice.do";
+            	//location.href = "/setting/board/notice.do";
             }
             else {
             }
@@ -342,32 +352,144 @@ function insertBoard(){
         complete : function() {
         	console.log('complete');
         }
-    });
+    });*/
 }
 
 function doUploadFileList(){
 	var upFileUi = $("#uploadFileList");
-	var upFile = $("#uploadFile")[0].files;
-	
-	//upFileUi.empty();
-	 	for(var i = 0; i < upFile.length; i++){
-		fileStore.push(upFile[i]);
+	if($("#uploadFileList").children().length > 9){
+		alert("첨부파일은 최대 10개까지만 첨부할 수 있습니다.");
 	}
- 	upFileUi.empty();
-	for(var i = 0; i < fileStore.length; i++){
-		var li = '<li name="" onclick="chooseFile(' + i + ');">업로드파일명.doc</li>';
+	else{
+		var li = '<li><input type="file" id="uploadFile" name="uploadFile"><a href="javascript:removeFile();" class="btn btn-sm">삭제</a></li>';
 		upFileUi.append(li);
 	}
- 	console.log(fileStore.length);
 	
+
 }
 
-function chooseFile(){
-	$("").attr('class', 'on');
+function chooseFile(index){
+	if($("#uploadFileList").children("#"+index).hasClass("on") === true){
+		$("#uploadFileList").children("#"+index).removeClass('on');
+	}
+	else{
+		$("#uploadFileList").children("#"+index).attr('class', 'on');
+	}
+	
 }
 
 function removeFile(){
-	$("").attr('class', 'on');
+	var upFileUi = $("#uploadFileList");
+	for(var i = 0; i < fileStore.length; i++){
+		if($("#uploadFileList").children("#"+i).hasClass("on") === false){
+			fileStoreTemp.push(fileStore[i]);
+		}
+	}
+	fileStore = [];
+	fileStore = fileStoreTemp;
+	fileStoreTemp = [];
+	
+	upFileUi.empty();
+	if(fileStore.length == 0){
+		var li = '<li>파일을 추가하여 주세요.</li>';
+		upFileUi.append(li);
+	}
+	else{
+		for(var i = 0; i < fileStore.length; i++){
+			var li = '<li id="' + i + '" onclick="chooseFile(' + i + ');">' + fileStore[i].name + '</li>';
+			upFileUi.append(li);
+		}	
+	}
+}
+
+function fileDropDown(){
+    var dropZone = $("#uploadFileList");
+    //Drag기능 
+    dropZone.on('dragenter',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        // 드롭다운 영역 css
+        dropZone.css('background-color','#E3F2FC');
+    });
+    dropZone.on('dragleave',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        // 드롭다운 영역 css
+        dropZone.css('background-color','#FFFFFF');
+    });
+    dropZone.on('dragover',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        // 드롭다운 영역 css
+        dropZone.css('background-color','#E3F2FC');
+    });
+    dropZone.on('drop',function(e){
+        e.preventDefault();
+        // 드롭다운 영역 css
+        dropZone.css('background-color','#FFFFFF');
+        
+        var files = e.originalEvent.dataTransfer.files;
+        if(files != null){
+            if(files.length < 1){
+                alert("폴더 업로드 불가");
+                return;
+            }
+            dropUploadFileList(files)
+        }else{
+            alert("ERROR");
+        }
+    });
+}
+
+function dropUploadFileList(files){
+	console.log(files);
+	var upFileUi = $("#uploadFileList");
+	
+	var totalFileCnt = fileStore.length + files.length;
+	
+	if(totalFileCnt > 10){
+		alert("첨부파일은 최대 10개까지 등록 가능합니다.");
+	}
+	else{
+		if(files.length > 10){
+			alert("첨부파일은 최대 10개까지 등록 가능합니다.");
+		}
+		else{
+			for(var i = 0; i < files.length; i++){
+				fileStore.push(files[i]);
+			}
+		 	upFileUi.empty();
+			if(fileStore.length == 0){
+				var li = '<li>파일을 추가하여 주세요.</li>';
+				upFileUi.append(li);
+			}
+			else{
+				for(var i = 0; i < fileStore.length; i++){
+					var li = '<li id="' + i + '" onclick="chooseFile(' + i + ');">' + fileStore[i].name + '</li>';
+					upFileUi.append(li);
+				}
+			}
+		}
+	}
+}
+
+function valueCheck(){
+	var boardTitle = $("#board_title").val();
+	var boardUserNm = $("#board_usernm").val();
+	var boardContent = $("#board_content").val();
+	if(boardTitle == "" || boardTitle == null){
+		alert("제목을 적어주세요.");
+		return
+	}
+	if(boardUserNm == "" || boardUserNm == null){
+		alert("작성자를 적어주세요.");
+		return
+	}
+	if(boardContent == "" || boardContent == null){
+		alert("내용을 적어주세요.");
+		return
+	}
+	insertBoard();
 }
 
 </script>

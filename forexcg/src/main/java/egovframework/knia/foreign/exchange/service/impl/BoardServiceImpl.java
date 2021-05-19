@@ -18,8 +18,8 @@ public class BoardServiceImpl implements BoardService {
 	private BoardMapper boardMapper;
 	
 	@Override
-	public int selectListCnt(String boardtype) throws Exception {
-		int cnt = boardMapper.selectBoardCnt(boardtype);
+	public int selectBoardCnt(BoardVO boardVO) throws Exception {
+		int cnt = boardMapper.selectBoardCnt(boardVO);
 		return cnt;
 	}
 

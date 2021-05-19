@@ -23,14 +23,17 @@
 		<result property="fileCnt" column="FILE_CNT"/>
 	</resultMap>
 	
-	<select id="selectBoardCnt" parameterType="String" resultType="int">
+	<select id="selectBoardCnt" parameterType="boardVO" resultType="int">
 			SELECT
 				COUNT(*) AS TOTAL_CNT
 			FROM
 				TB_FOR_BOARD
 			WHERE
-				BOARD_TYPE = #{boardtype}
+				BOARD_TYPE = #{boardType}
 			AND IS_DEL = 'N'
+			<if test='searchName != null or !searchName.equals("")'>
+				AND BOARD_TITLE LIKE CONCAT('%', #{searchName}, '%')
+			</if>
 	</select>
 
 	<!-- <select id="selectBoardList" resultMap="mapBoardVO">
@@ -99,6 +102,9 @@
 		WHERE
 			TB.BOARD_TYPE = #{boardType}
 			AND TB.IS_DEL = 'N'
+		<if test='searchName != null or !searchName.equals("")'>
+			AND TB.BOARD_TITLE LIKE CONCAT('%', #{searchName}, '%')
+		</if>
 		ORDER BY TB.BOARD_IDX DESC) TB
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>

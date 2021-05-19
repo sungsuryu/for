@@ -52,6 +52,8 @@ public class BoardVO implements Serializable {
 	
 	private int fileCnt;
 	
+	private String searchName = "";
+	
 	public int getFirstIndex() {
 		return firstIndex;
 	}
@@ -234,6 +236,14 @@ public class BoardVO implements Serializable {
 
 	public void setFileCnt(int fileCnt) {
 		this.fileCnt = fileCnt;
+	}
+
+	public String getSearchName() {
+		return searchName;
+	}
+
+	public void setSearchName(String searchName) {
+		this.searchName = searchName;
 	}
 	
 }

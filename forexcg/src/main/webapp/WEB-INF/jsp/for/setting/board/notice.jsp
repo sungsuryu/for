@@ -29,7 +29,7 @@
 	   	document.listForm.submit(); */
 	}
 	
-	function goBoardWrite(board_idx){
+	function goBoardEdit(board_idx){
 		location.href = "/setting/board/noticeEdit.do?board_idx=" + board_idx;
 	}
 </script>
@@ -272,7 +272,7 @@
 				<c:forEach var="result" items="${boardList}" varStatus="status">
 					<tr>
 						<td><c:out value="${result.listNum}" /></td>
-						<td class="left"><a href="javascript:goBoardWrite(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
+						<td class="left"><a href="javascript:goBoardEdit(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
 						<td>
 							<c:if test = "${result.fileCnt > 0}">
 								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>

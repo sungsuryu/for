@@ -35,7 +35,7 @@ public class BoardController {
 	private BoardService boardService;
 	
 	@RequestMapping(value="/setting/board/notice.do")
-	public String notice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingNotice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 관리 화면");
 		
 		int pageIndex;
@@ -47,14 +47,14 @@ public class BoardController {
 		PaginationInfo paginationInfo = new PaginationInfo();
 
 		paginationInfo.setCurrentPageNo(pageIndex);//개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(2);//개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(3);//개발용:페이지 리스트에 게시되는 페이지 건수
-		
-		int total_cnt = boardService.selectListCnt(BoardCode.NOTICE.toString());//개발용
+		paginationInfo.setRecordCountPerPage(10);//개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(10);//개발용:페이지 리스트에 게시되는 페이지 건수
 		
 		boardVO.setBoardType(BoardCode.NOTICE.toString());//개발용
-		boardVO.setRecordCountPerPage(2);//개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(10);//개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());//개발용:조회할 첫번째 데이터 번호
+		
+		int total_cnt = boardService.selectBoardCnt(boardVO);//개발용
 		
 		List<?> boardList = boardService.selectBoardList(boardVO);
 		model.addAttribute("boardList", boardList);
@@ -75,10 +75,13 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/setting/board/noticeWriteAction.ajax")
-	public String insertBoard(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String insertBoard(final MultipartHttpServletRequest multiRequest, @ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 추가");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		
+		//System.out.println("KJW file check - " + multiRequest.getFileMap());
+		//System.out.println("KJW file check - " + request.getParameter("board_alarm").toString());
 		
 		String alarm_yn = request.getParameter("board_alarm").toString();
 		boardVO.setBoardTitle(request.getParameter("board_title").toString());
@@ -97,15 +100,15 @@ public class BoardController {
 		else{
 			boardVO.setAlarmYn(alarm_yn);
 		}
-		//boardVO.setBoardtype(request.getParameter("board_type").toString());//운영용
 		boardVO.setBoardType(BoardCode.NOTICE.toString());//개발용
-		boardService.insertBoard(boardVO);
+		//boardService.insertBoard(boardVO);
 		
-		//return null;
 		HashMap<String, Object> boardInfo = new HashMap<String, Object>();
-		boardInfo.put("STATUS", "SUCCES");
+		boardInfo.put("STATUS", "SUCCESS");
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(boardInfo));
-		return "jsonView";
+		//return "jsonView";
+		return "redirect:/setting/board/noticeWrite.do";
+		//return null;
 	}
 	
 	@RequestMapping(value="/setting/board/noticeEdit.do", method=RequestMethod.GET)
@@ -166,15 +169,6 @@ public class BoardController {
 		return "jsonView";
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@RequestMapping(value="/setting/pds.do")
 	public String pds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 관리 화면");
@@ -188,4 +182,115 @@ public class BoardController {
 		
 		return "setting/faq";
 	}
+	
+	@RequestMapping(value="/board/notice.do")
+	public String boardNotice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("공지사항 화면");
+		
+		String searchName;
+		int pageIndex;
+		
+		if(EgovStringUtil.isEmpty(request.getParameter("searchName"))){
+			searchName = "";
+		}else{
+			searchName = request.getParameter("searchName").toString();
+		}
+		
+		if(EgovStringUtil.isEmpty(request.getParameter("pageIndex"))){
+			pageIndex = 1;
+		}else{
+			pageIndex = Integer.parseInt(request.getParameter("pageIndex").toString());
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+
+		paginationInfo.setCurrentPageNo(pageIndex);//개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(2);//개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(2);//개발용:페이지 리스트에 게시되는 페이지 건수
+		
+		boardVO.setBoardType(BoardCode.NOTICE.toString());//개발용
+		boardVO.setRecordCountPerPage(2);//개발용:한번에 조회할 데이터 수
+		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());//개발용:조회할 첫번째 데이터 번호
+		boardVO.setSearchName(searchName);
+		
+		int total_cnt = boardService.selectBoardCnt(boardVO);//개발용
+		
+		List<?> boardList = boardService.selectBoardList(boardVO);
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("total_cnt", total_cnt);
+		model.addAttribute("searchName", searchName);
+		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+		
+		return "board/notice";
+	}
+	
+	@RequestMapping(value="/board/noticeView.do", method=RequestMethod.GET)
+	public String boardNoticeView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("공지사항 상세내용 화면");
+		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
+		boardVO = boardService.selectBoard(board_idx);
+		
+		boardService.updateBoardViewCnt(board_idx);
+		model.addAttribute("board_idx", board_idx);
+		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
+		model.addAttribute("board_content", boardVO.getBoardContent().toString());
+		model.addAttribute("board_usernm", boardVO.getUserName().toString());
+		
+		return "board/noticeView";
+	}
+
+	
+	@RequestMapping(value="/board/pds.do")
+	public String boardPds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("자료실 화면");
+		
+		String searchName;
+		int pageIndex;
+		
+		if(EgovStringUtil.isEmpty(request.getParameter("searchName"))){
+			searchName = "";
+		}else{
+			searchName = request.getParameter("searchName").toString();
+		}
+		if(EgovStringUtil.isEmpty(request.getParameter("pageIndex"))){
+			pageIndex = 1;
+		}else{
+			pageIndex = Integer.parseInt(request.getParameter("pageIndex").toString());
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+
+		paginationInfo.setCurrentPageNo(pageIndex);//개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(10);//개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(10);//개발용:페이지 리스트에 게시되는 페이지 건수
+		
+		boardVO.setBoardType(BoardCode.PDS.toString());//개발용
+		boardVO.setRecordCountPerPage(10);//개발용:한번에 조회할 데이터 수
+		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());//개발용:조회할 첫번째 데이터 번호
+		
+		int total_cnt = boardService.selectBoardCnt(boardVO);//개발용
+		
+		List<?> boardList = boardService.selectBoardList(boardVO);
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("total_cnt", total_cnt);
+		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+		
+		return "board/pds";
+	}
+	
+	@RequestMapping(value="/board/pdsView.do", method=RequestMethod.GET)
+	public String boardPdsView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("자료실 상세내용 화면");
+		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
+		boardVO = boardService.selectBoard(board_idx);
+		
+		boardService.updateBoardViewCnt(board_idx);
+		model.addAttribute("board_idx", board_idx);
+		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
+		model.addAttribute("board_content", boardVO.getBoardContent().toString());
+		model.addAttribute("board_usernm", boardVO.getUserName().toString());
+		
+		return "board/pdsView";
+	}
+	
 }
