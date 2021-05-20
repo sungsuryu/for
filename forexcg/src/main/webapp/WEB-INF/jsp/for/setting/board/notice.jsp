@@ -30,7 +30,7 @@
 	}
 	
 	function goBoardEdit(board_idx){
-		location.href = "/setting/board/noticeEdit.do?board_idx=" + board_idx;
+		location.href = "/setting/board/noticeView.do?board_idx=" + board_idx;
 	}
 </script>
 <body>

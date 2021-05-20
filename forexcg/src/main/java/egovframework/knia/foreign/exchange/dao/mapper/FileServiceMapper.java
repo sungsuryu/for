@@ -12,6 +12,8 @@ public interface FileServiceMapper {
 	
 	List<?> selectFileList(FileVO fileVO) throws Exception;
 	
+	List<?> selectFile(FileVO fileVO) throws Exception;
+	
 	void insertFileInfo(FileVO fileVO) throws Exception;
 	
 	void deleteFile(FileVO fileVO) throws Exception;

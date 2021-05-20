@@ -94,9 +94,9 @@
 		FROM
 			(SELECT
 				TB.*,
-				COUNT(TBF.BOARD_IDX) AS FILE_CNT
+				COUNT(TBF.FILE_GRP_NUM) AS FILE_CNT
 			FROM
-				TB_FOR_BOARD TB LEFT OUTER JOIN TB_FOR_BOARD_FILES TBF ON TB.BOARD_IDX = TBF.BOARD_IDX
+				TB_FOR_BOARD TB LEFT OUTER JOIN TB_FOR_ATCH_FILES TBF ON TB.BOARD_IDX = TBF.FILE_GRP_NUM
 			WHERE 1=1
 			GROUP BY TB.BOARD_IDX) TB, (SELECT @rownum:=0) temp
 		WHERE
@@ -129,7 +129,7 @@
 			BOARD_IDX = #{boardIdx}
 	</update>
 	
-	<insert id="insertBoard" parameterType="boardVO">
+	<insert id="insertBoard" parameterType="boardVO" useGeneratedKeys="true" keyProperty="boardIdx">
 		INSERT INTO TB_FOR_BOARD
 		(
 				BOARD_TITLE,

@@ -42,6 +42,7 @@ public interface BoardMapper {
 	/**
 	 * 게시판 등록
 	 * @param BoardVO 게시판 등록 정보
+	 * @return BoardVO 게시판정보
 	 * @throws Exception
 	 */
 	void insertBoard(BoardVO boardVO) throws Exception;
@@ -59,4 +60,5 @@ public interface BoardMapper {
 	 * @throws Exception
 	 */
 	void deleteBoard(int boardIdx) throws Exception;
+	
 }

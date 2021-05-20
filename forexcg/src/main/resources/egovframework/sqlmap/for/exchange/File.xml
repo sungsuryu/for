@@ -59,6 +59,13 @@
 		ORDER BY
 			INSRT_DATE DESC
 	</select>
+	
+	<select id="selectFile" parameterType="fileVo" resultMap="mapFileVO">
+		/** File.selectFileList */
+			<include refid="sqlSelectFile" />
+		WHERE
+			FILE_ID = #{fileId}
+	</select>
 
 	<insert id="insertFileInfo" parameterType="fileVO">
 		/** File.insertFileInfo */

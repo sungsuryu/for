@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import egovframework.knia.foreign.exchange.vo.BoardVO;
+import egovframework.knia.foreign.exchange.vo.FileVO;
 
 public interface BoardService {
 	/**
@@ -39,9 +40,10 @@ public interface BoardService {
 	/**
 	 * 게시판 등록
 	 * @param BoardVO 게시판 등록 정보
+	 * @return BoardVO 게시판정보
 	 * @throws Exception
 	 */
-	void insertBoard(BoardVO boardVO) throws Exception;
+	int insertBoard(BoardVO boardVO) throws Exception;
 	
 	/**
 	 * 게시판 수정
@@ -56,5 +58,20 @@ public interface BoardService {
 	 * @throws Exception
 	 */
 	void deleteBoard(int boardIdx) throws Exception;
+	
+	/**
+	 * 게시판 관리 문서 리스트 조회
+	 * @param FileVO 파일정보
+	 * @return List 파일정보 리스트
+	 * @throws Exception
+	 */
+	List<?> selectFileList(FileVO fileVO) throws Exception;
 
+	/**
+	 * 게시판 관리 문서 단일 조회
+	 * @param FileVO 파일정보
+	 * @return List 파일정보
+	 * @throws Exception
+	 */
+	List<?> selectFile(FileVO fileVO) throws Exception;
 }

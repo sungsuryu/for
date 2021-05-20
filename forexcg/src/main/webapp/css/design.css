@@ -461,6 +461,7 @@ a.link01 { color:#0094cd; text-decoration:underline }
 .add_file_list ul li.on { background:#f2f5f7 }
 .add_file_list ul li:first-child { border:0 }
 .add_file { margin-top:5px }
+.add_file_list div { border:1px solid #e0e0e0; display:inline-block; vertical-align:bottom; width:700px; margin-right:5px; height:81px; overflow-y:auto }
 
 .pop_otp { text-align:center; height:296px }
 .pop_otp input[type=text], .pop_otp input[type=password] { text-align:center; }

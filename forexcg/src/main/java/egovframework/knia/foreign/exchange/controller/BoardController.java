@@ -2,9 +2,11 @@ package egovframework.knia.foreign.exchange.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -15,15 +17,20 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import egovframework.com.cmm.service.EgovFileMngUtil;
+import egovframework.com.cmm.service.EgovProperties;
 import egovframework.com.cmm.util.EgovStringUtil;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.BoardCode;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.BoardService;
+import egovframework.knia.foreign.exchange.service.FileService;
 import egovframework.knia.foreign.exchange.vo.BoardVO;
+import egovframework.knia.foreign.exchange.vo.FileVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
@@ -34,8 +41,14 @@ public class BoardController {
 	@Resource(name = "boardService")
 	private BoardService boardService;
 	
+	@Resource(name = "fileService")
+	private FileService fileService;
+	
+	@Resource(name="EgovFileMngUtil")
+	private EgovFileMngUtil fileUtil;
+		
 	@RequestMapping(value="/setting/board/notice.do")
-	public String settingNotice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNotice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 관리 화면");
 		
 		int pageIndex;
@@ -68,20 +81,19 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/setting/board/noticeWrite.do")
-	public String boardInsert(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNoticeWrite(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 작성 화면");
 	
 		return "setting/board/noticeWrite";
 	}
 	
 	@RequestMapping(value="/setting/board/noticeWriteAction.ajax")
-	public String insertBoard(final MultipartHttpServletRequest multiRequest, @ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNoticeWriteInsert(final MultipartHttpServletRequest multiRequest, @ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 추가");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
 		
-		//System.out.println("KJW file check - " + multiRequest.getFileMap());
-		//System.out.println("KJW file check - " + request.getParameter("board_alarm").toString());
+		int boardIdx = 0;
 		
 		String alarm_yn = request.getParameter("board_alarm").toString();
 		boardVO.setBoardTitle(request.getParameter("board_title").toString());
@@ -94,25 +106,54 @@ public class BoardController {
 		boardVO.setUpdtId(loginVO.getLoginId().toString());
 		boardVO.setViewCnt(0);
 		boardVO.setIsDel("N");
-		if(alarm_yn.equals("on")){
-			boardVO.setAlarmYn("Y");
-		}
-		else{
-			boardVO.setAlarmYn(alarm_yn);
-		}
+		boardVO.setAlarmYn(alarm_yn);
+		
 		boardVO.setBoardType(BoardCode.NOTICE.toString());//개발용
-		//boardService.insertBoard(boardVO);
+		boardIdx = boardService.insertBoard(boardVO);
+		
+		System.out.println("KJWKJW boardIdx - " + boardIdx);
+		List<FileVO> result = null;
+	    
+	    final Map<String, MultipartFile> files = multiRequest.getFileMap();
+	    if (!files.isEmpty()) {
+			result = fileUtil.parseFileInf(files, BoardCode.NOTICE.toString(), 0, boardIdx, "");
+			
+			int insertFileCnt = fileService.insertFileInfo(result, "");
+	    }
 		
 		HashMap<String, Object> boardInfo = new HashMap<String, Object>();
 		boardInfo.put("STATUS", "SUCCESS");
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(boardInfo));
 		//return "jsonView";
-		return "redirect:/setting/board/noticeWrite.do";
+		return "redirect:/setting/board/notice.do";
 		//return null;
 	}
 	
+	@RequestMapping(value="/setting/board/noticeView.do", method=RequestMethod.GET)
+	public String settingBoardNoticeView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("공지사항 상세내용 화면");
+		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
+		boardService.updateBoardViewCnt(board_idx);
+		boardVO = boardService.selectBoard(board_idx);
+		FileVO fileVO = new FileVO();
+		
+		fileVO.setFileGrpNum(board_idx);
+		fileVO.setFileGrpCd(BoardCode.NOTICE.toString());
+		
+		List<?> fileList = boardService.selectFileList(fileVO);
+		
+		boardService.updateBoardViewCnt(board_idx);
+		model.addAttribute("fileList", fileList);
+		model.addAttribute("board_idx", board_idx);
+		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
+		model.addAttribute("board_content", boardVO.getBoardContent().toString());
+		model.addAttribute("board_usernm", boardVO.getUserName().toString());
+		
+		return "setting/board/noticeView";
+	}
+	
 	@RequestMapping(value="/setting/board/noticeEdit.do", method=RequestMethod.GET)
-	public String boardWrite(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNoticeEdit(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 수정 화면");
 		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
 		boardVO = boardService.selectBoard(board_idx);
@@ -128,7 +169,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/setting/board/noticeEditAction.ajax")
-	public String updateBoard(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNoticeEditUpdate(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 수정");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
@@ -157,7 +198,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/setting/board/noticeDeleteAction.ajax")
-	public String boardDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNoticeEditDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 삭제");
 		int boardIdx = Integer.parseInt(request.getParameter("board_idx").toString());
 		
@@ -170,14 +211,14 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/setting/board/pds.do")
-	public String pds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardPds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("게시판 관리 화면");
 		
 		return "setting/board/pds";
 	}
 	
 	@RequestMapping(value="/setting/board/faq.do")
-	public String faq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardFaq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("FAQ 관리  화면");
 		int pageIndex;
 		if(EgovStringUtil.isEmpty(request.getParameter("pageIndex"))){
@@ -262,7 +303,6 @@ public class BoardController {
 		
 		return "board/noticeView";
 	}
-
 	
 	@RequestMapping(value="/board/pds.do")
 	public String boardPds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
@@ -317,10 +357,37 @@ public class BoardController {
 		return "board/pdsView";
 	}
 	
-	@RequestMapping(value="/board/faq.do", method=RequestMethod.GET)
+	@RequestMapping(value="/board/faq.do")
 	public String boardFaq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 상세내용 화면");
 		return "board/faq";
+	}
+	
+	@RequestMapping(value="/board/downloadFile.do", method=RequestMethod.GET)
+	public String downloadFile(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+		logger.debug("첨부파일 다은로드");
+		String fileId = request.getParameter("fileId").toString();
+		FileVO fileVO = new FileVO();
+		fileVO.setFileId(fileId);
+		
+		List<?> fileList = boardService.selectFile(fileVO);
+		String downloadFilePath = EgovProperties.getProperty("Globals.fileDownloadPath");
+		
+		// 저장된 파일명
+		String filename = request.getParameter("filename");
+		// 첨부된 원 파일명
+		String original = request.getParameter("original");
+		 
+		if ("".equals(original)) {
+			original = filename;
+		}
+		 
+		request.setAttribute("downFile", downloadFilePath + filename);
+		request.setAttribute("orginFile", original);
+		 
+		EgovFileMngUtil.downFile(request, response);
+		
+		return "setting/board/noticeView";
 	}
 	
 }

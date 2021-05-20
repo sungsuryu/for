@@ -24,6 +24,70 @@ $(document).ready(function() {
 	
 });
 
+var fileStore = [];
+function updateBoard(){
+	var formdata = $("#boardForm").serializeArray();
+	if(!$("#board_alarm").is(':checked')){
+		formdata.push({
+			name : $("#board_alarm").attr('name'),
+			value : "N"
+		});
+	}
+	$.ajax({
+        type:"POST",
+        url:"/setting/board/noticeEditAction.ajax",
+        cache:false,
+        data:formdata,
+        success: function(e){
+            if (e.result.status == 'SUCCESS') {
+            	alert("수정 성공");
+            	location.href = "/setting/board/notice.do";
+            }
+            else {
+            	alert("공지사항을 불러올 수  없습니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(error);
+        }, 
+        complete : function() {
+        	console.log('complete');
+        }
+    });
+}
+
+function deleteBoard(){
+	var formdata = $("#boardForm").serialize();
+	$.ajax({
+        type:"POST",
+        url:"/setting/board/noticeDeleteAction.ajax",
+        cache:false,
+        data:formdata,
+        success: function(e){
+            if (e.result.status == 'SUCCESS') {
+            	alert("수정 성공");
+            	location.href = "/setting/board/notice.do";
+            }
+            else {
+            	alert("공지사항을 불러올 수  없습니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert(error);
+        }, 
+        complete : function() {
+        	console.log('complete');
+        }
+    });
+}
+
+function doUploadFileList(){
+	var upfile = ("#uploadFile").files;
+	console.log(upfile);
+	/* for(var i = 0; i < upfile.length; i++){
+		fileStore.push(upfile[i]);			
+	} */
+}
 </script>
 <body>
 
@@ -316,70 +380,6 @@ $(document).ready(function() {
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-var fileStore = [];
-function updateBoard(){
-	var formdata = $("#boardForm").serializeArray();
-	if(!$("#board_alarm").is(':checked')){
-		formdata.push({
-			name : $("#board_alarm").attr('name'),
-			value : "N"
-		});
-	}
-	$.ajax({
-        type:"POST",
-        url:"/setting/board/noticeEditAction.ajax",
-        cache:false,
-        data:formdata,
-        success: function(e){
-            if (e.result.status == 'SUCCESS') {
-            	alert("수정 성공");
-            	location.href = "/setting/board/notice.do";
-            }
-            else {
-            	alert("공지사항을 불러올 수  없습니다.");
-            }
-        },
-        error: function(xhr, status, error) {
-            alert(error);
-        }, 
-        complete : function() {
-        	console.log('complete');
-        }
-    });
-}
-
-function deleteBoard(){
-	var formdata = $("#boardForm").serialize();
-	$.ajax({
-        type:"POST",
-        url:"/setting/board/noticeDeleteAction.ajax",
-        cache:false,
-        data:formdata,
-        success: function(e){
-            if (e.result.status == 'SUCCESS') {
-            	alert("수정 성공");
-            	location.href = "/setting/board/notice.do";
-            }
-            else {
-            	alert("공지사항을 불러올 수  없습니다.");
-            }
-        },
-        error: function(xhr, status, error) {
-            alert(error);
-        }, 
-        complete : function() {
-        	console.log('complete');
-        }
-    });
-}
-
-function doUploadFileList(){
-	var upfile = ("#uploadFile").files;
-	console.log(upfile);
-	/* for(var i = 0; i < upfile.length; i++){
-		fileStore.push(upfile[i]);			
-	} */
-}
 
 </script>
 

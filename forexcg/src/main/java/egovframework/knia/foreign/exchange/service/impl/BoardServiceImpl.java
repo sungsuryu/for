@@ -8,14 +8,19 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import egovframework.knia.foreign.exchange.dao.mapper.BoardMapper;
+import egovframework.knia.foreign.exchange.dao.mapper.FileServiceMapper;
 import egovframework.knia.foreign.exchange.service.BoardService;
 import egovframework.knia.foreign.exchange.vo.BoardVO;
+import egovframework.knia.foreign.exchange.vo.FileVO;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService {
 
 	@Resource(name="boardMapper")
 	private BoardMapper boardMapper;
+	
+	@Resource(name="fileServiceMapper")
+	private FileServiceMapper fileServiceMapper;
 	
 	@Override
 	public int selectBoardCnt(BoardVO boardVO) throws Exception {
@@ -40,8 +45,10 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void insertBoard(BoardVO boardVO) throws Exception {
+	public int insertBoard(BoardVO boardVO) throws Exception {
 		boardMapper.insertBoard(boardVO);
+		int boardIdx = boardVO.getBoardIdx();
+		return boardIdx;
 		
 	}
 
@@ -57,6 +64,13 @@ public class BoardServiceImpl implements BoardService {
 		
 	}
 
-
-
+	@Override
+	public List<?> selectFileList(FileVO fileVO) throws Exception {
+		return fileServiceMapper.selectFileList(fileVO);
+	}
+	
+	@Override
+	public List<?> selectFile(FileVO fileVO) throws Exception {
+		return fileServiceMapper.selectFile(fileVO);
+	}
 }
