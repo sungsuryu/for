@@ -26,6 +26,7 @@ import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.InsureService;
 import egovframework.knia.foreign.exchange.service.JoinService;
+import egovframework.knia.foreign.exchange.service.KaTalkService;
 import egovframework.knia.foreign.exchange.service.FileService;
 import egovframework.knia.foreign.exchange.vo.CellAuthVO;
 import egovframework.knia.foreign.exchange.vo.FileVO;
@@ -48,6 +49,9 @@ public class JoinController {
 	
 	@Resource(name="EgovFileMngUtil")
 	private EgovFileMngUtil fileUtil;
+	
+	@Resource(name = "kaTalkService")
+	private KaTalkService kaTalkService;
 	
 	@Autowired
     private DefaultBeanValidator beanValidator;
@@ -145,6 +149,13 @@ public class JoinController {
         CellAuthVO authInfo = joinService.generateAuthNum(cellAuthVO);
         
         logger.debug("gen authNum:{}", authInfo.getAuthNum());
+        
+        // KaTalk 전송
+        HashMap<String, Object> hMap = new HashMap<String, Object>();
+        hMap.put("authNum", authInfo.getAuthNum());
+        hMap.put("cellNum", authInfo.getCellNum());
+        
+        kaTalkService.sendOTPforJoin(hMap);
         
         model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
         

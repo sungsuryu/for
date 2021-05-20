@@ -102,7 +102,7 @@ public class JoinServiceImpl implements JoinService {
 		
 		authNumMapper.insertAuthNum(setInfo);
 
-		return cellAuthVO;
+		return setInfo;
 	}
 	
 	@Override
