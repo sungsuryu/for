@@ -3,46 +3,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
-<meta name="HandheldFriendly" content="true">
-<meta name="format-detection" content="telephone=no">
-<meta http-equiv="imagetoolbar" content="no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
-<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
+<script type="text/javascript" src="<c:url value='/js/cmmFunc.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/join.js'/>"></script>
 <script type="text/javascript">
 
-	var PhNumber = function(msg, numTxt) {
-		if (numTxt == "") {
-				alert(msg+"번호를 입력해주세요.");
-				return false;
-			}
-			var chkStyle = /[0-9]{9,12}$/;
-			if (!chkStyle.test(numTxt)) {
-				alert(msg+"번호는 숫자만 입력해주세요.");
-				return false;
-			}
-			if (numTxt.length < 9) {
-				alert(msg+"번호를 확인해주세요.");
-				return false;
-			}
-			return true;
-	};
-
-	var CnkEmail = function(e) {
-		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		var eml = e;
-		if (eml == '' || !re.test(eml)) {
-			return false;
-		}
-		return true;
-	}
 	var authrequest = false;
 	// 휴대폰번호 인증 받기
  	var btnReqAuth = function(){
@@ -85,18 +51,19 @@
 	};
 	
 	var authresponse = false;
+	// 인증번호 확인요청
 	var btnAuthCfm = function() {
 		var cellNum = $("#cellNum").val();		var authNum = $("#authInputNum").val();
 		
 		if (authNum == "") {
  			alert("인증번호를 입력해주세요.");
- 			$("#authNum").focus();
+ 			$("#authInputNum").focus();
  			return;
  		}
  		var chkStyle = /[0-9]{6}$/;
  		if (!chkStyle.test(authNum)) {
  			alert("인증번호는6자리  숫자만 입력해주세요.");
- 			$("#authNum").focus();
+ 			$("#authInputNum").focus();
  			return;
  		}
  		
@@ -114,7 +81,16 @@
 	        	authresponse = true;
 	        },
 	        success: function(e){
-
+	        	console.log(e);
+	        	try {
+		            if (e.result.authResult == 'SUCCESS') {
+		            	$("#authNum").val(authNum);
+		            	$("#authKey").val(e.result.authKey);
+		            	
+		            	$("#authInputNum").hide();
+			    		$("#btnAuthCfm").hide();
+		            }
+	        	} catch(e) {;}
 	        },
 	        complete : function() {
 	        	authresponse = false;
@@ -122,31 +98,14 @@
     	});
 	};
 
-	var ChkPwd = function(e) {
-		var regPwd = /(?=.*\d{1,20})(?=.*[~`!@#$%\^&*()-+=]{1,20})(?=.*[a-zA-Z]{1,20}).{8,20}$/;
-		if (e == '' || !regPwd.test(e)) {
-			return false;
-		}
-		return true;
-	};
-	
-	var ChkId = function(e) {
-		var regId = /^[a-zA-z][a-zA-z0-9]{7,19}$/gi;
-		if (e == '' || !regId.test(e)) {
-			return false;
-		}
-		return true;
-	};
-	
 	$(document).ready(function() {
 		$("#authInputNum").hide();
 		$("#btnAuthCfm").hide();
 		
 		// 회원가입
 		$(".btn-primary").click(function() {
-
 			var getId = $("#userIdTxt").val();
-
+			
 			if (getId == "") {
 				alert("사용할 아이디를 입력해주세요.");
 				$("#userIdTxt").focus();
@@ -156,12 +115,24 @@
 				alert("아이디 중복확인을 해주세요.");
 				return;
 			}
-			if ($("#password").val() == "") {
+			var pwd = $("#password").val(); 
+			if (pwd == "") {
 				alert("비밀번호를 입력해주세요.");
 				$("#password").focus();
 				return;
+			} else {
+				var regexNo = /(\w)\1\1\1/;
+				if (!regexNo.test(pwd)) {
+					if (!stck(pwd, 4)) {
+						alert("4자리 이상 연속된 문자를 사용할 수 없습니다.");
+						return;
+					}
+				} else {
+					alert("4자리 이상 동일한 문자를 사용할 수 없습니다.");
+					return;
+				}
 			}
-			if (!ChkPwd($("#password").val())) {
+			if (!ChkPwd(pwd)) {
 				alert("비밀번호는 영소ㆍ대, 숫자, 특수문자 3종류 이상으로 8자이상 20자 이하로 구성되어야 합니다.");
 				return;
 			}
@@ -219,11 +190,7 @@
 			$("#joinForm").submit();
 		});
 	});
-	
-	var gotoLogin = function() {
-		location.href = "login.do";
-	};
-	
+
 	var checkstatus = false;
 	// 아이디 중복확인
 	var checkUserId = function(e) {
@@ -239,7 +206,7 @@
 			$("#userIdTxt").focus();
 			return;
 		}
-		// TODO 아이디 생성 rule 적용해야함. 6자이상 20자이하 영문/숫자만 허용
+
 		$.ajax({
 	        type:"POST",
 	        url:"/checkUserId.ajax",
@@ -269,9 +236,6 @@
 	        	}
 	        },
 	        error: function(xhr, status, error) {
-	        	console.log(xhr);
-	        	console.log(status);
-	        	console.log(error);
 	        }, 
 	        complete : function() {
 	        	checkstatus = false;
