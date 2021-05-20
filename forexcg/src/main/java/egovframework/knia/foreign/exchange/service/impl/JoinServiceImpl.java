@@ -59,8 +59,8 @@ public class JoinServiceImpl implements JoinService {
 		userMapper.insertNewUser(userVO);
 		
 		// 알림톡 등록 - 신규등록시 이전알람 삭제 불필요.
-		int talkCnt = userVO.getAlrmType().length;
-		if (talkCnt > 0) {
+		if (userVO.getAlrmType() != null) {
+
 			String alarmType[] = userVO.getAlrmType();
 			UserAlarmVO userAlarmVO = new UserAlarmVO();
 			userAlarmVO.setUserId(userVO.getUserId());
@@ -69,7 +69,7 @@ public class JoinServiceImpl implements JoinService {
 			// 이전알람 삭제
 			userAlarmMapper.deleteUserAlarm(userAlarmVO);
 			
-			for (int i=0; i<talkCnt; i++) {
+			for (int i=0; i<userVO.getAlrmType().length; i++) {
 				userAlarmVO.setAlrmType(alarmType[i]);
 				// 신규알람 등록
 				userAlarmMapper.insertUserAlarm(userAlarmVO);
@@ -119,5 +119,19 @@ public class JoinServiceImpl implements JoinService {
 			
 			return null;
 		}
+	}
+	
+	@Override
+	public boolean compairAuthKey(UserVO userVO) throws Exception {
+		
+//		String cellNum = userVO.getCellNum();
+        String authKey = userVO.getAuthKey();
+        
+        String encAuthNum = EgovFileScrty.encryptPassword(userVO.getAuthNum(), userVO.getCellNum());
+        
+        if (!encAuthNum.equals(authKey)) {
+        	return false;
+        }
+        return true;
 	}
 }

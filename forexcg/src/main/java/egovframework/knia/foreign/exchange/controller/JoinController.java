@@ -114,6 +114,10 @@ public class JoinController {
         	throw new Exception();
         }
         
+        if (!joinService.compairAuthKey(userVO)) {
+        	throw new Exception("휴대폰인증 실패");
+        }
+        
 		List<FileVO> result = null;
 	    
 	    final Map<String, MultipartFile> files = multiRequest.getFileMap();

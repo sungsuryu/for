@@ -174,8 +174,8 @@
 				$("#emlAddr").focus();
 				return;
 			}
-			if ($("#cellNum").val() == "") {
-				alert("휴대폰번호를 입려해주세요.");
+			if ($("#authKey").val() == "") {
+				alert("휴대폰 인증을 해주세요.");
 				return;
 			}
 			if ($("input[name=joinAgree]:checked").val() != "Y") {

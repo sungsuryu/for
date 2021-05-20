@@ -12,4 +12,6 @@ public interface JoinService {
 	CellAuthVO generateAuthNum(CellAuthVO cellAuthVO) throws Exception;
 	
 	CellAuthVO compareAuthNum(CellAuthVO cellAuthVO) throws Exception;
+
+	boolean compairAuthKey(UserVO userVO) throws Exception;
 }
