@@ -880,4 +880,24 @@ public class EgovDateUtil {
 		
 		return cDateStr;
 	}
+	
+	// 출력 테스트
+	public static void main(String[] args) throws Exception {
+		System.out.println(currentDateTimeString());
+	}
+	
+	public static String currentDateTimeString() {
+		String[] cDateStr = new String[6];
+		
+		Calendar cal = Calendar.getInstance();
+
+		cDateStr[0] = String.valueOf(cal.get(Calendar.YEAR));
+		cDateStr[1] = String.valueOf(cal.get(Calendar.MONTH)+1);
+		cDateStr[2] = String.valueOf(cal.get(Calendar.DATE));
+		cDateStr[3] = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+		cDateStr[4] = String.valueOf(cal.get(Calendar.MINUTE));
+		cDateStr[5] = String.valueOf(cal.get(Calendar.SECOND));
+		
+		return cDateStr[0]+"-"+cDateStr[1]+"-"+cDateStr[2]+" "+cDateStr[3]+":"+cDateStr[4]+":"+cDateStr[5];
+	}
 }
