@@ -16,5 +16,6 @@
 		<typeAlias alias="termsAgreeHistVO" type="egovframework.knia.foreign.exchange.vo.TermsAgreeHistVO" />
 		<typeAlias alias="fileVO" type="egovframework.knia.foreign.exchange.vo.FileVO" />
 		<typeAlias alias="cellAuthVO" type="egovframework.knia.foreign.exchange.vo.CellAuthVO" />
+		<typeAlias alias="kaTalkVO" type="egovframework.knia.foreign.exchange.vo.KaTalkVO" />
     </typeAliases>
 </configuration>
