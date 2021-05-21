@@ -56,25 +56,8 @@ function insertBoard(){
 	$("#boardForm").submit();
 }
 
-function valueCheck(){
-	editors.getById["board_content"].exec("UPDATE_CONTENTS_FIELD", []);
-	var boardTitle = $("#board_title").val();
-	var boardUserNm = $("#board_usernm").val();
-	var boardContent = $("#board_content").val();
-	if(boardTitle == "" || boardTitle == null){
-		alert("제목을 적어주세요.");
-		return
-	}
-	if(boardUserNm == "" || boardUserNm == null){
-		alert("작성자를 적어주세요.");
-		return
-	}
-	if( boardContent == ""  || boardContent == null || boardContent == '&nbsp;' || boardContent == '<br>' || boardContent == '<br />' || boardContent == '<p>&nbsp;</p>' || boardContent == '<p><br></p>')  {
-        alert("내용을 입력하세요.");
-        oEditors.getById["COMVISION"].exec("FOCUS"); //포커싱
-        return;
-   }
-	insertBoard();
+function goEdit(boardIdx){
+	location.href = "/setting/board/noticeEdit.do?board_idx=" + boardIdx;
 }
 
 function makeFileAttachment(){
@@ -337,7 +320,7 @@ function makeFileAttachment(){
 	
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
+			<a href="javascript:goEdit('<c:out value="${board_idx}"/>');" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
 			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>

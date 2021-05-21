@@ -373,17 +373,17 @@ public class BoardController {
 		List<?> fileList = boardService.selectFile(fileVO);
 		String downloadFilePath = EgovProperties.getProperty("Globals.fileDownloadPath");
 		
-		// 저장된 파일명
-		String filename = request.getParameter("filename");
-		// 첨부된 원 파일명
-		String original = request.getParameter("original");
-		 
-		if ("".equals(original)) {
-			original = filename;
-		}
-		 
-		request.setAttribute("downFile", downloadFilePath + filename);
-		request.setAttribute("orginFile", original);
+//		// 저장된 파일명
+//		String filename = request.getParameter("filename");
+//		// 첨부된 원 파일명
+//		String original = request.getParameter("original");
+//		 
+//		if ("".equals(original)) {
+//			original = filename;
+//		}
+//		 
+//		request.setAttribute("downFile", downloadFilePath + filename);
+//		request.setAttribute("orginFile", original);
 		 
 		EgovFileMngUtil.downFile(request, response);
 		

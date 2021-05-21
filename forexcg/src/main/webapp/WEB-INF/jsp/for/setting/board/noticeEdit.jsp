@@ -18,10 +18,23 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js'/>" ></script>
+<script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
 $(document).ready(function() {
-	
+	nhn.husky.EZCreator.createInIFrame({
+ 		oAppRef: editors,
+ 		elPlaceHolder: 'board_content',
+ 		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+ 		fOnAppLoad : function(){
+            //기존 저장된 내용의 text 내용을 에디터상에 뿌려주고자 할때 사용
+            editors.getById["board_content"].exec("PASTE_HTML", ['<c:out value="${board_content}"/>']);
+            editors.exec("DISABLE_WYSIWYG");
+            editors.exec("DISABLE_ALL_UI");
+        },
+ 		fCreator: "createSEditor2"
+ 	});
 });
 
 var fileStore = [];
@@ -87,6 +100,13 @@ function doUploadFileList(){
 	/* for(var i = 0; i < upfile.length; i++){
 		fileStore.push(upfile[i]);			
 	} */
+}
+
+function makeFileAttachment(){
+	 var maxFileNum = 10;
+
+	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum );
+	 multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
 }
 </script>
 <body>
@@ -347,7 +367,9 @@ function doUploadFileList(){
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea id="board_content" name="board_content" rows="15"><c:out value="${board_content}"/></textarea>
+							<textarea id="board_content" name="board_content" rows="15">
+								
+							</textarea>
 						</td>
 					</tr>
 				</tbody>
