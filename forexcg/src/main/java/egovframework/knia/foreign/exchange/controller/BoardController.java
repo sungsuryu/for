@@ -1,5 +1,12 @@
 package egovframework.knia.foreign.exchange.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +30,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.EgovProperties;
+import egovframework.com.cmm.util.EgovBasicLogger;
+import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.com.cmm.util.EgovStringUtil;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.BoardCode;
@@ -91,8 +101,7 @@ public class BoardController {
 	public String settingBoardNoticeWriteInsert(final MultipartHttpServletRequest multiRequest, @ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 추가");
 		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
-		
+		//LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
 		int boardIdx = 0;
 		
 		String alarm_yn = request.getParameter("board_alarm").toString();
@@ -100,18 +109,25 @@ public class BoardController {
 		boardVO.setBoardContent(request.getParameter("board_content").toString());
 		//boardVO.setContent(request.getParameter("board_content").toString());//운영용
 		boardVO.setInsurCd("N00");//개발용
-		boardVO.setUserId(loginVO.getLoginId().toString());
+		
+		//boardVO.setUserId(loginVO.getLoginId().toString());
+		boardVO.setUserId("test");
+		
 		boardVO.setUserName(request.getParameter("board_usernm").toString());
-		boardVO.setInsrtId(loginVO.getLoginId().toString());
-		boardVO.setUpdtId(loginVO.getLoginId().toString());
+		
+//		boardVO.setInsrtId(loginVO.getLoginId().toString());
+//		boardVO.setUpdtId(loginVO.getLoginId().toString());
+		
+		boardVO.setInsrtId("test");
+		boardVO.setUpdtId("test");
+		
 		boardVO.setViewCnt(0);
+		
 		boardVO.setIsDel("N");
 		boardVO.setAlarmYn(alarm_yn);
 		
 		boardVO.setBoardType(BoardCode.NOTICE.toString());//개발용
 		boardIdx = boardService.insertBoard(boardVO);
-		
-		System.out.println("KJWKJW boardIdx - " + boardIdx);
 		List<FileVO> result = null;
 	    
 	    final Map<String, MultipartFile> files = multiRequest.getFileMap();
@@ -124,9 +140,7 @@ public class BoardController {
 		HashMap<String, Object> boardInfo = new HashMap<String, Object>();
 		boardInfo.put("STATUS", "SUCCESS");
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(boardInfo));
-		//return "jsonView";
 		return "redirect:/setting/board/notice.do";
-		//return null;
 	}
 	
 	@RequestMapping(value="/setting/board/noticeView.do", method=RequestMethod.GET)
@@ -142,7 +156,6 @@ public class BoardController {
 		
 		List<?> fileList = boardService.selectFileList(fileVO);
 		
-		boardService.updateBoardViewCnt(board_idx);
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("board_idx", board_idx);
 		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
@@ -158,7 +171,14 @@ public class BoardController {
 		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
 		boardVO = boardService.selectBoard(board_idx);
 		
-		boardService.updateBoardViewCnt(board_idx);
+		FileVO fileVO = new FileVO();
+		
+		fileVO.setFileGrpNum(board_idx);
+		fileVO.setFileGrpCd(BoardCode.NOTICE.toString());
+		
+		List<?> fileList = boardService.selectFileList(fileVO);
+		
+		model.addAttribute("fileList", fileList);
 		model.addAttribute("board_idx", board_idx);
 		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
 		model.addAttribute("board_content", boardVO.getBoardContent().toString());
@@ -269,11 +289,11 @@ public class BoardController {
 		PaginationInfo paginationInfo = new PaginationInfo();
 
 		paginationInfo.setCurrentPageNo(pageIndex);//개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(2);//개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(2);//개발용:페이지 리스트에 게시되는 페이지 건수
+		paginationInfo.setRecordCountPerPage(10);//개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(10);//개발용:페이지 리스트에 게시되는 페이지 건수
 		
 		boardVO.setBoardType(BoardCode.NOTICE.toString());//개발용
-		boardVO.setRecordCountPerPage(2);//개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(10);//개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());//개발용:조회할 첫번째 데이터 번호
 		boardVO.setSearchName(searchName);
 		
@@ -293,9 +313,17 @@ public class BoardController {
 	public String boardNoticeView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 상세내용 화면");
 		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
+		boardService.updateBoardViewCnt(board_idx);
 		boardVO = boardService.selectBoard(board_idx);
 		
-		boardService.updateBoardViewCnt(board_idx);
+		FileVO fileVO = new FileVO();
+		
+		fileVO.setFileGrpNum(board_idx);
+		fileVO.setFileGrpCd(BoardCode.NOTICE.toString());
+		
+		List<?> fileList = boardService.selectFileList(fileVO);
+		
+		model.addAttribute("fileList", fileList);
 		model.addAttribute("board_idx", board_idx);
 		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
 		model.addAttribute("board_content", boardVO.getBoardContent().toString());
@@ -349,6 +377,15 @@ public class BoardController {
 		boardVO = boardService.selectBoard(board_idx);
 		
 		boardService.updateBoardViewCnt(board_idx);
+		
+		FileVO fileVO = new FileVO();
+		
+		fileVO.setFileGrpNum(board_idx);
+		fileVO.setFileGrpCd(BoardCode.PDS.toString());
+		
+		List<?> fileList = boardService.selectFileList(fileVO);
+		
+		model.addAttribute("fileList", fileList);
 		model.addAttribute("board_idx", board_idx);
 		model.addAttribute("board_title", boardVO.getBoardTitle().toString());
 		model.addAttribute("board_content", boardVO.getBoardContent().toString());
@@ -359,35 +396,194 @@ public class BoardController {
 	
 	@RequestMapping(value="/board/faq.do")
 	public String boardFaq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
-		logger.debug("자료실 상세내용 화면");
+		logger.debug("FAQ 화면");
 		return "board/faq";
 	}
 	
+	
 	@RequestMapping(value="/board/downloadFile.do", method=RequestMethod.GET)
-	public String downloadFile(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
 		logger.debug("첨부파일 다은로드");
 		String fileId = request.getParameter("fileId").toString();
 		FileVO fileVO = new FileVO();
 		fileVO.setFileId(fileId);
 		
 		List<?> fileList = boardService.selectFile(fileVO);
-		String downloadFilePath = EgovProperties.getProperty("Globals.fileDownloadPath");
+		fileVO = (FileVO) fileList.get(0);
 		
-//		// 저장된 파일명
-//		String filename = request.getParameter("filename");
-//		// 첨부된 원 파일명
-//		String original = request.getParameter("original");
-//		 
-//		if ("".equals(original)) {
-//			original = filename;
-//		}
-//		 
-//		request.setAttribute("downFile", downloadFilePath + filename);
-//		request.setAttribute("orginFile", original);
-		 
-		EgovFileMngUtil.downFile(request, response);
+		File uFile = new File(fileVO.getFilePath(), fileVO.getFileNm());
+		long fSize = uFile.length();
 		
-		return "setting/board/noticeView";
+		if (fSize > 0) {
+			String mimetype = "application/x-msdownload";
+
+			//response.setBufferSize(fSize);	// OutOfMemeory 발생
+			response.setContentType(mimetype);
+			//response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fvo.getOrignlFileNm(), "utf-8") + "\"");
+			setDisposition(fileVO.getPhyFileNm(), request, response);
+			//response.setContentLength(fSize);
+
+			/*
+			 * FileCopyUtils.copy(in, response.getOutputStream());
+			 * in.close();
+			 * response.getOutputStream().flush();
+			 * response.getOutputStream().close();
+			 */
+			BufferedInputStream in = null;
+			BufferedOutputStream out = null;
+
+			try {
+				in = new BufferedInputStream(new FileInputStream(uFile));
+				out = new BufferedOutputStream(response.getOutputStream());
+
+				FileCopyUtils.copy(in, out);
+				out.flush();
+			} catch (IOException ex) {
+				// 다음 Exception 무시 처리
+				// Connection reset by peer: socket write error
+				EgovBasicLogger.ignore("IO Exception", ex);
+			} finally {
+				EgovResourceCloseHelper.close(in, out);
+			}
+
+		} else {
+			response.setContentType("application/x-msdownload");
+
+			PrintWriter printwriter = response.getWriter();
+			
+			printwriter.println("<html>");
+			printwriter.println("<br><br><br><h2>Could not get file name:<br>" + fileVO.getPhyFileNm() + "</h2>");
+			printwriter.println("<br><br><br><center><h3><a href='javascript: history.go(-1)'>Back</a></h3></center>");
+			printwriter.println("<br><br><br>&copy; webAccess");
+			printwriter.println("</html>");
+			
+			printwriter.flush();
+			printwriter.close();
+		}
 	}
 	
+	@RequestMapping(value="/board/downloadFaqFile.do")
+	public void downloadFaqFile(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+		logger.debug("FAQ첨부파일 다은로드");
+		FileVO fileVO = new FileVO();
+		List<?> fileList = boardService.selectFaqFile();
+		fileVO = (FileVO) fileList.get(0);
+		
+		File uFile = new File(fileVO.getFilePath(), fileVO.getFileNm());
+		long fSize = uFile.length();
+		
+		System.out.println("KJWKJW - 확인 : " + fileVO.getFilePath());
+		System.out.println("KJWKJW - 확인 : " + fileVO.getFileNm());
+		
+		if (fSize > 0) {
+			String mimetype = "application/x-msdownload";
+
+			//response.setBufferSize(fSize);	// OutOfMemeory 발생
+			response.setContentType(mimetype);
+			//response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fvo.getOrignlFileNm(), "utf-8") + "\"");
+			setDisposition(fileVO.getPhyFileNm(), request, response);
+			//response.setContentLength(fSize);
+
+			/*
+			 * FileCopyUtils.copy(in, response.getOutputStream());
+			 * in.close();
+			 * response.getOutputStream().flush();
+			 * response.getOutputStream().close();
+			 */
+			BufferedInputStream in = null;
+			BufferedOutputStream out = null;
+
+			try {
+				in = new BufferedInputStream(new FileInputStream(uFile));
+				out = new BufferedOutputStream(response.getOutputStream());
+
+				FileCopyUtils.copy(in, out);
+				out.flush();
+			} catch (IOException ex) {
+				// 다음 Exception 무시 처리
+				// Connection reset by peer: socket write error
+				EgovBasicLogger.ignore("IO Exception", ex);
+			} finally {
+				EgovResourceCloseHelper.close(in, out);
+			}
+
+		} else {
+			response.setContentType("application/x-msdownload");
+
+			PrintWriter printwriter = response.getWriter();
+			
+			printwriter.println("<html>");
+			printwriter.println("<br><br><br><h2>Could not get file name:<br>" + fileVO.getPhyFileNm() + "</h2>");
+			printwriter.println("<br><br><br><center><h3><a href='javascript: history.go(-1)'>Back</a></h3></center>");
+			printwriter.println("<br><br><br>&copy; webAccess");
+			printwriter.println("</html>");
+			
+			printwriter.flush();
+			printwriter.close();
+		}
+	}
+	
+	/**
+	 * Disposition 지정하기.
+	 *
+	 * @param filename
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	private void setDisposition(String filename, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String browser = getBrowser(request);
+
+		String dispositionPrefix = "attachment; filename=";
+		String encodedFilename = null;
+
+		if (browser.equals("MSIE")) {
+			encodedFilename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
+		} else if (browser.equals("Trident")) { // IE11 문자열 깨짐 방지
+			encodedFilename = URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20");
+		} else if (browser.equals("Firefox")) {
+			encodedFilename = "\"" + new String(filename.getBytes("UTF-8"), "8859_1") + "\"";
+		} else if (browser.equals("Opera")) {
+			encodedFilename = "\"" + new String(filename.getBytes("UTF-8"), "8859_1") + "\"";
+		} else if (browser.equals("Chrome")) {
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < filename.length(); i++) {
+				char c = filename.charAt(i);
+				if (c > '~') {
+					sb.append(URLEncoder.encode("" + c, "UTF-8"));
+				} else {
+					sb.append(c);
+				}
+			}
+			encodedFilename = sb.toString();
+		} else {
+			throw new IOException("Not supported browser");
+		}
+
+		response.setHeader("Content-Disposition", dispositionPrefix + encodedFilename);
+
+		if ("Opera".equals(browser)) {
+			response.setContentType("application/octet-stream;charset=UTF-8");
+		}
+	}
+	
+	/**
+	 * 브라우저 구분 얻기.
+	 *
+	 * @param request
+	 * @return
+	 */
+	private String getBrowser(HttpServletRequest request) {
+		String header = request.getHeader("User-Agent");
+		if (header.indexOf("MSIE") > -1) {
+			return "MSIE";
+		} else if (header.indexOf("Trident") > -1) { // IE11 문자열 깨짐 방지
+			return "Trident";
+		} else if (header.indexOf("Chrome") > -1) {
+			return "Chrome";
+		} else if (header.indexOf("Opera") > -1) {
+			return "Opera";
+		}
+		return "Firefox";
+	}
 }

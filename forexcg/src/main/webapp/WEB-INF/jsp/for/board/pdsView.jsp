@@ -19,6 +19,15 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 </head>
+<script>
+$(document).ready(function() {
+});
+
+function fn_egov_downFile(fileId){
+	window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
+	//location.href = "/board/downloadFile.do?fileId=" + fileId;
+}
+</script>
 <body>
 
 <div id="popLayerBg"></div>
@@ -214,12 +223,20 @@
 				</tr>
 				<tr>
 					<th>첨부파일</th>
-					<td><a href="javascript:;" class="link01">첨부파일.txt</a></td>
+					<td>
+						<c:forEach var="result" items="${fileList}" varStatus="status">
+							<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
+								<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
+							</a>
+						</c:forEach>
+					</td>
 				</tr>
 				<tr>
 					<th>내용</th>
 					<td>
-						<c:out value="${board_content}"/>
+						<div>
+							<c:out value="${board_content}" escapeXml="false" />
+						<div>
 					</td>
 				</tr>
 			</tbody>

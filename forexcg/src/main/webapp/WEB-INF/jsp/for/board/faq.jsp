@@ -19,7 +19,16 @@
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 </head>
+<script>
+$(document).ready(function() {
+	console.log("FAQ 파일 다운로드");
+	fn_egov_downFile();
+});
 
+function fn_egov_downFile(){
+	window.open("<c:url value='/board/downloadFaqFile.do'/>");
+}
+</script>
 <body>
 
 <div id="popLayerBg"></div>
@@ -197,10 +206,8 @@
 			</span>
 		</div>
 	</header>
-	
 </div>
 <!--+++++ /컨텐츠 +++++-->
-
 <!--+++++ 우측 레이어(도움말) +++++-->
 <aside id="aside_right">
 	<header class="aside_right_header">

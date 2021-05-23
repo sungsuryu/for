@@ -22,16 +22,16 @@
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
+var editors = [];
 $(document).ready(function() {
+	makeFileAttachment();
 	nhn.husky.EZCreator.createInIFrame({
  		oAppRef: editors,
  		elPlaceHolder: 'board_content',
  		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
  		fOnAppLoad : function(){
             //기존 저장된 내용의 text 내용을 에디터상에 뿌려주고자 할때 사용
-            editors.getById["board_content"].exec("PASTE_HTML", ['<c:out value="${board_content}"/>']);
-            editors.exec("DISABLE_WYSIWYG");
-            editors.exec("DISABLE_ALL_UI");
+            editors.getById["board_content"].exec("PASTE_HTML", ['${board_content}']);
         },
  		fCreator: "createSEditor2"
  	});
@@ -319,8 +319,9 @@ function makeFileAttachment(){
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
-	<form id="boardForm" name="boardForm" method="post">
+	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input id="board_idx" name="board_idx" type="hidden" value="<c:out value="${board_idx}" />">
+		<input type='hidden' id="board_alarm" name='board_alarm'>
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -344,23 +345,13 @@ function makeFileAttachment(){
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
 						<td>
 							<div class="add_file_list">
-								<ul>
-									<!-- 선택한 파일 addClass="on" -->
-									<li class="on">업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-									<li>업로드파일명.doc</li>
-								</ul>
-								<a href="javascript:;" class="btn btn-sm">삭제</a>
+								<div id="uploadFileList" name="uploadFileList" class='uploadFileList'>
+									
+								</div>
+								
 							</div>
 							<div class="add_file">
-								<input type="file" id="uploadFile" name="uploadFile" multiple>
-								<a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a>
+								<input name="file_1" id="egovComFileUploader" type="file" title="첨부파일입력"/>
 							</div>
 						</td>
 					</tr>
@@ -381,7 +372,7 @@ function makeFileAttachment(){
 		<div class="f_right">
 			<a href="javascript:updateBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
-			<a href="/board.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	

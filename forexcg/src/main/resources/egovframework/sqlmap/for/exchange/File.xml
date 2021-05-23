@@ -61,10 +61,19 @@
 	</select>
 	
 	<select id="selectFile" parameterType="fileVo" resultMap="mapFileVO">
-		/** File.selectFileList */
+		/** File.selectFile */
 			<include refid="sqlSelectFile" />
 		WHERE
 			FILE_ID = #{fileId}
+	</select>
+	
+		<select id="selectFaqFile" resultMap="mapFileVO">
+		/** File.selectFaqFile */
+			<include refid="sqlSelectFile" />
+		WHERE
+			FILE_GRP_CD = 'FAQ'
+		ORDER BY INSRT_DATE DESC
+		LIMIT 1
 	</select>
 
 	<insert id="insertFileInfo" parameterType="fileVO">

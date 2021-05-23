@@ -73,4 +73,9 @@ public class BoardServiceImpl implements BoardService {
 	public List<?> selectFile(FileVO fileVO) throws Exception {
 		return fileServiceMapper.selectFile(fileVO);
 	}
+	
+	@Override
+	public List<?> selectFaqFile() throws Exception {
+		return fileServiceMapper.selectFaqFile();
+	}
 }

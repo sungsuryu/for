@@ -30,7 +30,8 @@ public class FileServiceImpl implements FileService {
 		while (iter.hasNext()) {
 			filevo = (FileVO)iter.next();
 			
-			fileServiceMapper.selectFileId(filevo);
+			//KJWKJWKJW
+			//fileServiceMapper.selectFileId(filevo);
 
 			filevo.setFileId(filevo.getFileGrpCd() +"-"+ String.valueOf(filevo.getFileIdx()));
 			filevo.setFileGrpVal(grpVal);

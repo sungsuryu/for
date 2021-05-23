@@ -68,10 +68,17 @@ public interface BoardService {
 	List<?> selectFileList(FileVO fileVO) throws Exception;
 
 	/**
-	 * 게시판 관리 문서 단일 조회
+	 * 게시판 첨부파일 다운로드
 	 * @param FileVO 파일정보
 	 * @return List 파일정보
 	 * @throws Exception
 	 */
 	List<?> selectFile(FileVO fileVO) throws Exception;
+	
+	/**
+	 * FAQ 문서 다운로드
+	 * @return List 파일정보
+	 * @throws Exception
+	 */
+	List<?> selectFaqFile() throws Exception;
 }

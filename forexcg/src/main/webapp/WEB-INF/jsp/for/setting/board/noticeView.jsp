@@ -18,55 +18,20 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
 var editors = [];
 $(document).ready(function() {
-	//fileDropDown();
-	makeFileAttachment();
-	nhn.husky.EZCreator.createInIFrame({
- 		oAppRef: editors,
- 		elPlaceHolder: 'board_content',
- 		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
- 		fOnAppLoad : function(){
-            //기존 저장된 내용의 text 내용을 에디터상에 뿌려주고자 할때 사용
-            editors.getById["board_content"].exec("PASTE_HTML", ['<c:out value="${board_content}"/>']);
-            editors.exec("DISABLE_WYSIWYG");
-            editors.exec("DISABLE_ALL_UI");
-        },
- 		fCreator: "createSEditor2"
- 	});
 });
 
 function fn_egov_downFile(fileId){
-	//window.open("<c:url value='/cmm/fms/FileDown.do?atchFileId="+atchFileId+"&fileSn="+fileSn+"'/>");
-	location.href = "/board/downloadFile.do?fileId=" + fileId;
-}
-
-function insertBoard(){
-	if(!$("#board_alarmYn").is(':checked')){
-		$("#board_alarm").val("N");
-	}
-	else{
-		$("#board_alarm").val("Y");
-	}
-	$("#boardForm").attr("action", "/setting/board/noticeWriteAction.ajax");
-	$("#boardForm").submit();
+	window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
+	//location.href = "/board/downloadFile.do?fileId=" + fileId;
 }
 
 function goEdit(boardIdx){
 	location.href = "/setting/board/noticeEdit.do?board_idx=" + boardIdx;
 }
-
-function makeFileAttachment(){
-	 var maxFileNum = 10;
-
-	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum );
-	 multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
-}
-
 </script>
 <body>
 
@@ -299,8 +264,8 @@ function makeFileAttachment(){
 						<th>첨부파일</th>
 						<td>
 							<c:forEach var="result" items="${fileList}" varStatus="status">
-								<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')">
-									<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]
+								<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
+									<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
 								</a>
 							</c:forEach>
 						</td>
@@ -308,9 +273,9 @@ function makeFileAttachment(){
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea id="board_content" name="board_content" rows="15">
-								
-							</textarea>
+							<div>
+								<c:out value="${board_content}" escapeXml="false" />
+							<div>
 						</td>
 					</tr>
 				</tbody>
