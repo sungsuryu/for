@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.FindUserAccountMapper">
+
+	<resultMap id="mapUserVO" type="egovframework.knia.foreign.exchange.vo.UserVO">
+		<result property="userId" column="USER_ID" />
+		<result property="cellNum" column="CELL_NUM" />
+	</resultMap>
+
+	<sql id="selectFindUser">
+		SELECT
+			USER_ID, CELL_NUM
+		FROM
+			TB_FOR_USER
+		WHERE
+			CELL_NUM=#{cellNum}
+			AND USER_NM=#{userNm}
+	</sql>
+	
+	<select id="selectUserIdByCellNumUserNm" parameterType="userVO" resultMap="mapUserVO">
+		/** User.selectUserIdByCellNumUserNm */
+		<include refid="selectFindUser" />
+	</select>
+	
+	<select id="selectUserByCellNumUserNmUserId" parameterType="userVO" resultMap="mapUserVO">
+		/** User.selectUserByCellNumUserNmUserId */
+		<include refid="selectFindUser" />
+		AND USER_ID=#{loginId}
+		AND IS_APPROVE='Y'
+		AND IS_LOCK='N'
+		AND USE_YN='Y'
+		AND IS_DEL='N'
+	</select>
+	
+</mapper>
