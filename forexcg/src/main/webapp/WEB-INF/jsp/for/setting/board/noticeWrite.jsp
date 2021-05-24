@@ -17,7 +17,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js'/>" ></script>
+<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js?ver=1.1'/>" ></script>
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
@@ -314,7 +314,6 @@ function makeFileAttachment(){
 						<td>
 							<div class="add_file_list">
 								<ul id="uploadFileList">
-									<li>sdf</li>
 								</ul>
 								<!-- a href="javascript:;" class="btn btn-sm">삭제</a -->
 							</div>

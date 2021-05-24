@@ -17,7 +17,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js'/>" ></script>
+<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js?version=2.2'/>" ></script>
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
@@ -26,6 +26,7 @@ var deleteOriginFileId;
 var editors = [];
 $(document).ready(function() {
 	makeFileAttachment();
+	
 	nhn.husky.EZCreator.createInIFrame({
  		oAppRef: editors,
  		elPlaceHolder: 'board_content',
@@ -38,7 +39,7 @@ $(document).ready(function() {
  	});
 });
 function updateBoard(){
-	console.log(deleteOriginFileId);
+
 	if(!$("#board_alarmYn").is(':checked')){
 		$("#board_alarm").val("N");
 	}
@@ -89,7 +90,7 @@ function fn_egov_check_file(flag) {
 
 function deleteFileList(e, index, fileId) {
 //	console.log(e.parentNode);
-	multi_selector.addMax(e);
+	multi_selector.addMax();
 	//$(".chooseFile input:disabled").attr("disabled", false);
 //	e.parentNode.element.multi_selector.current_element.disabled = false;
 	$("#boardForm").prepend('<input id="deleteOriginFileId" name="deleteOriginFileId" type="hidden" value="' + fileId + '">');
@@ -358,13 +359,14 @@ function valueCheck(){
 					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
    								    <tr>
 								        <td>
-								        	<div id="egovComFileList">
+								        	<div class="add_file_list">
+								        		<ul id="egovComFileList">
 								        		<c:forEach var="result" items="${fileList}" varStatus="status">
-													<li id="originFileList${status.index}">
+													<li id="originFileList${status.index}" ondblclick="deleteFileList(this, '${status.index}', '${result.fileId}')">
 														<c:out value="${result.phyFileNm}"/>
-														<input type="button" onclick='deleteFileList(this, ${status.index}, "${result.fileId}");' value="삭제">
 													</li>
 												</c:forEach>
+								        		</ul>
 								        	</div>
 								        </td>
 								    </tr>

@@ -1,24 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
-<meta name="HandheldFriendly" content="true">
-<meta name="format-detection" content="telephone=no">
-<meta http-equiv="imagetoolbar" content="no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
-<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-</head>
-<script>
+<%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
+<script type="text/javascript">
 	//페이지 전환 함수
 	function fn_egov_link_page(pageNo){
 		$("#pageIndex").val(pageNo);
@@ -32,6 +19,8 @@
 		location.href = "/setting/board/noticeView.do?board_idx=" + board_idx;
 	}
 </script>
+</head>
+
 <body>
 
 <div id="popLayerBg"></div>
@@ -268,19 +257,22 @@
 				</tr>
 			</thead>
 			<tbody>
+				
 				<c:forEach var="result" items="${boardList}" varStatus="status">
-					<tr>
-						<td><c:out value="${result.listNum}" /></td>
-						<td class="left"><a href="javascript:goBoardEdit(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
-						<td>
-							<c:if test = "${result.fileCnt > 0}">
-								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
-							</c:if>
-						<td><c:out value="${result.userName}" /></td>
-						<td><c:out value="${result.updtDate}"/></td>
-						<td><c:out value="${result.viewCnt}" /></td>
-					</tr>
+				<tr>
+					<td><c:out value="${result.listNum}" /></td>
+					<td class="left"><a href="javascript:goBoardEdit(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
+					<td>
+						<c:if test = "${result.fileCnt > 0}">
+							<a href="javascript:void(0)" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+						</c:if>
+					</td>
+					<td><c:out value="${result.userName}" /></td>
+					<td><c:out value="${result.updtDate}"/></td>
+					<td><c:out value="${result.viewCnt}" /></td>
+				</tr>
 				</c:forEach>
+				
 			</tbody>
 		</table>
 	</div>
@@ -288,23 +280,7 @@
 	<div class="tbl_btm">
 		<div class="f_left">
 			<div class="pagenum">
-				<!-- <a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				<a href="javascript:" class="on">1</a>
-				<a href="javascript:">2</a>
-				<a href="javascript:">3</a>
-				<a href="javascript:">4</a>
-				<a href="javascript:">5</a>
-				<a href="javascript:">6</a>
-				<a href="javascript:">7</a>
-				<a href="javascript:">8</a>
-				<a href="javascript:">9</a>
-				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
 				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-				<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
-					<input type="hidden" id = "pageIndex" name = "pageIndex">
-				</form>
 			</div>
 		</div>
 		<div class="f_right">
@@ -312,6 +288,9 @@
 		</div>
 	</div>
 	
+	<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
+		<input type="hidden" id = "pageIndex" name = "pageIndex">
+	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->
 
