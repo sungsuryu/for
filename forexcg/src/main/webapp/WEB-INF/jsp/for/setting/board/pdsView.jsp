@@ -17,61 +17,20 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
 var editors = [];
 $(document).ready(function() {
-	//fileDropDown();
-	makeFileAttachment();
-	nhn.husky.EZCreator.createInIFrame({
- 		oAppRef: editors,
- 		elPlaceHolder: 'board_content',
- 		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
- 		fCreator: "createSEditor2"
- 	});
 });
 
-function insertBoard(){
-	if(!$("#board_alarmYn").is(':checked')){
-		$("#board_alarm").val("N");
-	}
-	else{
-		$("#board_alarm").val("Y");
-	}
-	$("#boardForm").attr("action", "/setting/board/noticeWriteAction.do");
-	$("#boardForm").submit();
+function fn_egov_downFile(fileId){
+	window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
+	//location.href = "/board/downloadFile.do?fileId=" + fileId;
 }
 
-function valueCheck(){
-	editors.getById["board_content"].exec("UPDATE_CONTENTS_FIELD", []);
-	var boardTitle = $("#board_title").val();
-	var boardUserNm = $("#board_usernm").val();
-	var boardContent = $("#board_content").val();
-	if(boardTitle == "" || boardTitle == null){
-		alert("제목을 적어주세요.");
-		return
-	}
-	if(boardUserNm == "" || boardUserNm == null){
-		alert("작성자를 적어주세요.");
-		return
-	}
-	if( boardContent == ""  || boardContent == null || boardContent == '&nbsp;' || boardContent == '<br>' || boardContent == '<br />' || boardContent == '<p>&nbsp;</p>' || boardContent == '<p><br></p>')  {
-        alert("내용을 입력하세요.");
-        oEditors.getById["COMVISION"].exec("FOCUS"); //포커싱
-        return;
-   }
-	insertBoard();
+function goEdit(boardIdx){
+	location.href = "/setting/board/pdsEdit.do?board_idx=" + boardIdx;
 }
-
-function makeFileAttachment(){
-	 var maxFileNum = 10;
-
-	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum );
-	 multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
-}
-
 </script>
 <body>
 
@@ -278,8 +237,8 @@ function makeFileAttachment(){
 	
 	<div class="catg_area">
 		<ul>
-			<li class="on"><a href="javascript:;">공지사항</a></li>
-			<li><a href="javascript:;">자료실</a></li>
+			<li><a href="javascript:;">공지사항</a></li>
+			<li  class="on"><a href="javascript:;">자료실</a></li>
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
@@ -294,34 +253,28 @@ function makeFileAttachment(){
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><input id="board_title" name="board_title" type="text" style="width:100%"></td>
-					</tr>
-					<tr>
-						<th>알림톡</th>
-						<td><input id="board_alarmYn" name="board_alarmYn" type="checkbox"><i></i> <label for="">전송</label></td>
+						<td><c:out value="${board_title}" /></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><input id="board_usernm" name="board_usernm" type="text"></td>
+						<td><c:out value="${board_usernm}" /></td>
 					</tr>
 					<tr>
-						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
+						<th>첨부파일</th>
 						<td>
-							<div class="add_file_list">
-								<div id="uploadFileList" name="uploadFileList" class='uploadFileList'>
-									
-								</div>
-							</div>
-							<div class="add_file">
-								<input name="file_1" id="egovComFileUploader" type="file" title="첨부파일입력"/>
-								<!-- <a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a> -->
-							</div>
+							<c:forEach var="result" items="${fileList}" varStatus="status">
+								<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
+									<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
+								</a>
+							</c:forEach>
 						</td>
 					</tr>
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea id="board_content" name="board_content" rows="15"></textarea>
+							<div>
+								<c:out value="${board_content}" escapeXml="false" />
+							<div>
 						</td>
 					</tr>
 				</tbody>
@@ -331,8 +284,8 @@ function makeFileAttachment(){
 	
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="javascript:goEdit('<c:out value="${board_idx}"/>');" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
+			<a href="/setting/board/pds.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	

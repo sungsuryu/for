@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*"%>
+<%@page import="java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -21,27 +21,79 @@
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
+var multi_selector;
+var deleteOriginFileId;
 var editors = [];
 $(document).ready(function() {
-	//fileDropDown();
 	makeFileAttachment();
 	nhn.husky.EZCreator.createInIFrame({
  		oAppRef: editors,
  		elPlaceHolder: 'board_content',
  		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+ 		fOnAppLoad : function(){
+            //기존 저장된 내용의 text 내용을 에디터상에 뿌려주고자 할때 사용
+            editors.getById["board_content"].exec("PASTE_HTML", ['${board_content}']);
+        },
  		fCreator: "createSEditor2"
  	});
 });
-
-function insertBoard(){
+function updateBoard(){
+	console.log(deleteOriginFileId);
 	if(!$("#board_alarmYn").is(':checked')){
 		$("#board_alarm").val("N");
 	}
 	else{
 		$("#board_alarm").val("Y");
 	}
-	$("#boardForm").attr("action", "/setting/board/noticeWriteAction.do");
+	$("#boardForm").attr("action", "/setting/board/pdsEditAction.do");
 	$("#boardForm").submit();
+}
+
+function deleteBoard(){
+	$("#boardForm").attr("action", "/setting/board/pdsDeleteAction.do");
+	$("#boardForm").submit();
+}
+
+function getUploadableNum(){
+	var existFileNum = ${fileCnt};
+	var maxFileNum = 10;//파일 최대 첨부갯수
+
+	if (existFileNum=="undefined" || existFileNum ==null) {
+		existFileNum = 0;
+	}
+	if (maxFileNum=="undefined" || maxFileNum ==null) {
+		maxFileNum = 0;
+	}
+	var uploadableFileNum = maxFileNum - existFileNum;
+	if (uploadableFileNum<0) {
+		uploadableFileNum = 0;
+	}
+	return uploadableFileNum;
+}
+
+function makeFileAttachment(){
+	var uploadableFileNum = getUploadableNum();
+	multi_selector = new MultiSelector( document.getElementById( 'egovComFileList' ), uploadableFileNum );
+	multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
+}
+
+function fn_egov_check_file(flag) {
+	if (flag=="Y") {
+		document.getElementById('file_upload_posbl').style.display = "block";
+		document.getElementById('file_upload_imposbl').style.display = "none";
+	} else {
+		document.getElementById('file_upload_posbl').style.display = "none";
+		document.getElementById('file_upload_imposbl').style.display = "block";
+	}
+}
+
+function deleteFileList(e, index, fileId) {
+//	console.log(e.parentNode);
+	multi_selector.addMax(e);
+	//$(".chooseFile input:disabled").attr("disabled", false);
+//	e.parentNode.element.multi_selector.current_element.disabled = false;
+	$("#boardForm").prepend('<input id="deleteOriginFileId" name="deleteOriginFileId" type="hidden" value="' + fileId + '">');
+	$("#originFileList" + index).remove();
 }
 
 function valueCheck(){
@@ -62,14 +114,7 @@ function valueCheck(){
         oEditors.getById["COMVISION"].exec("FOCUS"); //포커싱
         return;
    }
-	insertBoard();
-}
-
-function makeFileAttachment(){
-	 var maxFileNum = 10;
-
-	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum );
-	 multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
+	updateBoard();
 }
 
 </script>
@@ -278,12 +323,14 @@ function makeFileAttachment(){
 	
 	<div class="catg_area">
 		<ul>
-			<li class="on"><a href="javascript:;">공지사항</a></li>
-			<li><a href="javascript:;">자료실</a></li>
+			<li><a href="javascript:;">공지사항</a></li>
+			<li class="on"><a href="javascript:;">자료실</a></li>
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
+		<input id="board_idx" name="board_idx" type="hidden" value="<c:out value="${board_idx}" />">
+		<input id="isOriginFile" name="isOriginFile" type="hidden" value="<c:out value="${isOriginFile}" />">
 		<input type='hidden' id="board_alarm" name='board_alarm'>
 		<div class="table_v01">
 			<table>
@@ -294,34 +341,53 @@ function makeFileAttachment(){
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><input id="board_title" name="board_title" type="text" style="width:100%"></td>
+						<td><input id="board_title" name="board_title" type="text" style="width:100%" value="<c:out value="${board_title}" />"></td>
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input id="board_alarmYn" name="board_alarmYn" type="checkbox"><i></i> <label for="">전송</label></td>
+						<td><input id="board_alarmYn" name="board_alarmYn" type="checkbox"><i></i><label for="">전송</label></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><input id="board_usernm" name="board_usernm" type="text"></td>
+						<td><input id="board_usernm" name="board_usernm" type="text" value="<c:out value="${board_usernm}" />"></td>
 					</tr>
 					<tr>
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
 						<td>
-							<div class="add_file_list">
-								<div id="uploadFileList" name="uploadFileList" class='uploadFileList'>
-									
-								</div>
+							<div id="file_upload_posbl">
+					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+   								    <tr>
+								        <td>
+								        	<div id="egovComFileList">
+								        		<c:forEach var="result" items="${fileList}" varStatus="status">
+													<li id="originFileList${status.index}">
+														<c:out value="${result.phyFileNm}"/>
+														<input type="button" onclick='deleteFileList(this, ${status.index}, "${result.fileId}");' value="삭제">
+													</li>
+												</c:forEach>
+								        	</div>
+								        </td>
+								    </tr>
+								    <tr>
+								        <td><input name="file_1" id="egovComFileUploader" type="file" title="첨부파일명 입력"/></td>
+								    </tr>
+					   	        </table>
 							</div>
-							<div class="add_file">
-								<input name="file_1" id="egovComFileUploader" type="file" title="첨부파일입력"/>
-								<!-- <a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a> -->
+							<div id="file_upload_imposbl"  style="display:none;" >
+					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+								    <tr>
+								        <td>cannot upload files</td>
+								    </tr>
+					   	        </table>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea id="board_content" name="board_content" rows="15"></textarea>
+							<textarea id="board_content" name="board_content" rows="15">
+								
+							</textarea>
 						</td>
 					</tr>
 				</tbody>
@@ -332,7 +398,8 @@ function makeFileAttachment(){
 	<div class="tbl_btm">
 		<div class="f_right">
 			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
+			<a href="/setting/board/pds.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	

@@ -40,7 +40,7 @@ function insertBoard(){
 	else{
 		$("#board_alarm").val("Y");
 	}
-	$("#boardForm").attr("action", "/setting/board/noticeWriteAction.do");
+	$("#boardForm").attr("action", "/setting/board/pdsWriteAction.do");
 	$("#boardForm").submit();
 }
 
@@ -278,8 +278,8 @@ function makeFileAttachment(){
 	
 	<div class="catg_area">
 		<ul>
-			<li class="on"><a href="javascript:;">공지사항</a></li>
-			<li><a href="javascript:;">자료실</a></li>
+			<li><a href="javascript:;">공지사항</a></li>
+			<li class="on"><a href="javascript:;">자료실</a></li>
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
@@ -332,7 +332,7 @@ function makeFileAttachment(){
 	<div class="tbl_btm">
 		<div class="f_right">
 			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="/setting/board/pds.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	

@@ -45,12 +45,12 @@ function updateBoard(){
 	else{
 		$("#board_alarm").val("Y");
 	}
-	$("#boardForm").attr("action", "/setting/board/noticeEditAction.ajax");
+	$("#boardForm").attr("action", "/setting/board/noticeEditAction.do");
 	$("#boardForm").submit();
 }
 
 function deleteBoard(){
-	$("#boardForm").attr("action", "/setting/board/noticeDeleteAction.ajax");
+	$("#boardForm").attr("action", "/setting/board/noticeDeleteAction.do");
 	$("#boardForm").submit();
 }
 
@@ -89,7 +89,7 @@ function fn_egov_check_file(flag) {
 
 function deleteFileList(e, index, fileId) {
 //	console.log(e.parentNode);
-	//multi_selector.addMax(e);
+	multi_selector.addMax(e);
 	//$(".chooseFile input:disabled").attr("disabled", false);
 //	e.parentNode.element.multi_selector.current_element.disabled = false;
 	$("#boardForm").prepend('<input id="deleteOriginFileId" name="deleteOriginFileId" type="hidden" value="' + fileId + '">');
