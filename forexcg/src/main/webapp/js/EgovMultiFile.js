@@ -30,6 +30,10 @@ function MultiSelector( list_target, max ){
 		this.max = -1;
 	};
 	
+	this.addMax = function(){
+		this.max = this.max + 1;
+	};
+	
 	/**
 	 * Add a new file input element
 	 */
@@ -52,23 +56,24 @@ function MultiSelector( list_target, max ){
 				new_element.type = 'file';
 
 				// Add new element
-				this.parentNode.insertBefore( new_element, this );
+				// parentNode.insertBefore(newNode, referenceNode);
+				this.parentNode.insertBefore(new_element, this);
 
 				// Apply 'update' to element
-				this.multi_selector.addElement( new_element );
+				this.multi_selector.addElement(new_element);
 
 				// Update list
-				this.multi_selector.addListRow( this );
+				this.multi_selector.addListRow(this);
 				
 				// Hide this: we can't use display:none because Safari doesn't like it
-				this.style.position = 'absolute';
-				this.style.left = '-1000px';
-				this.style.top = '-1000px';
+//				this.style.position = 'absolute';
+//				this.style.left = '-1000px';
+//				this.style.top = '-1000px';
 				this.style.display = 'none';
 				this.style.visibility = 'hidden';
-				this.style.width = '0';
-				this.style.height = '0';
-				this.style.overflow = 'hidden';
+//				this.style.width = '0';
+//				this.style.height = '0';
+//				this.style.overflow = 'hidden';
 
 				new_element.onkeypress = function(){
 					return false;
@@ -98,7 +103,7 @@ function MultiSelector( list_target, max ){
 	this.addListRow = function( element ){
 
 		// Row div
-		var new_row = document.createElement( 'li' );
+		var new_row = document.createElement('li');
 
 		// Delete button
 		var new_row_button = document.createElement( 'input' );
@@ -110,7 +115,6 @@ function MultiSelector( list_target, max ){
 
 		// Delete function
 		new_row_button.onclick= function(){
-
 			// Remove element from form
 			this.parentNode.element.parentNode.removeChild( this.parentNode.element );
 
@@ -128,12 +132,31 @@ function MultiSelector( list_target, max ){
 		};
 
 		// Set row value
+		// input value 를 li테그 에 출력함.
 		new_row.innerHTML = element.value;
 
+		new_row.ondblclick = function() {
+
+			//if (confirm("삭제 하시겠습니까?")) {
+				this.element.parentNode.removeChild( this.element );
+
+				// Remove this row from the list
+				this.parentNode.removeChild( this );
+
+				// Decrement counter
+				this.element.multi_selector.count--;
+console.log(this.element);
+				// Re-enable input element (if it's disabled)
+				this.element.multi_selector.current_element.disabled = false;
+			//}
+		}
+		
+		
 		// Add button
-		new_row.appendChild( new_row_button );
+		//new_row.appendChild( new_row_button );
 
 		// Add it to the list
+		// 목록에 출력
 		this.list_target.appendChild( new_row );
 	};
 

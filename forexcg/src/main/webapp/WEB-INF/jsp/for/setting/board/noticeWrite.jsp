@@ -5,7 +5,6 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
@@ -41,7 +40,7 @@ function insertBoard(){
 	else{
 		$("#board_alarm").val("Y");
 	}
-	$("#boardForm").attr("action", "/setting/board/noticeWriteAction.ajax");
+	$("#boardForm").attr("action", "/setting/board/noticeWriteAction.do");
 	$("#boardForm").submit();
 }
 
@@ -69,10 +68,15 @@ function valueCheck(){
 function makeFileAttachment(){
 	 var maxFileNum = 10;
 
-	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum );
-	 multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
+	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum);
+	 multi_selector.addElement(document.getElementById('egovComFileUploader'));
 }
 
+// 	$(function() {
+// 		$("#uploadFileList li").click(function() {
+// 			$(this).addClass("on");
+// 		});
+// 	});
 </script>
 <body>
 
@@ -306,19 +310,21 @@ function makeFileAttachment(){
 						<td><input id="board_usernm" name="board_usernm" type="text"></td>
 					</tr>
 					<tr>
-						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
+						<th>첨부파일</th>
 						<td>
 							<div class="add_file_list">
-								<div id="uploadFileList" name="uploadFileList" class='uploadFileList'>
-									
-								</div>
+								<ul id="uploadFileList">
+									<li>sdf</li>
+								</ul>
+								<!-- a href="javascript:;" class="btn btn-sm">삭제</a -->
 							</div>
 							<div class="add_file">
-								<input name="file_1" id="egovComFileUploader" type="file" title="첨부파일입력"/>
-								<!-- <a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a> -->
+								<input type="file" name="file" id="egovComFileUploader" title="첨부파일" />
+								<!-- a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a -->
 							</div>
 						</td>
 					</tr>
+					
 					<tr>
 						<th>내용</th>
 						<td>
