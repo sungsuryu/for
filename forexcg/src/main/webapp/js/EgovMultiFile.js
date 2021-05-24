@@ -31,6 +31,8 @@ function MultiSelector( list_target, max ){
 	};
 	
 	this.addMax = function(){
+		console.log(this.max);
+		
 		this.max = this.max + 1;
 	};
 	
@@ -146,7 +148,7 @@ function MultiSelector( list_target, max ){
 
 				// Decrement counter
 				this.element.multi_selector.count--;
-console.log(this.element);
+
 				// Re-enable input element (if it's disabled)
 				this.element.multi_selector.current_element.disabled = false;
 			//}
