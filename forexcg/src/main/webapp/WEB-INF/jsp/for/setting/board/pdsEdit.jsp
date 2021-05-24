@@ -61,18 +61,8 @@ function getUploadableNum(){
 
 function makeFileAttachment(){
 	var uploadableFileNum = getUploadableNum();
-	multi_selector = new MultiSelector( document.getElementById( 'egovComFileList' ), uploadableFileNum );
+	multi_selector = new MultiSelector( document.getElementById( 'uploadFileList' ), uploadableFileNum );
 	multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
-}
-
-function fn_egov_check_file(flag) {
-	if (flag=="Y") {
-		document.getElementById('file_upload_posbl').style.display = "block";
-		document.getElementById('file_upload_imposbl').style.display = "none";
-	} else {
-		document.getElementById('file_upload_posbl').style.display = "none";
-		document.getElementById('file_upload_imposbl').style.display = "block";
-	}
 }
 
 function deleteFileList(e, index, fileId) {
@@ -341,32 +331,18 @@ function valueCheck(){
 					<tr>
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
 						<td>
-							<div id="file_upload_posbl">
-					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-   								    <tr>
-								        <td>
-								        	<div id="egovComFileList">
-								        		<c:forEach var="result" items="${fileList}" varStatus="status">
-													<li id="originFileList${status.index}">
-														<c:out value="${result.phyFileNm}"/>
-														<input type="button" onclick='deleteFileList(this, ${status.index}, "${result.fileId}");' value="삭제">
-													</li>
-												</c:forEach>
-								        	</div>
-								        </td>
-								    </tr>
-								    <tr>
-								        <td><input name="file_1" id="egovComFileUploader" type="file" title="첨부파일명 입력"/></td>
-								    </tr>
-					   	        </table>
-							</div>
-							<div id="file_upload_imposbl"  style="display:none;" >
-					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-								    <tr>
-								        <td>cannot upload files</td>
-								    </tr>
-					   	        </table>
-							</div>
+				        	<div class="add_file_list">
+				        		<ul id="uploadFileList">
+				        		<c:forEach var="result" items="${fileList}" varStatus="status">
+									<li id="originFileList${status.index}" ondblclick="deleteFileList(this, '${status.index}', '${result.fileId}')">
+										<c:out value="${result.phyFileNm}"/>
+									</li>
+								</c:forEach>
+				        		</ul>
+				        	</div>
+				        	<div class="add_file">
+				        		<input name="file_1" id="egovComFileUploader" type="file" title="첨부파일명 입력"/>
+				        	</div>
 						</td>
 					</tr>
 					<tr>
