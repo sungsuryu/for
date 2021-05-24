@@ -63,12 +63,12 @@ public class EgovImgPaginationRenderer extends AbstractPaginationRenderer implem
 	//커스텀 -KJW- 21.05.17
 	public void initVariables() {
 
-		firstPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-double-left\" aria-hidden=\"true\"></i>" + "</a>&#160;";
-		previousPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-left\" aria-hidden=\"true\"></i>" + "</a>&#160;";
-		currentPageLabel = "<strong class=\"on\">{0}</strong>&#160;";
-		otherPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\">{2}</a>&#160;";
-		nextPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-right\" aria-hidden=\"true\"></i>" + "</a>&#160;";
-		lastPageLabel = "<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"prev\">" + "<i class=\"fa fa-angle-double-right\" aria-hidden=\"true\"></i>" + "</a>&#160;";
+		firstPageLabel = "<a href=\"javascript:void(0)\" onclick=\"{0}({1});\" title=\"prev\">" + "<i class=\"fa fa-angle-double-left\" aria-hidden=\"true\"></i>" + "</a>";
+		previousPageLabel = "<a href=\"javascript:void(0)\" onclick=\"{0}({1});\" title=\"prev\">" + "<i class=\"fa fa-angle-left\" aria-hidden=\"true\"></i>" + "</a>";
+		currentPageLabel = "<a href=\"javascript:void(0)\" class=\"on\">{0}</a>";
+		otherPageLabel = "<a href=\"javascript:void(0)\" onclick=\"{0}({1});\">{2}</a>";
+		nextPageLabel = "<a href=\"javascript:void(0)\" onclick=\"{0}({1});\" title=\"prev\">" + "<i class=\"fa fa-angle-right\" aria-hidden=\"true\"></i>" + "</a>";
+		lastPageLabel = "<a href=\"javascript:void(0)\" onclick=\"{0}({1});\" title=\"prev\">" + "<i class=\"fa fa-angle-double-right\" aria-hidden=\"true\"></i>" + "</a>";
 	}
 
 	@Override
