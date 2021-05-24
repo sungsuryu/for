@@ -87,7 +87,7 @@
 			FROM
 				TB_FOR_LOGIN_AUTH_HIST
 			WHERE
-				USER_ID=#{userId}
+				USER_ID=#{loginId}
 				AND IS_EXP='N'
 				AND IS_DEL='N'
 				AND INSRT_DATE > DATE_SUB(now(), INTERVAL 2 MINUTE)

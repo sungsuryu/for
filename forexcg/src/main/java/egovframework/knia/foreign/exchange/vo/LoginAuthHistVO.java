@@ -8,12 +8,22 @@ public class LoginAuthHistVO extends CommonVO implements Serializable {
 
 	private String userId;
 	
+	private String loginId;
+	
 	private String approveTimestamp;
 	
 	private String authNum;
 	
 	private String isExp;
-	
+
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
 	public String getUserId() {
 		return userId;
 	}

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springmodules.validation.commons.DefaultBeanValidator;
@@ -17,10 +18,13 @@ import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
+import egovframework.knia.foreign.exchange.service.FindUserAccount;
 import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.knia.foreign.exchange.vo.FindIdVO;
+import egovframework.knia.foreign.exchange.vo.FindPwdVO;
 import egovframework.knia.foreign.exchange.vo.LoginAuthHistVO;
 
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -38,6 +42,9 @@ public class LoginController {
 	
 	@Resource(name = "loginService")
 	private LoginService loginService;
+	
+	@Resource(name = "findUserAccount")
+	private FindUserAccount findUserAccount;
 	
 	@Resource(name = "egovMessageSource")
 	EgovMessageSource egovMessageSource;
@@ -125,7 +132,7 @@ public class LoginController {
 		HashMap<String, Object> authInfo = new HashMap<String, Object>();
 		
 		if (getLoginVO != null) {	
-			if (getLoginVO.getLoginId().equals(loginAuthHistVO.getUserId())) {
+			if (getLoginVO.getLoginId().equals(loginAuthHistVO.getLoginId())) {
 				if (loginService.loginAuthNum(loginAuthHistVO)) {
 					authInfo.put("auth", "T");
 					
@@ -172,4 +179,49 @@ public class LoginController {
 		
 		return "jsonView";
 	}
+	
+	@RequestMapping(value="/findId.ajax")
+	public String findId(@ModelAttribute("findIdVO") FindIdVO findIdVO, BindingResult bindingResult, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		beanValidator.validate(findIdVO, bindingResult);
+        if (bindingResult.hasErrors()) {
+        	logger.error("필수 파라메터 바인딩 오류");
+        	throw new Exception("필수 파라메터 바인딩 오류");
+        }
+		
+        HashMap<String, Object> findInfo = new HashMap<String, Object>();
+        
+        if (findUserAccount.findLoginId(findIdVO)) {
+        	findInfo.put("findId", "T");
+        } else {
+        	findInfo.put("findId", "F");
+        }
+        
+        model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(findInfo));
+        
+		return "jsonView";
+	}
+
+	@RequestMapping(value="/findPwd.ajax")
+	public String findId(@ModelAttribute("findPwdVO") FindPwdVO findPwdVO, BindingResult bindingResult, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		beanValidator.validate(findPwdVO, bindingResult);
+        if (bindingResult.hasErrors()) {
+        	logger.error("필수 파라메터 바인딩 오류");
+        	throw new Exception("필수 파라메터 바인딩 오류");
+        }
+		
+        HashMap<String, Object> findInfo = new HashMap<String, Object>();
+        
+        if (findUserAccount.findPassword(findPwdVO)) {
+        	findInfo.put("findPwd", "T");
+        } else {
+        	findInfo.put("findPwd", "F");
+        }
+        
+        model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(findInfo));
+        
+		return "jsonView";
+	}
+	
 }

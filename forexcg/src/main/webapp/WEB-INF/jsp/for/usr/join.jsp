@@ -5,7 +5,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
-<script type="text/javascript" src="<c:url value='/js/cmmFunc.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/join.js'/>"></script>
 <script type="text/javascript">
 

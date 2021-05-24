@@ -5,6 +5,8 @@
     <typeAliases>
 		<typeAlias alias="loginVO" type="egovframework.knia.foreign.exchange.vo.LoginVO" />
 		<typeAlias alias="userVO" type="egovframework.knia.foreign.exchange.vo.UserVO" />
+		<typeAlias alias="findIdVO" type="egovframework.knia.foreign.exchange.vo.FindIdVO" />
+		<typeAlias alias="findPwdVO" type="egovframework.knia.foreign.exchange.vo.FindPwdVO" />
 		<typeAlias alias="loginAuthHistVO" type="egovframework.knia.foreign.exchange.vo.LoginAuthHistVO" />
 		<typeAlias alias="commonCodeVO" type="egovframework.knia.foreign.exchange.vo.CommonCodeVO" />
 		<typeAlias alias="menuVO" type="egovframework.knia.foreign.exchange.vo.MenuVO" />

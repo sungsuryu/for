@@ -38,5 +38,27 @@
 				<arg0 key="title.auth.cellNum" />
 			</field>
 		</form>
+		
+		<form name="findIdVO">
+			<field property="cellNum" depends="required">
+				<arg0 key="title.auth.cellNum" />
+			</field>
+			<field property="userNm" depends="required">
+				<arg0 key="title.join.userNm" />
+			</field>
+		</form>
+		
+		<form name="findPwdVO">
+			<field property="cellNum" depends="required">
+				<arg0 key="title.auth.cellNum" />
+			</field>
+			<field property="userNm" depends="required">
+				<arg0 key="title.join.userNm" />
+			</field>
+			<field property="loginId" depends="required">
+				<arg0 key="title.login.loginid" />
+			</field>
+		</form>
+		
 	</formset>
 </form-validation>

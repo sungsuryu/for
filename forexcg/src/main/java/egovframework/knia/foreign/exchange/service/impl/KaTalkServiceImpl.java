@@ -1,6 +1,5 @@
 package egovframework.knia.foreign.exchange.service.impl;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.annotation.Resource;
@@ -42,6 +41,32 @@ public class KaTalkServiceImpl implements KaTalkService {
 		this.initKaTalk(kaTalkVO);
 		
 		kaTalkVO.setSendMessage(EgovProperties.getProperty("Globals.katalk.join.title")+" "+hMap.get("authNum").toString()+"#");
+		kaTalkVO.setSubject(EgovProperties.getProperty("Globals.katalk.subject"));
+		kaTalkVO.setReceiveMobileNo(hMap.get("cellNum").toString());
+		kaTalkVO.setSendReserveDateStr(EgovDateUtil.currentDateTimeString());
+		
+		kaTalkMapper.insertKaTalk(kaTalkVO);
+	}
+	
+	public void sendFindUserId(HashMap<String, Object> hMap) throws Exception {
+		
+		KaTalkVO kaTalkVO = new KaTalkVO();
+		this.initKaTalk(kaTalkVO);
+		
+		kaTalkVO.setSendMessage(EgovProperties.getProperty("Globals.katalk.findUserId.title")+" "+hMap.get("loginId").toString()+"");
+		kaTalkVO.setSubject(EgovProperties.getProperty("Globals.katalk.subject"));
+		kaTalkVO.setReceiveMobileNo(hMap.get("cellNum").toString());
+		kaTalkVO.setSendReserveDateStr(EgovDateUtil.currentDateTimeString());
+		
+		kaTalkMapper.insertKaTalk(kaTalkVO);
+	}
+	
+	public void sendFindPassword(HashMap<String, Object> hMap) throws Exception {
+		
+		KaTalkVO kaTalkVO = new KaTalkVO();
+		this.initKaTalk(kaTalkVO);
+		
+		kaTalkVO.setSendMessage(EgovProperties.getProperty("Globals.katalk.findPassword.title")+" "+hMap.get("loginId").toString()+"");
 		kaTalkVO.setSubject(EgovProperties.getProperty("Globals.katalk.subject"));
 		kaTalkVO.setReceiveMobileNo(hMap.get("cellNum").toString());
 		kaTalkVO.setSendReserveDateStr(EgovDateUtil.currentDateTimeString());

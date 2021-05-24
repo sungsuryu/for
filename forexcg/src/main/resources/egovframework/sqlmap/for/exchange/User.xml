@@ -24,13 +24,15 @@
 	</resultMap>
 	
 	<select id="countUser" parameterType="String" resultType="int">
+		/** User.countUser */
 			SELECT
 				COUNT(USER_ID) CNT FROM TB_FOR_USER
 			WHERE
-			USER_ID=#{value}
+				USER_ID=#{value}
 	</select>
 
 	<select id="selectUser" parameterType="userVO" resultMap="mapUserVO">
+		/** User.selectUser */
 		SELECT
 			USER_ID, USER_NM, 
 			PASSWORD, ACS_IP, 
@@ -45,6 +47,7 @@
 	</select>
 	
 	<insert id="insertNewUser" parameterType="userVO">
+		/** User.insertNewUser */
 		INSERT INTO TB_FOR_USER (
 			USER_ID, USER_NM, 
 			PASSWORD, ACS_IP, 
@@ -52,7 +55,8 @@
 			INSUR_CD, EML_ADDR, 
 			IS_RCV_EML, CELL_NUM, 
 			IS_RCV_CELL, IS_APPROVE, 
-			IS_DEL, USE_YN, 
+			IS_CHG_PASSWORD, IS_LOCK, 
+			USE_YN, IS_DEL 
 			INSRT_ID, INSRT_DATE, 
 			UPDT_ID, UPDT_DATE
 		) VALUES (
@@ -61,10 +65,24 @@
 			#{dptNm}, #{officeTelNum},
 			#{insurCd}, #{emlAddr}, 
 			#{isRcvEml}, #{cellNum},
-			#{isRcvCell}, 'N', 
+			'N', 'N',
+			'N', #{isRcvCell}, 
 			'N', 'Y', 
 			#{userId}, now(), 
 			#{userId}, now()
 		)
 	</insert>
+
+	<update id="updateNewPassword" parameterType="userVO">
+		/** User.updateNewPassword */
+		UPDATE
+			TB_FOR_USER
+			SET
+				IS_CHG_PASSWORD='Y',
+				PASSWORD=#{password}, 
+				UPDT_ID=#{userId}, 
+				UPDT_DATE=now()
+		WHERE
+			USER_ID=#{userId}
+	</update>
 </mapper>

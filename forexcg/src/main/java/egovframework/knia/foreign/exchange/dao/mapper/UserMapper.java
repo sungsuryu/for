@@ -12,4 +12,6 @@ public interface UserMapper {
 	UserVO selectUser(LoginVO loginVO) throws Exception;
 	
 	void insertNewUser(UserVO userVO) throws Exception;
+	
+	void updateNewPassword(UserVO userVO) throws Exception;
 }

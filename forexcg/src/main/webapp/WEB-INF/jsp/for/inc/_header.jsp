@@ -11,3 +11,4 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
 <script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/cmmFunc.js'/>"></script>
