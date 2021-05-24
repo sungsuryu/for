@@ -456,7 +456,7 @@ tr.on td { background:#e7f4fd }
 
 a.link01 { color:#0094cd; text-decoration:underline }
 
-.add_file_list ul { border:1px solid #e0e0e0; display:inline-block; vertical-align:bottom; width:700px; margin-right:5px; max-height:81px; overflow-y:auto }
+.add_file_list ul { border:1px solid #e0e0e0; display:inline-block; vertical-align:bottom; width:700px; margin-right:5px; height:80px; max-height:81px; overflow-y:auto }
 .add_file_list ul li { border-top:1px dashed #eee; padding:5px; line-height:1.2; cursor:pointer }
 .add_file_list ul li.on { background:#f2f5f7 }
 .add_file_list ul li:first-child { border:0 }
