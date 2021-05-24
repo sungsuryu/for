@@ -30,6 +30,10 @@ function MultiSelector( list_target, max ){
 		this.max = -1;
 	};
 	
+	this.addMax = function(){
+		this.max = this.max + 1;
+	};
+	
 	/**
 	 * Add a new file input element
 	 */
@@ -50,6 +54,7 @@ function MultiSelector( list_target, max ){
 				// New file input
 				var new_element = document.createElement( 'input' );
 				new_element.type = 'file';
+				new_element.className = 'chooseFile';
 
 				// Add new element
 				this.parentNode.insertBefore( new_element, this );
@@ -122,7 +127,7 @@ function MultiSelector( list_target, max ){
 
 			// Re-enable input element (if it's disabled)
 			this.parentNode.element.multi_selector.current_element.disabled = false;
-
+			console.log(this.parentNode);
 			//    which nixes your already queued uploads
 			return false;
 		};

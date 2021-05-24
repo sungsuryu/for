@@ -78,4 +78,9 @@ public class BoardServiceImpl implements BoardService {
 	public List<?> selectFaqFile() throws Exception {
 		return fileServiceMapper.selectFaqFile();
 	}
+
+	@Override
+	public void deleteFile(FileVO fileVO) throws Exception {
+		fileServiceMapper.deleteFile(fileVO);
+	}
 }

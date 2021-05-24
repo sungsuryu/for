@@ -5,7 +5,6 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
@@ -22,6 +21,8 @@
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
+var multi_selector;
+var deleteOriginFileId;
 var editors = [];
 $(document).ready(function() {
 	makeFileAttachment();
@@ -36,78 +37,86 @@ $(document).ready(function() {
  		fCreator: "createSEditor2"
  	});
 });
-
-var fileStore = [];
 function updateBoard(){
-	var formdata = $("#boardForm").serializeArray();
-	if(!$("#board_alarm").is(':checked')){
-		formdata.push({
-			name : $("#board_alarm").attr('name'),
-			value : "N"
-		});
+	console.log(deleteOriginFileId);
+	if(!$("#board_alarmYn").is(':checked')){
+		$("#board_alarm").val("N");
 	}
-	$.ajax({
-        type:"POST",
-        url:"/setting/board/noticeEditAction.ajax",
-        cache:false,
-        data:formdata,
-        success: function(e){
-            if (e.result.status == 'SUCCESS') {
-            	alert("수정 성공");
-            	location.href = "/setting/board/notice.do";
-            }
-            else {
-            	alert("공지사항을 불러올 수  없습니다.");
-            }
-        },
-        error: function(xhr, status, error) {
-            alert(error);
-        }, 
-        complete : function() {
-        	console.log('complete');
-        }
-    });
+	else{
+		$("#board_alarm").val("Y");
+	}
+	$("#boardForm").attr("action", "/setting/board/noticeEditAction.ajax");
+	$("#boardForm").submit();
 }
 
 function deleteBoard(){
-	var formdata = $("#boardForm").serialize();
-	$.ajax({
-        type:"POST",
-        url:"/setting/board/noticeDeleteAction.ajax",
-        cache:false,
-        data:formdata,
-        success: function(e){
-            if (e.result.status == 'SUCCESS') {
-            	alert("수정 성공");
-            	location.href = "/setting/board/notice.do";
-            }
-            else {
-            	alert("공지사항을 불러올 수  없습니다.");
-            }
-        },
-        error: function(xhr, status, error) {
-            alert(error);
-        }, 
-        complete : function() {
-        	console.log('complete');
-        }
-    });
+	$("#boardForm").attr("action", "/setting/board/noticeDeleteAction.ajax");
+	$("#boardForm").submit();
 }
 
-function doUploadFileList(){
-	var upfile = ("#uploadFile").files;
-	console.log(upfile);
-	/* for(var i = 0; i < upfile.length; i++){
-		fileStore.push(upfile[i]);			
-	} */
+function getUploadableNum(){
+	var existFileNum = ${fileCnt};
+	var maxFileNum = 10;//파일 최대 첨부갯수
+
+	if (existFileNum=="undefined" || existFileNum ==null) {
+		existFileNum = 0;
+	}
+	if (maxFileNum=="undefined" || maxFileNum ==null) {
+		maxFileNum = 0;
+	}
+	var uploadableFileNum = maxFileNum - existFileNum;
+	if (uploadableFileNum<0) {
+		uploadableFileNum = 0;
+	}
+	return uploadableFileNum;
 }
 
 function makeFileAttachment(){
-	 var maxFileNum = 10;
-
-	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum );
-	 multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
+	var uploadableFileNum = getUploadableNum();
+	multi_selector = new MultiSelector( document.getElementById( 'egovComFileList' ), uploadableFileNum );
+	multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
 }
+
+function fn_egov_check_file(flag) {
+	if (flag=="Y") {
+		document.getElementById('file_upload_posbl').style.display = "block";
+		document.getElementById('file_upload_imposbl').style.display = "none";
+	} else {
+		document.getElementById('file_upload_posbl').style.display = "none";
+		document.getElementById('file_upload_imposbl').style.display = "block";
+	}
+}
+
+function deleteFileList(e, index, fileId) {
+//	console.log(e.parentNode);
+	//multi_selector.addMax(e);
+	//$(".chooseFile input:disabled").attr("disabled", false);
+//	e.parentNode.element.multi_selector.current_element.disabled = false;
+	$("#boardForm").prepend('<input id="deleteOriginFileId" name="deleteOriginFileId" type="hidden" value="' + fileId + '">');
+	$("#originFileList" + index).remove();
+}
+
+function valueCheck(){
+	editors.getById["board_content"].exec("UPDATE_CONTENTS_FIELD", []);
+	var boardTitle = $("#board_title").val();
+	var boardUserNm = $("#board_usernm").val();
+	var boardContent = $("#board_content").val();
+	if(boardTitle == "" || boardTitle == null){
+		alert("제목을 적어주세요.");
+		return
+	}
+	if(boardUserNm == "" || boardUserNm == null){
+		alert("작성자를 적어주세요.");
+		return
+	}
+	if( boardContent == ""  || boardContent == null || boardContent == '&nbsp;' || boardContent == '<br>' || boardContent == '<br />' || boardContent == '<p>&nbsp;</p>' || boardContent == '<p><br></p>')  {
+        alert("내용을 입력하세요.");
+        oEditors.getById["COMVISION"].exec("FOCUS"); //포커싱
+        return;
+   }
+	updateBoard();
+}
+
 </script>
 <body>
 
@@ -321,6 +330,7 @@ function makeFileAttachment(){
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input id="board_idx" name="board_idx" type="hidden" value="<c:out value="${board_idx}" />">
+		<input id="isOriginFile" name="isOriginFile" type="hidden" value="<c:out value="${isOriginFile}" />">
 		<input type='hidden' id="board_alarm" name='board_alarm'>
 		<div class="table_v01">
 			<table>
@@ -335,7 +345,7 @@ function makeFileAttachment(){
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input id="board_alarm" name="board_alarm" type="checkbox"><i></i><label for="">전송</label></td>
+						<td><input id="board_alarmYn" name="board_alarmYn" type="checkbox"><i></i><label for="">전송</label></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
@@ -344,14 +354,31 @@ function makeFileAttachment(){
 					<tr>
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
 						<td>
-							<div class="add_file_list">
-								<div id="uploadFileList" name="uploadFileList" class='uploadFileList'>
-									
-								</div>
-								
+							<div id="file_upload_posbl">
+					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+   								    <tr>
+								        <td>
+								        	<div id="egovComFileList">
+								        		<c:forEach var="result" items="${fileList}" varStatus="status">
+													<li id="originFileList${status.index}">
+														<c:out value="${result.phyFileNm}"/>
+														<input type="button" onclick='deleteFileList(this, ${status.index}, "${result.fileId}");' value="삭제">
+													</li>
+												</c:forEach>
+								        	</div>
+								        </td>
+								    </tr>
+								    <tr>
+								        <td><input name="file_1" id="egovComFileUploader" type="file" title="첨부파일명 입력"/></td>
+								    </tr>
+					   	        </table>
 							</div>
-							<div class="add_file">
-								<input name="file_1" id="egovComFileUploader" type="file" title="첨부파일입력"/>
+							<div id="file_upload_imposbl"  style="display:none;" >
+					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+								    <tr>
+								        <td>cannot upload files</td>
+								    </tr>
+					   	        </table>
 							</div>
 						</td>
 					</tr>
@@ -370,7 +397,7 @@ function makeFileAttachment(){
 	
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:updateBoard();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
 			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
