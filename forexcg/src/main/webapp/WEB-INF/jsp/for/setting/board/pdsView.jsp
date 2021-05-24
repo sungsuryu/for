@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
 <html>
 <head>
 <meta charset="utf-8">
@@ -19,18 +19,18 @@
 <script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
 </head>
 <script>
-	//페이지 전환 함수
-	function fn_egov_link_page(pageNo){
-		$("#pageIndex").val(pageNo);
-		$("#pagingForm").submit();
-/* 		document.listForm.pageIndex.value = pageNo;
-		document.listForm.action = "<c:url value='/board.do'/>";
-	   	document.listForm.submit(); */
-	}
-	
-	function goBoardEdit(board_idx){
-		location.href = "/setting/board/noticeView.do?board_idx=" + board_idx;
-	}
+var editors = [];
+$(document).ready(function() {
+});
+
+function fn_egov_downFile(fileId){
+	window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
+	//location.href = "/board/downloadFile.do?fileId=" + fileId;
+}
+
+function goEdit(boardIdx){
+	location.href = "/setting/board/pdsEdit.do?board_idx=" + boardIdx;
+}
 </script>
 <body>
 
@@ -237,78 +237,55 @@
 	
 	<div class="catg_area">
 		<ul>
-			<li class="on"><a href="javascript:;">공지사항</a></li>
-			<li><a href="javascript:;">자료실</a></li>
+			<li><a href="javascript:;">공지사항</a></li>
+			<li  class="on"><a href="javascript:;">자료실</a></li>
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
-	
-	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${total_cnt}" /></strong>건</p>
-	</div>
-	
-	<div class="table_h01">
-		<table>
-			<colgroup>
-				<col style="width:70px">
-				<col style="">
-				<col style="width:120px">
-				<col style="width:120px">
-				<col style="width:120px">
-				<col style="width:120px">
-			</colgroup>
-			<thead>
-				<tr>
-					<th>순번</th>
-					<th>제목</th>
-					<th>첨부파일</th>
-					<th>작성자</th>
-					<th>작성일자</th>
-					<th>조회</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="result" items="${boardList}" varStatus="status">
+	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
+		<input type='hidden' id="board_alarm" name='board_alarm'>
+		<div class="table_v01">
+			<table>
+				<colgroup>
+					<col style="width:150px">
+					<col style="">
+				</colgroup>
+				<tbody>
 					<tr>
-						<td><c:out value="${result.listNum}" /></td>
-						<td class="left"><a href="javascript:goBoardEdit(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
-						<td>
-							<c:if test = "${result.fileCnt > 0}">
-								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
-							</c:if>
-						<td><c:out value="${result.userName}" /></td>
-						<td><c:out value="${result.updtDate}"/></td>
-						<td><c:out value="${result.viewCnt}" /></td>
+						<th>제목</th>
+						<td><c:out value="${board_title}" /></td>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</div>
+					<tr>
+						<th>작성자</th>
+						<td><c:out value="${board_usernm}" /></td>
+					</tr>
+					<tr>
+						<th>첨부파일</th>
+						<td>
+							<c:forEach var="result" items="${fileList}" varStatus="status">
+								<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
+									<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
+								</a>
+							</c:forEach>
+						</td>
+					</tr>
+					<tr>
+						<th>내용</th>
+						<td>
+							<div>
+								<c:out value="${board_content}" escapeXml="false" />
+							<div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</form>
 	
 	<div class="tbl_btm">
-		<div class="f_left">
-			<div class="pagenum">
-				<!-- <a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				<a href="javascript:" class="on">1</a>
-				<a href="javascript:">2</a>
-				<a href="javascript:">3</a>
-				<a href="javascript:">4</a>
-				<a href="javascript:">5</a>
-				<a href="javascript:">6</a>
-				<a href="javascript:">7</a>
-				<a href="javascript:">8</a>
-				<a href="javascript:">9</a>
-				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
-				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-				<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
-					<input type="hidden" id = "pageIndex" name = "pageIndex">
-				</form>
-			</div>
-		</div>
 		<div class="f_right">
-			<a href="/setting/board/noticeWrite.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="javascript:goEdit('<c:out value="${board_idx}"/>');" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
+			<a href="/setting/board/pds.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	
@@ -329,8 +306,7 @@
 <!--+++++ /우측 레이어(도움말) +++++-->
 
 <script>
-$(function(){
-});
+
 </script>
 
 </body>

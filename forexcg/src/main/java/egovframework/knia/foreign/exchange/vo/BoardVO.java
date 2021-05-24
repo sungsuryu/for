@@ -16,8 +16,6 @@ public class BoardVO implements Serializable {
 	
 	private String boardContent;
 
-	private String insurCd;
-	
 	private String userId;
 	
 	private String userName;
@@ -108,14 +106,6 @@ public class BoardVO implements Serializable {
 
 	public void setBoardContent(String boardContent) {
 		this.boardContent = boardContent;
-	}
-
-	public String getInsurCd() {
-		return insurCd;
-	}
-
-	public void setInsurCd(String insurCd) {
-		this.insurCd = insurCd;
 	}
 
 	public String getUserId() {

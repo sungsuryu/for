@@ -29,7 +29,7 @@
 	}
 	
 	function goBoardEdit(board_idx){
-		location.href = "/setting/board/noticeView.do?board_idx=" + board_idx;
+		location.href = "/setting/board/pdsView.do?board_idx=" + board_idx;
 	}
 </script>
 <body>
@@ -237,8 +237,8 @@
 	
 	<div class="catg_area">
 		<ul>
-			<li class="on"><a href="javascript:;">공지사항</a></li>
-			<li><a href="javascript:;">자료실</a></li>
+			<li><a href="javascript:;">공지사항</a></li>
+			<li class="on"><a href="javascript:;">자료실</a></li>
 			<li><a href="for_014_faq.htm">FAQ</a></li>
 		</ul>
 	</div>
@@ -302,13 +302,13 @@
 				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
 				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
 				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-				<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
+				<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/pds.do">
 					<input type="hidden" id = "pageIndex" name = "pageIndex">
 				</form>
 			</div>
 		</div>
 		<div class="f_right">
-			<a href="/setting/board/noticeWrite.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="/setting/board/pdsWrite.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
 	

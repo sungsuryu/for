@@ -81,4 +81,11 @@ public interface BoardService {
 	 * @throws Exception
 	 */
 	List<?> selectFaqFile() throws Exception;
+	
+	/**
+	 * 첨부파일 삭제
+	 * @param FileVO 파일정보
+	 * @throws Exception
+	 */
+	void deleteFile(FileVO fileVO) throws Exception;
 }

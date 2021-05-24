@@ -6,7 +6,6 @@
 		<result property="boardIdx" column="BOARD_IDX"/>
 		<result property="boardTitle" column="BOARD_TITLE"/>
 		<result property="boardContent" column="BOARD_CONTENT"/>
-		<result property="insurCd" column="INSUR_CD"/>
 		<result property="userId" column="USER_ID"/>
 		<result property="userName" column="USER_NM"/>
 		<result property="insrtId" column="INSRT_ID"/>
@@ -134,7 +133,6 @@
 		(
 				BOARD_TITLE,
 				BOARD_CONTENT,
-				INSUR_CD,
 				USER_ID,
 				USER_NM,
 				INSRT_ID,
@@ -150,7 +148,6 @@
 		VALUE(
 			#{boardTitle},
 			#{boardContent},
-			#{insurCd},
 			#{userId},
 			#{userName},
 			#{userId},
