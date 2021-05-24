@@ -4,7 +4,7 @@
 
 	<insert id="insertTermsAgree" parameterType="termsAgreeHistVO">
 		INSERT INTO 
-		TB_FOR_TERMS_AGR_HIST (
+		TB_FOR_TERMS_AGRE_HIST (
 			USER_ID, 
 			AGREE_YN, 
 			IS_DEL, 

@@ -1085,7 +1085,7 @@
                       <defaultValue></defaultValue>
                     </net.java.amateras.db.visual.model.ColumnModel>
                     <net.java.amateras.db.visual.model.ColumnModel>
-                      <columnName>IS_RCV_EMAIL</columnName>
+                      <columnName>IS_RCV_EML</columnName>
                       <logicalName>이메일수신여부</logicalName>
                       <columnType class="net.java.amateras.db.dialect.ColumnType">
                         <name>CHAR</name>
@@ -1114,7 +1114,12 @@
                     <net.java.amateras.db.visual.model.ColumnModel>
                       <columnName>IS_RCV_CELL</columnName>
                       <logicalName>휴대전화수신여부</logicalName>
-                      <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[9]/columnType"/>
+                      <columnType class="net.java.amateras.db.dialect.ColumnType">
+                        <name>CHAR</name>
+                        <logicalName>Character</logicalName>
+                        <supportSize>true</supportSize>
+                        <type>1</type>
+                      </columnType>
                       <size>1</size>
                       <notNull>true</notNull>
                       <primaryKey>false</primaryKey>
@@ -1125,7 +1130,7 @@
                     <net.java.amateras.db.visual.model.ColumnModel>
                       <columnName>IS_APPROVE</columnName>
                       <logicalName>승인여부</logicalName>
-                      <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[9]/columnType"/>
+                      <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[11]/columnType"/>
                       <size>1</size>
                       <notNull>true</notNull>
                       <primaryKey>false</primaryKey>
@@ -1152,7 +1157,7 @@
                     <net.java.amateras.db.visual.model.ColumnModel>
                       <columnName>IS_DEL</columnName>
                       <logicalName>삭제여부</logicalName>
-                      <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[9]/columnType"/>
+                      <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[11]/columnType"/>
                       <size>1</size>
                       <notNull>true</notNull>
                       <primaryKey>false</primaryKey>
@@ -1163,7 +1168,7 @@
                     <net.java.amateras.db.visual.model.ColumnModel>
                       <columnName>USE_YN</columnName>
                       <logicalName>사용여부</logicalName>
-                      <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[9]/columnType"/>
+                      <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[11]/columnType"/>
                       <size>1</size>
                       <notNull>true</notNull>
                       <primaryKey>false</primaryKey>
