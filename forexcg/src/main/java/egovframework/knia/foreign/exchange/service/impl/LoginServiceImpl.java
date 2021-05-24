@@ -33,15 +33,32 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		UserVO userVO = loginMapper.selectUser(loginVO);
 		
 		if (userVO != null && !userVO.getUserId().equals("") && !userVO.getPassword().equals("")) {
-			// 인증번호 생성
-			this.insertAuthHist(userVO);
 			
-			return userVO;
+			UserVO hisVO = loginMapper.selectLoginHist(loginVO);
+			
+			if (userVO.getPassword().equals(loginVO.getPassword())) {	// 계정확인 완료
+				// 인증번호 생성
+				this.insertAuthHist(userVO);
+				
+			} else {	// 비밀번호 불일치
+				userVO = new UserVO();
+			}
+			
+			insertLoginHist(hisVO, loginVO);
 		} else {
 			userVO = new UserVO();
 		}
 		
 		return userVO;
+	}
+	
+	private void insertLoginHist(UserVO userVO, LoginVO loginVO) throws Exception {
+		if (userVO != null) {
+			
+		} else {
+			loginVO.setRetryCnt(1);
+//			loginMapper.insertLoginHist(loginVO);
+		}
 	}
 	
 	/**

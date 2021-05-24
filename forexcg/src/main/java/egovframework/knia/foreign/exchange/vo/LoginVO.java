@@ -20,6 +20,16 @@ public class LoginVO extends CommonVO implements Serializable {
 	
 	private String ip;
 
+	private int retryCnt;
+	
+	public int getRetryCnt() {
+		return retryCnt;
+	}
+
+	public void setRetryCnt(int retryCnt) {
+		this.retryCnt = retryCnt;
+	}
+
 	public String getUuId() {
 		return uuId;
 	}

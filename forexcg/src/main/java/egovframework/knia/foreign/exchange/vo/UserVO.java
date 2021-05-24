@@ -53,6 +53,16 @@ public class UserVO implements Serializable {
 	
 	private String authKey;
 	
+	private int retryCnt;
+	
+	public int getRetryCnt() {
+		return retryCnt;
+	}
+
+	public void setRetryCnt(int retryCnt) {
+		this.retryCnt = retryCnt;
+	}
+
 	public String getJoinAgree() {
 		return joinAgree;
 	}

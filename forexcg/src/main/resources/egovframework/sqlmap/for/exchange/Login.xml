@@ -15,6 +15,12 @@
 		<result property="authNum" column="AUTH_NUM" />
 		<result property="approveTimestamp" column="APPROVE_TIMESTAMP" />
 	</resultMap>
+	
+	<resultMap id="mapLoginHistVO" type="egovframework.knia.foreign.exchange.vo.UserVO">
+		<result property="userId" column="USER_ID" />
+		<result property="acsIp" column="ACS_IP" />
+		<result property="retryCnt" column="RETRY_CNT" />
+	</resultMap>
 
 	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO">
 		/** Login.selectUser */
@@ -24,11 +30,11 @@
 			FROM
 				TB_FOR_USER
 			WHERE
-				USER_ID=#{loginId} 
-				AND PASSWORD=#{password}
-				AND IS_DEL='N' 
-				AND USE_YN='Y' 
+				USER_ID=#{loginId}
 				AND IS_APPROVE='Y'
+				AND IS_LOCK='N'
+				AND IS_DEL='N' 
+				AND USE_YN='Y'
 	</select>
 	
 	<select id="countUser" parameterType="loginVO" resultType="int">
@@ -94,5 +100,52 @@
 			ORDER BY
 				INSRT_DATE DESC LIMIT 1
 			
+	</select>
+	
+	<insert id="insertLoginHist" parameterType="loginVO">
+		/** Login.insertLoginHist */
+		INSERT
+			TB_FOR_LOGIN_HIST (
+				USER_ID, 
+				RETRY_CNT, 
+				ACS_IP, 
+				IS_DEL, 
+				INSRT_ID, 
+				INSRT_DATE, 
+				UPDT_ID, 
+				UPDT_DATE
+			) VALUES (
+				#{loginId }, 
+				1, 
+				#{acsIp}, 
+				'N', 
+				#{loginId}, 
+				now(), 
+				#{loginId}, 
+				now()
+			)
+	</insert>
+	
+	<update id="updateLoginHist" parameterType="loginVO">
+		/** Login.updateLoginHist */
+		UPDATE
+			TB_FOR_LOGIN_HIST
+			SET
+				RETRY_CNT=#{retryCnt}, 
+				UPDT_ID=#{loginId}, 
+				UPDT_DATE=now()
+		WHERE
+			USER_ID=#{loginId}
+	</update>
+
+	<select id="selectLoginHist" parameterType="loginVO" resultMap="mapLoginHistVO">
+		/** Login.selectLoginHist */
+		SELECT
+			USER_ID, RETRY_CNT, ACS_IP
+		FROM
+			TB_FOR_LOGIN_HIST
+		WHERE
+			USER_ID=#{loginId}
+		LIMIT 1
 	</select>
 </mapper>

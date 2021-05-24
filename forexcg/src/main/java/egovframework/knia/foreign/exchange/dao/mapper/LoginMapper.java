@@ -35,4 +35,10 @@ public interface LoginMapper {
 	void updateExpireOtp(LoginVO loginVO) throws Exception;
 	
 	int countUser() throws Exception;
+	
+	void insertLoginHist(LoginVO loginVO) throws Exception;
+	
+	void updateLoginHist(LoginVO loginVO) throws Exception;
+	
+	UserVO selectLoginHist(LoginVO loginVO) throws Exception;
 }
