@@ -8,7 +8,7 @@
 <script>
 	//페이지 전환 함수
 	function fn_egov_link_page(pageNo){
-		$("#pageIndex").val(pageNo);
+		$("#pageNo").val(pageNo);
 		$("#pagingForm").submit();
 	}
 	
@@ -262,7 +262,9 @@
 								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
 							</c:if>
 						<td><c:out value="${result.userName}" /></td>
-						<td><c:out value="${result.updtDate}"/></td>
+							<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
+							<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
+						<td><c:out value="${result.insrtDate}"/></td>
 						<td><c:out value="${result.viewCnt}" /></td>
 					</tr>
 				</c:forEach>
@@ -273,23 +275,7 @@
 	<div class="tbl_btm">
 		<div class="f_left">
 			<div class="pagenum">
-				<!-- <a href="javascript:" title="prev"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-				<a href="javascript:" class="on">1</a>
-				<a href="javascript:">2</a>
-				<a href="javascript:">3</a>
-				<a href="javascript:">4</a>
-				<a href="javascript:">5</a>
-				<a href="javascript:">6</a>
-				<a href="javascript:">7</a>
-				<a href="javascript:">8</a>
-				<a href="javascript:">9</a>
-				<a href="javascript:" title="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-				<a href="javascript:" title="prev"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a> -->
 				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-				<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/pds.do">
-					<input type="hidden" id = "pageIndex" name = "pageIndex">
-				</form>
 			</div>
 		</div>
 		<div class="f_right">
@@ -297,6 +283,9 @@
 		</div>
 	</div>
 	
+	<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/pds.do">
+		<input type="hidden" id = "pageNo" name = "pageNo">
+	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->
 

@@ -205,11 +205,11 @@ function fn_egov_downFile(fileId){
 			<tbody>
 				<tr>
 					<th>제목</th>
-					<td><c:out value="${board_title}" /></td>
+					<td><c:out value="${boardVO.boardTitle}" /></td>
 				</tr>
 				<tr>
 					<th>작성자</th>
-					<td><c:out value="${board_usernm}" /></td>
+					<td><c:out value="${boardVO.userName}" /></td>
 				</tr>
 				<tr>
 					<th>첨부파일</th>
@@ -225,7 +225,7 @@ function fn_egov_downFile(fileId){
 					<th>내용</th>
 					<td>
 						<div>
-							<c:out value="${board_content}" escapeXml="false" />
+							<c:out value="${boardVO.boardContent}" escapeXml="false" />
 						<div>
 					</td>
 				</tr>

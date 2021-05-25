@@ -42,7 +42,7 @@ public class BoardVO implements Serializable {
 	
 	private int totalCnt;
 	
-	private int pageNo;
+	private int pageNo = 0;
 	
 	private int firstIndex;
 	

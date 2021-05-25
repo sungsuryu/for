@@ -232,7 +232,7 @@ function goEdit(boardIdx){
 		</ul>
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
-		<input type='hidden' id="board_alarm" name='board_alarm'>
+		<input type='hidden' id="alarmYn" name='alarmYn'>
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -242,11 +242,11 @@ function goEdit(boardIdx){
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><c:out value="${board_title}" /></td>
+						<td><c:out value="${boardVO.boardTitle}" /></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><c:out value="${board_usernm}" /></td>
+						<td><c:out value="${boardVO.userName}" /></td>
 					</tr>
 					<tr>
 						<th>첨부파일</th>
@@ -262,7 +262,7 @@ function goEdit(boardIdx){
 						<th>내용</th>
 						<td>
 							<div>
-								<c:out value="${board_content}" escapeXml="false" />
+								<c:out value="${boardVO.boardContent}" escapeXml="false" />
 							<div>
 						</td>
 					</tr>
@@ -273,7 +273,7 @@ function goEdit(boardIdx){
 	
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:goEdit('<c:out value="${board_idx}"/>');" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
+			<a href="javascript:goEdit('<c:out value="${boardVO.boardIdx}"/>');" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
 			<a href="/setting/board/pds.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>

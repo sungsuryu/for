@@ -142,6 +142,9 @@
 				VIEW_CNT,
 				IS_DEL,
 				ALARM_YN,
+				<if test='!alarmYn.equals("N")'>
+					ALARM_DATE,
+				</if>
 				BOARD_TYPE
 				
 		)
@@ -157,6 +160,9 @@
 			0,
 			#{isDel},
 			#{alarmYn},
+			<if test='!alarmYn.equals("N")'>
+				NOW(),
+			</if>
 			#{boardType}
 		)
 	</insert>
