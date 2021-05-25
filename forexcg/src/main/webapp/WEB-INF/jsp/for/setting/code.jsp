@@ -3,19 +3,75 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
-<meta name="HandheldFriendly" content="true">
-<meta name="format-detection" content="telephone=no">
-<meta http-equiv="imagetoolbar" content="no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
-<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
+<script type="text/javascript">
+	$(function() {
+		$(".btn_grp_del").click(function(e) {
+			alert('ok');
+		});
+		
+		$(".group-code-tr").click(function(event) {
+			$(".group-code-tr").removeClass("on");
+			
+			var thisEl = $(event.currentTarget);
+			thisEl.addClass("on");
+			
+			var cdEl = thisEl.children("td").children("strong");
+			var cmmCd = $(cdEl).text();
+			var pData = {
+				"cmmCd":cmmCd	
+			};
+			
+			subCodeList(pData);
+		});
+		
+		var subCodeList = function(pData) {
+			$.ajax({
+		        type:"POST",
+		        url:"/setting/code/subCode.ajax",
+		        data : pData,
+		        success: function(e){
+		        	var cdlist = e.subCodeList;
+		        	var cdSiz = cdlist.length;
+		        	
+		        	$("#subCodeList .subCode").remove();
+		        	
+		        	if (cdSiz > 0) {
+						for (var i in cdlist) {
+							addSubCode(cdlist[i]);
+						}		        		
+		        	}
+		        	
+		        }
+	    	});
+		}
+		
+		var addSubCode = function(sCode) {
+			var cmmCd = sCode.cmmCd;
+			var cmmCdNm = sCode.cmmCdNm;
+			var cdDesc = sCode.cdDesc;
+			var sortNum = sCode.sortNum;
+			var useYn = sCode.useYn;
+			
+			var cells = $("<strong />").text(cmmCd);
+			
+			var rows = $("<tr />").append(
+					$("<td />").append(cells), 
+					$("<td />").text(cmmCdNm),
+					$("<td />").text(cdDesc),
+					$("<td />").text(useYn),
+					$("<td />").text(sortNum),
+					$("<td />")
+			);
+			
+			$(rows).addClass('subCode');
+
+			$(".subCodeInput").before(rows);
+
+		};
+	});
+</script>
 </head>
 
 <body>
@@ -24,38 +80,7 @@
 
 <!--+++++ 상단 +++++-->
 <header id="header">
-	<nav class="gnb">
-		<ul>
-			<li class="depth1">
-				<a href="javascript:;">공통관리</a>
-				<ul>
-					<li><a href="for_007.htm">사용자 등록관리</a></li>
-					<li><a href="for_008.htm">내정보 관리</a></li>
-					<li><a href="for_009.htm">시스템 설정관리</a></li>
-					<li><a href="for_017.htm">통계 및 조회</a></li>
-				</ul>				
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">게시판</a>
-				<ul>
-					<li><a href="for_020.htm">FAQ</a></li>
-					<li><a href="for_021.htm">공지사항</a></li>
-					<li><a href="for_022.htm">보고관련 자료실</a></li>
-				</ul>				
-			</li>
-			<li class="depth1">
-				<a href="for_023.htm">보고서 전송 및 결과확인</a>
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">조회</a>
-				<ul>
-					<li><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li><a href="for_025.htm">주요계수현황</a></li>
-					<li><a href="for_026.htm">차액상세표</a></li>
-				</ul>				
-			</li>
-		</ul>
-	</nav>
+<%@ include file="/WEB-INF/jsp/for/inc/_gnb.jsp" %>
 	<div class="top_con">
 		<a href="javascript:" class="btn_sh" title="상단메뉴 열기/닫기">
 			<i class="fa fa-angle-down" aria-hidden="true"></i>
@@ -98,94 +123,16 @@
 		<h1><a href="main.htm"><img src="img/ci.png" alt="ci"></a></h1>
 		<h2>외환정보시스템</h2>
 	</header>
-	<nav class="gnb">
-		<ul>
-			<!-- 현재 메뉴 addClass="on" -->
-			<li class="depth1 on">
-				<a href="javascript:;">공통관리</a>
-				<ul>
-					<!-- 현재 메뉴 addClass="on" -->
-					<li><a href="for_007.htm">사용자 등록관리</a></li>
-					<li><a href="for_008.htm">내정보 관리</a></li>
-					<li class="on"><a href="for_009.htm">시스템 설정관리</a></li>
-					<li><a href="for_017.htm">통계 및 조회</a></li>
-				</ul>				
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">게시판</a>
-				<ul>
-					<li><a href="for_020.htm">FAQ</a></li>
-					<li><a href="for_021.htm">공지사항</a></li>
-					<li><a href="for_022.htm">보고관련 자료실</a></li>
-				</ul>				
-			</li>
-			<li class="depth1">
-				<a href="for_023.htm">보고서</a>
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">조회</a>
-				<ul>
-					<li><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li><a href="for_025.htm">주요계수현황</a></li>
-					<li><a href="for_026.htm">차액상세표</a></li>
-				</ul>				
-			</li>
-		</ul>
-	</nav>
+<%@ include file="/WEB-INF/jsp/for/inc/_lnb.jsp" %>
 </aside>
 <!--+++++ /좌측 레이어 +++++-->
 
 <!--+++++ 컨텐츠 +++++-->
 <div id="contents">
-	
-	<div class="tab_menu col7">
-		<ul>
-			<!-- 현재 메뉴 addClass="on" -->
-			<li class="on"><a href="for_009.htm">공통코드 관리</a></li>
-			<li><a href="for_010.htm">보고서 관리</a></li>
-			<li><a href="for_011.htm">메뉴 관리</a></li>
-			<li><a href="for_012.htm">그룹별 메뉴 관리</a></li>
-			<li><a href="for_013.htm">팝업 관리</a></li>
-			<li><a href="for_014.htm">게시판 관리</a></li>
-			<li><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
-		</ul>
-	</div>
-	
+
 	<header class="contents_header">
 		<h2>공통코드 관리</h2>
-		<div class="navi">
-			<a href="main.htm" class="btn_home" title="홈"><i class="fa fa-home" aria-hidden="true"></i></a>
-			<span class="styled_select">
-				<select>
-					<option>공통관리</option>
-					<option>게시판</option>
-					<option>보고서 전송 및 결과확인</option>
-					<option>조회</option>
-				</select>
-				<i class="fa fa-chevron-down" aria-hidden="true"></i>
-			</span>
-			<span class="styled_select">
-				<select>					
-					<option>시스템 설정관리</option>
-					<option>내정보 관리</option>
-					<option>사용자 등록관리</option>					
-					<option>통계 및 조회</option>
-				</select>
-				<i class="fa fa-chevron-down" aria-hidden="true"></i>
-			</span>
-			<span class="styled_select">
-				<select>					
-					<option>공통코드 관리</option>
-					<option>보고서 관리</option>
-					<option>메뉴 관리</option>					
-					<option>그룹별 메뉴 관리</option>
-					<option>팝업 관리</option>
-					<option>게시판 관리</option>
-					<option>한국은행 시스템 정보 관리</option>
-				</select>
-				<i class="fa fa-chevron-down" aria-hidden="true"></i>
-			</span>
-		</div>
+<%@ include file="/WEB-INF/jsp/for/inc/setting/_location.jsp" %>
 	</header>
 	
 	<div class="clear layout_for009">
@@ -220,28 +167,17 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr class="on">
-									<td><strong>ORG_CD</strong></td>
-									<td>회사코드</td>
-									<td>회원사코드</td>
-									<td>Y</td>
-									<td><a href="javascript:;" class="btn btn-sm" title="삭제"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+								<c:forEach var="groupCode" items="${groupCodeList }" varStatus="status">
+								<tr class="group-code-tr">
+									<td><strong>${groupCode.cmmCd }</strong></td>
+									<td>${groupCode.cmmCdNm }</td>
+									<td>${groupCode.cdDesc }</td>
+									<td>${groupCode.useYn }</td>
+									<td><a href="javascript:void(0)" class="btn btn-sm btn_grp_del" title="삭제"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
 								</tr>
-								<tr>
-									<td><strong>STS_CD</strong></td>
-									<td>보고서 상태코드</td>
-									<td>보험서 진행상태</td>
-									<td>Y</td>
-									<td><a href="javascript:;" class="btn btn-sm" title="삭제"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-								</tr>
-								<tr>
-									<td><strong>REP_CD</strong></td>
-									<td>보고서코드</td>
-									<td>보고서종류</td>
-									<td>Y</td>
-									<td><a href="javascript:;" class="btn btn-sm" title="삭제"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-								</tr>
-								<tr>
+								</c:forEach>
+
+								<tr class="grpCodeInput">
 									<td><input type="text" placeholder="코드" style="width:100%"></td>
 									<td><input type="text" placeholder="코드명" style="width:100%"></td>
 									<td><input type="text" placeholder="코드설명" style="width:100%"></td>
@@ -294,32 +230,8 @@
 									<th>관리</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
-									<td><strong>N01</strong></td>
-									<td>메리츠화재</td>
-									<td>4301</td>
-									<td>Y</td>
-									<td>1</td>
-									<td><a href="javascript:;" class="btn btn-sm" title="삭제"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-								</tr>
-								<tr>
-									<td><strong>N02</strong></td>
-									<td>한화손보</td>
-									<td>4302</td>
-									<td>Y</td>
-									<td>2</td>
-									<td><a href="javascript:;" class="btn btn-sm" title="삭제"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-								</tr>
-								<tr>
-									<td><strong>N03</strong></td>
-									<td>롯데손보</td>
-									<td>4303</td>
-									<td>Y</td>
-									<td>3</td>
-									<td><a href="javascript:;" class="btn btn-sm" title="삭제"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-								</tr>
-								<tr>
+							<tbody id="subCodeList">
+								<tr class="subCodeInput">
 									<td><input type="text" placeholder="코드" style="width:100%"></td>
 									<td><input type="text" placeholder="코드명" style="width:100%"></td>
 									<td><input type="text" placeholder="설명" style="width:100%"></td>
