@@ -68,8 +68,7 @@
 		$("#linkOTPlogin").click(function(event) {
 			var returnId = $("#returnLoginId").text();
 			var authNum = $("#authNum").val();
-			console.log(returnId);
-			console.log('-----------');
+
 			if (authNum == "") {
 				alert('인증번호를 입려해주세요.');
 				return;
