@@ -9,10 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.knia.foreign.exchange.service.CommonCodeService;
+import egovframework.knia.foreign.exchange.vo.CommonCodeVO;
 
 @Controller
 public class CommonCodeController {
@@ -32,7 +34,14 @@ public class CommonCodeController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(value="/setting/code")
+	/**
+	 * 그룹코드 목록 조회
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/setting/code.do")
 	public String groupCode(HttpServletRequest request, ModelMap model) throws Exception {
 		
 		List<?> groupCodeList = commonCodeService.selectGroupCodeList();
@@ -41,8 +50,20 @@ public class CommonCodeController {
 		return "setting/code";
 	}
 	
-	@RequestMapping(value="/setting/ajx/{cmmCd}")
-	public String subCode(HttpServletRequest request, ModelMap model) throws Exception {
+	/**
+	 * 하위코드 목록 조회
+	 * @param commonCodeVO
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/setting/code/subCode.ajax")
+	public String subCode(@ModelAttribute("commonCodeVO") CommonCodeVO commonCodeVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		List<CommonCodeVO> subCodeList = (List<CommonCodeVO>) commonCodeService.selectCodeList(commonCodeVO.getCmmCd());
+		
+		model.addAttribute("subCodeList", subCodeList);
 		
 		return "jsonView";
 	}
