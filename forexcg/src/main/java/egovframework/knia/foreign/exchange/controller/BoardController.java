@@ -23,8 +23,10 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.util.EgovBasicLogger;
@@ -53,11 +55,17 @@ public class BoardController {
 	private EgovFileMngUtil fileUtil;
 
 	@RequestMapping(value = "/setting/board/notice.do")
-	public String settingBoardNotice(@ModelAttribute("boardVO") BoardVO boardVO, ModelMap model) throws Exception {
+	public String settingBoardNotice(@ModelAttribute("boardVO") BoardVO boardVO, ModelMap model, @RequestParam("pageNo") int pageNo) throws Exception {
 		logger.debug("공지사항 관리 화면");
 
+		
 		if (boardVO.getPageNo() == 0) {
-			boardVO.setPageNo(1);
+			if(pageNo == 0){
+				boardVO.setPageNo(1);
+			}
+			else{
+				boardVO.setPageNo(pageNo);
+			}
 		}
 		PaginationInfo paginationInfo = new PaginationInfo();
 
@@ -74,6 +82,7 @@ public class BoardController {
 		List<?> boardList = boardService.selectBoardList(boardVO);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("total_cnt", total_cnt);
+		model.addAttribute("pageNo", boardVO.getPageNo());
 		paginationInfo.setTotalRecordCount(total_cnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
@@ -124,10 +133,12 @@ public class BoardController {
 	public String settingBoardNoticeView(HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 상세내용 화면");
 		int boardIdx = Integer.parseInt(request.getParameter("board_idx").toString());
+		int pageNo = Integer.parseInt(request.getParameter("pageNo").toString());
 		boardService.updateBoardViewCnt(boardIdx);
 		
 		BoardVO boardVO = new BoardVO();
 		boardVO = boardService.selectBoard(boardIdx);
+		boardVO.setPageNo(pageNo);
 		FileVO fileVO = new FileVO();
 
 		fileVO.setFileGrpNum(boardIdx);
@@ -146,12 +157,13 @@ public class BoardController {
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
 		
-		
 		int board_idx = Integer.parseInt(request.getParameter("board_idx").toString());
+		int pageNo = Integer.parseInt(request.getParameter("pageNo").toString());
 		
 		BoardVO boardVO = new BoardVO();
 		boardVO = boardService.selectBoard(board_idx);
-
+		boardVO.setPageNo(pageNo);
+		
 		FileVO fileVO = new FileVO();
 
 		fileVO.setFileGrpNum(board_idx);
@@ -174,7 +186,7 @@ public class BoardController {
 
 	@RequestMapping(value = "/setting/board/noticeEditAction.do")
 	public String settingBoardNoticeEditUpdate(final MultipartHttpServletRequest multiRequest,
-			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request) throws Exception {
+			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
 		logger.debug("공지사항 수정");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
@@ -213,11 +225,12 @@ public class BoardController {
 
 			int insertFileCnt = fileService.insertFileInfo(result, "");
 		}
+		attr.addAttribute("pageNo", boardVO.getPageNo());
 		return "redirect:/setting/board/notice.do";
 	}
 
 	@RequestMapping(value = "/setting/board/noticeDeleteAction.do")
-	public String settingBoardNoticeEditDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request) throws Exception {
+	public String settingBoardNoticeEditDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
 		logger.debug("공지사항 삭제");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
@@ -243,6 +256,7 @@ public class BoardController {
 				boardService.deleteFile(fileVO);
 			}
 		}
+		attr.addAttribute("pageNo", boardVO.getPageNo());
 		return "redirect:/setting/board/notice.do";
 	}
 

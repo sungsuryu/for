@@ -14,7 +14,8 @@
 	}
 	
 	function goBoardEdit(board_idx){
-		location.href = "/setting/board/noticeView.do?board_idx=" + board_idx;
+		var pageNo = $("#pageNo").val();
+		location.href = "/setting/board/noticeView.do?board_idx=" + board_idx + "&pageNo=" + pageNo;
 	}
 </script>
 </head>
@@ -289,7 +290,7 @@
 	</div>
 	
 	<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
-		<input type="hidden" id = "pageNo" name = "pageNo">
+		<input type="hidden" id = "pageNo" name = "pageNo" value="${pageNo}">
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->

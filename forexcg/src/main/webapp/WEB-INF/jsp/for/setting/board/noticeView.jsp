@@ -8,18 +8,24 @@
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 </head>
 <script>
-var editors = [];
-$(document).ready(function() {
-});
-
-function fn_egov_downFile(fileId){
-	window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
-	//location.href = "/board/downloadFile.do?fileId=" + fileId;
-}
-
-function goEdit(boardIdx){
-	location.href = "/setting/board/noticeEdit.do?board_idx=" + boardIdx;
-}
+	var editors = [];
+	$(document).ready(function() {
+	});
+	
+	function fn_egov_downFile(fileId){
+		window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
+		//location.href = "/board/downloadFile.do?fileId=" + fileId;
+	}
+	
+	function goEdit(boardIdx){
+		var pageNo = $("#pageNo").val();
+		location.href = "/setting/board/noticeEdit.do?board_idx=" + boardIdx + "&pageNo=" + pageNo;
+	}
+	
+	function goNotice(){
+		$("#boardForm").attr("action", "/setting/board/notice.do");
+		$("#boardForm").submit();
+	}
 </script>
 <body>
 
@@ -233,6 +239,7 @@ function goEdit(boardIdx){
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input type='hidden' id="alarmYn" name='alarmYn'>
+		<input type='hidden' id="pageNo" name='pageNo' value="${boardVO.pageNo}">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -248,16 +255,18 @@ function goEdit(boardIdx){
 						<th>작성자</th>
 						<td><c:out value="${boardVO.userName}" /></td>
 					</tr>
-					<tr>
-						<th>첨부파일</th>
-						<td>
-							<c:forEach var="result" items="${fileList}" varStatus="status">
-								<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
-									<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
-								</a>
-							</c:forEach>
-						</td>
-					</tr>
+					<c:if test="${fn:length(fileList)!= 0}">
+						<tr>
+							<th>첨부파일</th>
+							<td>
+								<c:forEach var="result" items="${fileList}" varStatus="status">
+									<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
+										<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
+									</a>
+								</c:forEach>
+							</td>
+						</tr>
+					</c:if>
 					<tr>
 						<th>내용</th>
 						<td>
@@ -274,7 +283,7 @@ function goEdit(boardIdx){
 	<div class="tbl_btm">
 		<div class="f_right">
 			<a href="javascript:goEdit('<c:out value="${boardVO.boardIdx}"/>');" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
-			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="javascript:goNotice()" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	

@@ -88,6 +88,10 @@
 	   }
 		updateBoard();
 	}
+	function goNotice(){
+		$("#boardForm").attr("action", "/setting/board/notice.do");
+		$("#boardForm").submit();
+	}
 </script>
 </head>
 <body>
@@ -302,6 +306,7 @@
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input id="boardIdx" name="boardIdx" type="hidden" value="<c:out value="${boardVO.boardIdx}" />">
+		<input id="pageNo" name="pageNo" type="hidden" value="<c:out value="${boardVO.pageNo}" />">
 		<input id="isOriginFile" name="isOriginFile" type="hidden" value="<c:out value="${isOriginFile}" />">
 		<input type='hidden' id="board_alarm" name='board_alarm'>
 		<div class="table_v01">
@@ -357,7 +362,7 @@
 		<div class="f_right">
 			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 			<a href="javascript:deleteBoard();" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
-			<a href="/setting/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="javascript:goNotice()" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	
