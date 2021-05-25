@@ -71,11 +71,11 @@ public class BoardController {
 		PaginationInfo paginationInfo = new PaginationInfo();
 
 		paginationInfo.setCurrentPageNo(pageIndex);// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(2);// 개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(2);// 개발용:페이지 리스트에 게시되는 페이지 건수
+		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
-		boardVO.setRecordCountPerPage(2);// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
 																	// 첫번째 데이터
 																	// 번호
@@ -479,42 +479,61 @@ public class BoardController {
 		return "redirect:/setting/board/pds.do";
 	}
 	
-	
-	
-	
-	
-
 	@RequestMapping(value = "/setting/board/faq.do")
 	public String settingBoardFaq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request,
 			ModelMap model) throws Exception {
 		logger.debug("FAQ 관리  화면");
-		int pageIndex;
-		if (EgovStringUtil.isEmpty(request.getParameter("pageIndex"))) {
-			pageIndex = 1;
-		} else {
-			pageIndex = Integer.parseInt(request.getParameter("pageIndex").toString());
-		}
-		PaginationInfo paginationInfo = new PaginationInfo();
+//		int pageIndex;
+//		if (EgovStringUtil.isEmpty(request.getParameter("pageIndex"))) {
+//			pageIndex = 1;
+//		} else {
+//			pageIndex = Integer.parseInt(request.getParameter("pageIndex").toString());
+//		}
+//		PaginationInfo paginationInfo = new PaginationInfo();
+//
+//		paginationInfo.setCurrentPageNo(pageIndex);// 개발용:현재 페이지 번호
+//		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
+//		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
+//
+//		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
+//		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
+//		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
+//																	// 첫번째 데이터
+//																	// 번호
+//
+//		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
+//
+//		List<?> boardList = boardService.selectBoardList(boardVO);
+//		model.addAttribute("boardList", boardList);
+//		model.addAttribute("total_cnt", total_cnt);
+//		paginationInfo.setTotalRecordCount(total_cnt);
+//		model.addAttribute("paginationInfo", paginationInfo);
 
-		paginationInfo.setCurrentPageNo(pageIndex);// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
-
-		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
-		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
-		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
-																	// 첫번째 데이터
-																	// 번호
-
-		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
-
-		List<?> boardList = boardService.selectBoardList(boardVO);
-		model.addAttribute("boardList", boardList);
-		model.addAttribute("total_cnt", total_cnt);
-		paginationInfo.setTotalRecordCount(total_cnt);
-		model.addAttribute("paginationInfo", paginationInfo);
-
+		FileVO fileVO = new FileVO();
+		
+		fileVO.setFileGrpCd(BoardCode.FAQ.toString());
+		List<?> fileList = boardService.selectFileList(fileVO);
+		
+		model.addAttribute("boardList", fileList);
+		
 		return "setting/board/faq";
+	}
+	
+	@RequestMapping(value = "/setting/board/faqInsertAction.do")
+	public String settingBoardFaqInsert(final MultipartHttpServletRequest multiRequest,
+			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
+		logger.debug("자료실 추가");
+		HttpSession session = request.getSession();
+		
+		List<FileVO> result = null;
+
+		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		if (!files.isEmpty()) {
+			result = fileUtil.parseFileInf(files, BoardCode.FAQ.toString(), 0, 0, "");
+
+			int insertFileCnt = fileService.insertFileInfo(result, "");
+		}
+		return "redirect:/setting/board/faq.do";
 	}
 
 	@RequestMapping(value = "/board/notice.do")
@@ -731,9 +750,6 @@ public class BoardController {
 
 		File uFile = new File(fileVO.getFilePath(), fileVO.getFileNm());
 		long fSize = uFile.length();
-
-		System.out.println("KJWKJW - 확인 : " + fileVO.getFilePath());
-		System.out.println("KJWKJW - 확인 : " + fileVO.getFileNm());
 
 		if (fSize > 0) {
 			String mimetype = "application/x-msdownload";

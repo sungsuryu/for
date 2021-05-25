@@ -1,23 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=utf-8"%>
 <%@page import="java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
-<meta name="HandheldFriendly" content="true">
-<meta name="format-detection" content="telephone=no">
-<meta http-equiv="imagetoolbar" content="no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
-<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js?version=2.2'/>" ></script>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
+<script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js?version=2.1'/>" ></script>
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 </head>
 <script>
@@ -74,22 +63,11 @@ function getUploadableNum(){
 
 function makeFileAttachment(){
 	var uploadableFileNum = getUploadableNum();
-	multi_selector = new MultiSelector( document.getElementById( 'egovComFileList' ), uploadableFileNum );
+	multi_selector = new MultiSelector( document.getElementById( 'uploadFileList' ), uploadableFileNum );
 	multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
 }
 
-function fn_egov_check_file(flag) {
-	if (flag=="Y") {
-		document.getElementById('file_upload_posbl').style.display = "block";
-		document.getElementById('file_upload_imposbl').style.display = "none";
-	} else {
-		document.getElementById('file_upload_posbl').style.display = "none";
-		document.getElementById('file_upload_imposbl').style.display = "block";
-	}
-}
-
 function deleteFileList(e, index, fileId) {
-//	console.log(e.parentNode);
 	multi_selector.addMax();
 	//$(".chooseFile input:disabled").attr("disabled", false);
 //	e.parentNode.element.multi_selector.current_element.disabled = false;
@@ -353,35 +331,20 @@ function valueCheck(){
 						<td><input id="board_usernm" name="board_usernm" type="text" value="<c:out value="${board_usernm}" />"></td>
 					</tr>
 					<tr>
-						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
+						<th>첨부파일</th>
 						<td>
-							<div id="file_upload_posbl">
-					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-   								    <tr>
-								        <td>
-								        	<div class="add_file_list">
-								        		<ul id="egovComFileList">
-								        		<c:forEach var="result" items="${fileList}" varStatus="status">
-													<li id="originFileList${status.index}" ondblclick="deleteFileList(this, '${status.index}', '${result.fileId}')">
-														<c:out value="${result.phyFileNm}"/>
-													</li>
-												</c:forEach>
-								        		</ul>
-								        	</div>
-								        </td>
-								    </tr>
-								    <tr>
-								        <td><input name="file_1" id="egovComFileUploader" type="file" title="첨부파일명 입력"/></td>
-								    </tr>
-					   	        </table>
-							</div>
-							<div id="file_upload_imposbl"  style="display:none;" >
-					            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
-								    <tr>
-								        <td>cannot upload files</td>
-								    </tr>
-					   	        </table>
-							</div>
+				        	<div class="add_file_list">
+				        		<ul id="uploadFileList">
+				        		<c:forEach var="result" items="${fileList}" varStatus="status">
+									<li id="originFileList${status.index}" ondblclick="deleteFileList(this, '${status.index}', '${result.fileId}')">
+										<c:out value="${result.phyFileNm}"/>
+									</li>
+								</c:forEach>
+				        		</ul>
+				        	</div>
+				        	<div class="add_file">
+				        		<input name="file_1" id="egovComFileUploader" type="file" title="첨부파일명 입력"/>
+				        	</div>
 						</td>
 					</tr>
 					<tr>

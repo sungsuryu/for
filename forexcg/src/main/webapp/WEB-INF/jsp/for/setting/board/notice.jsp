@@ -11,9 +11,6 @@
 	function fn_egov_link_page(pageNo){
 		$("#pageIndex").val(pageNo);
 		$("#pagingForm").submit();
-/* 		document.listForm.pageIndex.value = pageNo;
-		document.listForm.action = "<c:url value='/board.do'/>";
-	   	document.listForm.submit(); */
 	}
 	
 	function goBoardEdit(board_idx){
@@ -269,9 +266,10 @@
 						</c:if>
 					</td>
 					<td><c:out value="${result.userName}" /></td>
-						<fmt:parseDate value="${result.updtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
+						<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
 						<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
 					<td><c:out value="${insrtDate }" /></td>
+					<td><c:out value="${result.insrtDate}"/></td>
 					<td><c:out value="${result.viewCnt}" /></td>
 				</tr>
 				</c:forEach>
