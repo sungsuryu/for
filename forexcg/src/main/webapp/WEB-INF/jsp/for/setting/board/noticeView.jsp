@@ -17,9 +17,9 @@
 		//location.href = "/board/downloadFile.do?fileId=" + fileId;
 	}
 	
-	function goEdit(boardIdx){
-		var pageNo = $("#pageNo").val();
-		location.href = "/setting/board/noticeEdit.do?board_idx=" + boardIdx + "&pageNo=" + pageNo;
+	function goEdit(){
+		$("#boardForm").attr("action", "/setting/board/noticeEdit.do");
+		$("#boardForm").submit();
 	}
 	
 	function goNotice(){
@@ -239,6 +239,7 @@
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input type='hidden' id="alarmYn" name='alarmYn'>
+		<input type='hidden' id="boardIdx" name='boardIdx' value="${boardVO.boardIdx}">
 		<input type='hidden' id="pageNo" name='pageNo' value="${boardVO.pageNo}">
 		<div class="table_v01">
 			<table>
@@ -282,7 +283,7 @@
 	
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:goEdit('<c:out value="${boardVO.boardIdx}"/>');" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
+			<a href="javascript:goEdit();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>
 			<a href="javascript:goNotice()" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>

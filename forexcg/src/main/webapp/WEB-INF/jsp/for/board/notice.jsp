@@ -11,16 +11,20 @@
 	//페이지 전환 함수
 	function fn_egov_link_page(pageNo){
 		$("#pageNo").val(pageNo);
+		$("#pageNum").val(pageNo);
 		$("#pagingForm").submit();
 	}
 	
-	function goBoardView(board_idx){
-		var searchName = $("#searchName").val();
-		location.href = "/board/noticeView.do?board_idx=" + board_idx;
+	function goBoardView(boardIdx){
+		$("#boardIdx").val(boardIdx);
+		$("#boardForm").submit();
 	}
 	
 	function doSearchList(){
-		$("#searchForm").submit();
+		$("#searchName").val($("#search").val());
+		$("#pageNo").val(1);
+		$("#pageNum").val(1);
+		$("#pagingForm").submit();
 	}
 </script>
 
@@ -203,11 +207,9 @@
 	</header>
 	
 	<div class="top_search_area">
-		<form id="searchForm" name="searchForm" method="post" action="/board/notice.do">
-			<span class="label">제목</span>
-			<input id="searchName" name="searchName" type="text" style="width:500px" value="<c:out value="${searchName}" />">
-			<a href="javascript:doSearchList();" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
-		</form>
+		<span class="label">제목</span>
+		<input id="search" name="search" type="text" style="width:500px" value="<c:out value="${searchName}" />">
+		<a href="javascript:doSearchList();" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
 	</div>
 	
 	<div class="tbl_top">
@@ -265,10 +267,14 @@
 		</div>
 	</div>
 	<form id="pagingForm" name="pagingForm" method="post" action="/board/notice.do">
-		<input type="hidden" id = "pageNo" name = "pageNo">
-		<input type="hidden" id = "searchInfo" name = "searchName" value="<c:out value="${searchName}" />">
+		<input type="hidden" id = "pageNo" name = "pageNo" value="<c:out value="${pageNo}" />">
+		<input type="hidden" id = "searchName" name = "searchName" value="<c:out value="${searchName}" />">
 	</form>
-	
+	<form id="boardForm" name="boardForm" method="post" action="/board/noticeView.do">
+		<input type="hidden" id = "boardIdx" name = "boardIdx">
+		<input type="hidden" id = "pageNum" name = "pageNum" value="<c:out value="${pageNo}" />">
+		<input type="hidden" id = "searchNm" name = "searchNm" value="<c:out value="${searchName}" />">
+	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->
 

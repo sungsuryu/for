@@ -8,15 +8,18 @@
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 </head>
 <script>
-var editors = [];
-$(document).ready(function() {
-});
-
-function fn_egov_downFile(fileId){
-	window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
-	//location.href = "/board/downloadFile.do?fileId=" + fileId;
-}
-
+	$(document).ready(function() {
+	});
+	
+	function fn_egov_downFile(fileId){
+		window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
+		//location.href = "/board/downloadFile.do?fileId=" + fileId;
+	}
+	
+	function goNotice(){
+		$("#boardForm").attr("action", "/board/notice.do");
+		$("#boardForm").submit();
+	}
 </script>
 <body>
 
@@ -195,47 +198,52 @@ function fn_egov_downFile(fileId){
 			</span>
 		</div>
 	</header>
-	
-	<div class="table_v01">
-		<table>
-			<colgroup>
-				<col style="width:150px">
-				<col style="">
-			</colgroup>
-			<tbody>
-				<tr>
-					<th>제목</th>
-					<td><c:out value="${boardVO.boardTitle}" /></td>
-				</tr>
-				<tr>
-					<th>작성자</th>
-					<td><c:out value="${boardVO.userName}" /></td>
-				</tr>
-				<tr>
-					<th>첨부파일</th>
-					<td>
-						<c:forEach var="result" items="${fileList}" varStatus="status">
-							<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
-								<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
-							</a>
-						</c:forEach>
-					</td>
-				</tr>
-				<tr>
-					<th>내용</th>
-					<td>
-						<div>
-							<c:out value="${boardVO.boardContent}" escapeXml="false" />
-						<div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	
+	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
+		<input type='hidden' id="alarmYn" name='alarmYn'>
+		<input type='hidden' id="pageNo" name='pageNo' value="${boardVO.pageNo}">
+		<input type='hidden' id="searchName" name='searchName' value="${boardVO.searchName}">
+		<div class="table_v01">
+			<table>
+				<colgroup>
+					<col style="width:150px">
+					<col style="">
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>제목</th>
+						<td><c:out value="${boardVO.boardTitle}" /></td>
+					</tr>
+					<tr>
+						<th>작성자</th>
+						<td><c:out value="${boardVO.userName}" /></td>
+					</tr>
+					<c:if test="${fn:length(fileList)!= 0}">
+						<tr>
+							<th>첨부파일</th>
+							<td>
+								<c:forEach var="result" items="${fileList}" varStatus="status">
+									<a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}"/>')" class="link01">
+										<c:out value="${result.phyFileNm}"/>&nbsp;[<c:out value="${result.fileSize}"/>&nbsp;byte]</br>
+									</a>
+								</c:forEach>
+							</td>
+						</tr>
+					</c:if>
+					<tr>
+						<th>내용</th>
+						<td>
+							<div>
+								<c:out value="${boardVO.boardContent}" escapeXml="false" />
+							<div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</form>
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="/board/notice.do" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
+			<a href="javascript:goNotice();" class="btn btn-lg"><i class="fa fa-list-alt" aria-hidden="true"></i> 목록</a>
 		</div>
 	</div>
 	

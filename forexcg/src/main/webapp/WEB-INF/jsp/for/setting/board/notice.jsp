@@ -9,13 +9,14 @@
 <script type="text/javascript">
 	//페이지 전환 함수
 	function fn_egov_link_page(pageNo){
+		$("#pageNum").val(pageNo);
 		$("#pageNo").val(pageNo);
 		$("#pagingForm").submit();
 	}
 	
-	function goBoardEdit(board_idx){
-		var pageNo = $("#pageNo").val();
-		location.href = "/setting/board/noticeView.do?board_idx=" + board_idx + "&pageNo=" + pageNo;
+	function goBoardView(boardIdx){
+		$("#boardIdx").val(boardIdx);
+		$("#boardForm").submit();
 	}
 </script>
 </head>
@@ -260,7 +261,7 @@
 				<c:forEach var="result" items="${boardList}" varStatus="status">
 				<tr>
 					<td><c:out value="${result.listNum}" /></td>
-					<td class="left"><a href="javascript:goBoardEdit(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
+					<td class="left"><a href="javascript:goBoardView(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
 					<td>
 						<c:if test = "${result.fileCnt > 0}">
 							<a href="javascript:void(0)" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
@@ -291,6 +292,10 @@
 	
 	<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
 		<input type="hidden" id = "pageNo" name = "pageNo" value="${pageNo}">
+	</form>
+	<form id="boardForm" name="boardForm" method="post" action="/setting/board/noticeView.do">
+		<input type="hidden" id = "boardIdx" name = "boardIdx">
+		<input type="hidden" id = "pageNum" name = "pageNum" value="${pageNo}">
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->

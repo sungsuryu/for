@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.GuideMapper">
+	<resultMap id="mapGuideVO" type="egovframework.knia.foreign.exchange.vo.GuideVO">
+		<result property="uiNum" column="UI_NUM"/>
+		<result property="guideNum" column="GUIDE_NUM"/>
+		<result property="guideContent" column="GUIDE_CONTENT"/>
+		<result property="useYn" column="USE_YN"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="userName" column="USER_NM"/>
+		<result property="insrtId" column="INSRT_ID"/>
+		<result property="insrtDate" column="INSRT_DATE"/>
+		<result property="updtId" column="UPDT_ID"/>
+		<result property="updtDate" column="UPDT_DATE"/>
+	</resultMap>
+	
+	<select id="selectGuide" parameterType="guideVO" resultMap="mapBoardVO">
+		/** Guide.selectGuide */
+		SELECT 
+			 UI_NUM
+			,GUIDE_NUM
+			,GUIDE_CONTENT
+			,USE_YN
+			,USER_ID
+			,USER_NM
+			,INSRT_ID
+			,INSRT_DATE
+			,UPDT_ID
+			,UPDT_DATE
+		FROM TB_FOR_GUIDE
+		WHERE guideNum = #{board_idx};
+	</select>
+	
+	<insert id="insertGuide" parameterType="guideVO">
+		/** Guide.insertGuide */
+		INSERT INTO
+			TB_FOR_GUIDE (
+				 UI_NUM
+				,GUIDE_CONTENT
+				,USE_YN
+				,USER_ID
+				,USER_NM
+				,INSRT_ID
+				,INSRT_DATE
+				,UPDT_ID
+				,UPDT_DATE
+			) VALUES (
+				#{uiNum}
+				,#{guideContent}
+				,'Y'
+				,#{userId}
+				,#{userName}
+				,#{userId}
+				,now()
+				,#{userId}
+				,now()
+			)
+	</insert>
+	
+	<update id="updateGuide" parameterType="guideVO">
+		/** Guide.updateGuide */
+		UPDATE
+			TB_FOR_GUIDE
+		SET
+			 UI_NUM = #{uiNum}
+			,GUIDE_CONTENT = #{guideContent}
+			,USER_ID = #{guideContent}
+			,USER_NM = #{userId}
+			,UPDT_ID = #{updtId}
+			,UPDT_DATE = NOW()
+		WHERE
+			GUIDE_NUM = #{guideNum}
+	</update>
+	
+	<update id="deleteGuide" parameterType="guideVO">
+		/** Guide.deleteGuide */
+		UPDATE
+			TB_FOR_GUIDE
+		SET
+			USE_YN = 'N'
+		WHERE
+			GUIDE_NUM = #{guideNum}
+	</update>	
+</mapper>
