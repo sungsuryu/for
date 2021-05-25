@@ -27,12 +27,10 @@ function MultiSelector( list_target, max ){
 	if( max ){
 		this.max = max;
 	} else {
-		this.max = -1;
+		this.max = 0;
 	};
 	
 	this.addMax = function(){
-		console.log(this.max);
-		
 		this.max = this.max + 1;
 	};
 	
@@ -87,6 +85,7 @@ function MultiSelector( list_target, max ){
 				};
 
 			};
+
 			// If we've reached maximum number, disable input element
 			if( this.max != -1 && this.count >= this.max ){
 				element.disabled = true;
