@@ -8,82 +8,85 @@
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 <script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js'/>" ></script>
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
-</head>
-<script>
-var multi_selector;
-var deleteOriginFileId;
-var editors = [];
-$(document).ready(function() {
-	makeFileAttachment();
-	nhn.husky.EZCreator.createInIFrame({
- 		oAppRef: editors,
- 		elPlaceHolder: 'boardContent',
- 		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
- 		fOnAppLoad : function(){
-            //기존 저장된 내용의 text 내용을 에디터상에 뿌려주고자 할때 사용
-            editors.getById["boardContent"].exec("PASTE_HTML", ['${boardVO.boardContent}']);
-        },
- 		fCreator: "createSEditor2"
- 	});
-});
-function updateBoard(){
-	$("#boardForm").attr("action", "/setting/board/pdsEditAction.do");
-	$("#boardForm").submit();
-}
+<script type="text/javascript">
 
-function deleteBoard(){
-	$("#boardForm").attr("action", "/setting/board/pdsDeleteAction.do");
-	$("#boardForm").submit();
-}
-
-function getUploadableNum(){
-	var existFileNum = ${fileCnt};
-	var maxFileNum = 10;//파일 최대 첨부갯수
-
-	if (existFileNum=="undefined" || existFileNum ==null) {
-		existFileNum = 0;
+	var multi_selector;
+	var deleteOriginFileId;
+	var editors = [];
+	$(document).ready(function() {
+		makeFileAttachment();
+		nhn.husky.EZCreator.createInIFrame({
+	 		oAppRef: editors,
+	 		elPlaceHolder: 'boardContent',
+	 		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
+	 		fOnAppLoad : function(){
+	            //기존 저장된 내용의 text 내용을 에디터상에 뿌려주고자 할때 사용
+	            editors.getById["boardContent"].exec("PASTE_HTML", ['${boardVO.boardContent}']);
+	        },
+	 		fCreator: "createSEditor2"
+	 	});
+	});
+	function updateBoard(){
+		$("#boardForm").attr("action", "/setting/board/pdsEditAction.do");
+		$("#boardForm").submit();
 	}
-	if (maxFileNum=="undefined" || maxFileNum ==null) {
-		maxFileNum = 0;
+	
+	function deleteBoard(){
+		$("#boardForm").attr("action", "/setting/board/pdsDeleteAction.do");
+		$("#boardForm").submit();
 	}
-	var uploadableFileNum = maxFileNum - existFileNum;
-	if (uploadableFileNum<0) {
-		uploadableFileNum = 0;
+	
+	function getUploadableNum(){
+		var existFileNum = ${fileCnt};
+		var maxFileNum = 10;//파일 최대 첨부갯수
+	
+		if (existFileNum=="undefined" || existFileNum ==null) {
+			existFileNum = 0;
+		}
+		if (maxFileNum=="undefined" || maxFileNum ==null) {
+			maxFileNum = 0;
+		}
+		var uploadableFileNum = maxFileNum - existFileNum;
+		if (uploadableFileNum<0) {
+			uploadableFileNum = 0;
+		}
+		return uploadableFileNum;
 	}
-	return uploadableFileNum;
-}
-
-function makeFileAttachment(){
-	var uploadableFileNum = getUploadableNum();
-	multi_selector = new MultiSelector( document.getElementById( 'uploadFileList' ), uploadableFileNum );
-	multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
-}
-
-function deleteFileList(e, index, fileId) {
-	multi_selector.addMax();
-	//$(".chooseFile input:disabled").attr("disabled", false);
-//	e.parentNode.element.multi_selector.current_element.disabled = false;
-	$("#boardForm").prepend('<input id="deleteOriginFileId" name="deleteOriginFileId" type="hidden" value="' + fileId + '">');
-	$("#originFileList" + index).remove();
-}
-
-function valueCheck(){
-	editors.getById["boardContent"].exec("UPDATE_CONTENTS_FIELD", []);
-	var boardTitle = $("#boardTitle").val();
-	var boardContent = $("#boardContent").val();
-	if(boardTitle == "" || boardTitle == null){
-		alert("제목을 적어주세요.");
-		return
+	
+	function makeFileAttachment(){
+		var uploadableFileNum = getUploadableNum();
+		multi_selector = new MultiSelector( document.getElementById( 'uploadFileList' ), uploadableFileNum );
+		multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
 	}
-	if( boardContent == ""  || boardContent == null || boardContent == '&nbsp;' || boardContent == '<br>' || boardContent == '<br />' || boardContent == '<p>&nbsp;</p>' || boardContent == '<p><br></p>')  {
-        alert("내용을 입력하세요.");
-        oEditors.getById["COMVISION"].exec("FOCUS"); //포커싱
-        return;
-   }
-	updateBoard();
-}
+	
+	function deleteFileList(e, index, fileId) {
+		multi_selector.addMax();
+	
+		$("#boardForm").prepend('<input id="deleteOriginFileId" name="deleteOriginFileId" type="hidden" value="' + fileId + '">');
+		$("#originFileList" + index).remove();
+		
+		var fileEl = $(".add_file").children().first();
+		$(fileEl).prop("disabled", false);
+	}
+	
+	function valueCheck(){
+		editors.getById["boardContent"].exec("UPDATE_CONTENTS_FIELD", []);
+		var boardTitle = $("#boardTitle").val();
+		var boardContent = $("#boardContent").val();
+		if(boardTitle == "" || boardTitle == null){
+			alert("제목을 적어주세요.");
+			return
+		}
+		if( boardContent == ""  || boardContent == null || boardContent == '&nbsp;' || boardContent == '<br>' || boardContent == '<br />' || boardContent == '<p>&nbsp;</p>' || boardContent == '<p><br></p>')  {
+	        alert("내용을 입력하세요.");
+	        oEditors.getById["COMVISION"].exec("FOCUS"); //포커싱
+	        return;
+	   }
+		updateBoard();
+	}
 
 </script>
+</head>
 <body>
 
 <div id="popLayerBg"></div>
