@@ -9,7 +9,7 @@
 <script type="text/javascript">
 	//페이지 전환 함수
 	function fn_egov_link_page(pageNo){
-		$("#pageIndex").val(pageNo);
+		$("#pageNo").val(pageNo);
 		$("#pagingForm").submit();
 	}
 	
@@ -289,7 +289,7 @@
 	</div>
 	
 	<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
-		<input type="hidden" id = "pageIndex" name = "pageIndex">
+		<input type="hidden" id = "pageNo" name = "pageNo">
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->

@@ -17,22 +17,16 @@ $(document).ready(function() {
 	makeFileAttachment();
 	nhn.husky.EZCreator.createInIFrame({
  		oAppRef: editors,
- 		elPlaceHolder: 'board_content',
+ 		elPlaceHolder: 'boardContent',
  		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
  		fOnAppLoad : function(){
             //기존 저장된 내용의 text 내용을 에디터상에 뿌려주고자 할때 사용
-            editors.getById["board_content"].exec("PASTE_HTML", ['${board_content}']);
+            editors.getById["boardContent"].exec("PASTE_HTML", ['${boardVO.boardContent}']);
         },
  		fCreator: "createSEditor2"
  	});
 });
 function updateBoard(){
-	if(!$("#board_alarmYn").is(':checked')){
-		$("#board_alarm").val("N");
-	}
-	else{
-		$("#board_alarm").val("Y");
-	}
 	$("#boardForm").attr("action", "/setting/board/pdsEditAction.do");
 	$("#boardForm").submit();
 }
@@ -66,7 +60,7 @@ function makeFileAttachment(){
 }
 
 function deleteFileList(e, index, fileId) {
-	multi_selector.addMax(e);
+	multi_selector.addMax();
 	//$(".chooseFile input:disabled").attr("disabled", false);
 //	e.parentNode.element.multi_selector.current_element.disabled = false;
 	$("#boardForm").prepend('<input id="deleteOriginFileId" name="deleteOriginFileId" type="hidden" value="' + fileId + '">');
@@ -74,16 +68,11 @@ function deleteFileList(e, index, fileId) {
 }
 
 function valueCheck(){
-	editors.getById["board_content"].exec("UPDATE_CONTENTS_FIELD", []);
-	var boardTitle = $("#board_title").val();
-	var boardUserNm = $("#board_usernm").val();
-	var boardContent = $("#board_content").val();
+	editors.getById["boardContent"].exec("UPDATE_CONTENTS_FIELD", []);
+	var boardTitle = $("#boardTitle").val();
+	var boardContent = $("#boardContent").val();
 	if(boardTitle == "" || boardTitle == null){
 		alert("제목을 적어주세요.");
-		return
-	}
-	if(boardUserNm == "" || boardUserNm == null){
-		alert("작성자를 적어주세요.");
 		return
 	}
 	if( boardContent == ""  || boardContent == null || boardContent == '&nbsp;' || boardContent == '<br>' || boardContent == '<br />' || boardContent == '<p>&nbsp;</p>' || boardContent == '<p><br></p>')  {
@@ -306,7 +295,7 @@ function valueCheck(){
 		</ul>
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
-		<input id="board_idx" name="board_idx" type="hidden" value="<c:out value="${board_idx}" />">
+		<input id="boardIdx" name="boardIdx" type="hidden" value="<c:out value="${boardVO.boardIdx}" />">
 		<input id="isOriginFile" name="isOriginFile" type="hidden" value="<c:out value="${isOriginFile}" />">
 		<input type='hidden' id="board_alarm" name='board_alarm'>
 		<div class="table_v01">
@@ -318,15 +307,15 @@ function valueCheck(){
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><input id="board_title" name="board_title" type="text" style="width:100%" value="<c:out value="${board_title}" />"></td>
+						<td><input id="boardTitle" name="boardTitle" type="text" style="width:100%" value="<c:out value="${boardVO.boardTitle}" />"></td>
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input id="board_alarmYn" name="board_alarmYn" type="checkbox"><i></i><label for="">전송</label></td>
+						<td><input id="alarmYn" name="alarmYn" type="checkbox" value="Y"><i></i><label for="">전송</label></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><input id="board_usernm" name="board_usernm" type="text" value="<c:out value="${board_usernm}" />"></td>
+						<td><c:out value="${userName}" /></td>
 					</tr>
 					<tr>
 						<th>첨부파일 <!--a href="javascript:;" title="추가" style="margin-left:5px"><i class="fa fa-plus-circle" aria-hidden="true"></i></a--></th>
@@ -348,7 +337,7 @@ function valueCheck(){
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea id="board_content" name="board_content" rows="15">
+							<textarea id="boardContent" name="boardContent" rows="15">
 								
 							</textarea>
 						</td>

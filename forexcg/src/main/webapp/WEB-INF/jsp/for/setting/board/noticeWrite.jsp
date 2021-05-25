@@ -16,34 +16,23 @@ $(document).ready(function() {
 	makeFileAttachment();
 	nhn.husky.EZCreator.createInIFrame({
  		oAppRef: editors,
- 		elPlaceHolder: 'board_content',
+ 		elPlaceHolder: 'boardContent',
  		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
  		fCreator: "createSEditor2"
  	});
 });
 
 function insertBoard(){
-	if(!$("#board_alarmYn").is(':checked')){
-		$("#board_alarm").val("N");
-	}
-	else{
-		$("#board_alarm").val("Y");
-	}
 	$("#boardForm").attr("action", "/setting/board/noticeWriteAction.do");
 	$("#boardForm").submit();
 }
 
 function valueCheck(){
-	editors.getById["board_content"].exec("UPDATE_CONTENTS_FIELD", []);
-	var boardTitle = $("#board_title").val();
-	var boardUserNm = $("#board_usernm").val();
-	var boardContent = $("#board_content").val();
+	editors.getById["boardContent"].exec("UPDATE_CONTENTS_FIELD", []);
+	var boardTitle = $("#boardTitle").val();
+	var boardContent = $("#boardContent").val();
 	if(boardTitle == "" || boardTitle == null){
 		alert("제목을 적어주세요.");
-		return
-	}
-	if(boardUserNm == "" || boardUserNm == null){
-		alert("작성자를 적어주세요.");
 		return
 	}
 	if( boardContent == ""  || boardContent == null || boardContent == '&nbsp;' || boardContent == '<br>' || boardContent == '<br />' || boardContent == '<p>&nbsp;</p>' || boardContent == '<p><br></p>')  {
@@ -60,12 +49,6 @@ function makeFileAttachment(){
 	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum);
 	 multi_selector.addElement(document.getElementById('egovComFileUploader'));
 }
-
-// 	$(function() {
-// 		$("#uploadFileList li").click(function() {
-// 			$(this).addClass("on");
-// 		});
-// 	});
 </script>
 <body>
 
@@ -278,7 +261,6 @@ function makeFileAttachment(){
 		</ul>
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
-		<input type='hidden' id="board_alarm" name='board_alarm'>
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -288,15 +270,15 @@ function makeFileAttachment(){
 				<tbody>
 					<tr>
 						<th>제목</th>
-						<td><input id="board_title" name="board_title" type="text" style="width:100%"></td>
+						<td><input id="boardTitle" name="boardTitle" type="text" style="width:100%"></td>
 					</tr>
 					<tr>
 						<th>알림톡</th>
-						<td><input id="board_alarmYn" name="board_alarmYn" type="checkbox"><i></i> <label for="">전송</label></td>
+						<td><input id="alarmYn" name="alarmYn" type="checkbox" value="Y"><i></i> <label for="">전송</label></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td><input id="board_usernm" name="board_usernm" type="text"></td>
+						<td><c:out value="${userName}" /></td>
 					</tr>
 					<tr>
 						<th>첨부파일</th>
@@ -312,11 +294,10 @@ function makeFileAttachment(){
 							</div>
 						</td>
 					</tr>
-					
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea id="board_content" name="board_content" rows="15"></textarea>
+							<textarea id="boardContent" name="boardContent" rows="15"></textarea>
 						</td>
 					</tr>
 				</tbody>
