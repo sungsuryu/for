@@ -102,6 +102,7 @@ public class LoginController {
 		if (userVO != null && userVO.getUserId() != null && !userVO.getUserId().equals("")) {
 			// 1차 로그인 세션 생성
 			loginVO.setLoginStep(CommonConst.LOGIN_STEP0);
+			loginVO.setUserNm(userVO.getUserNm());
 			request.getSession().setAttribute(ConstCode.loginVO.toString(), loginVO);
 			
 			HashMap<String, Object> loginInfo = new HashMap<String, Object>();

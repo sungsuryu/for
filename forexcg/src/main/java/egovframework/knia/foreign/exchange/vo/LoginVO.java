@@ -10,6 +10,8 @@ public class LoginVO extends CommonVO implements Serializable {
 	
 	private String loginId;
 	
+	private String userNm;
+	
 	private String password;
 	
 	private String timestamp;
@@ -22,6 +24,14 @@ public class LoginVO extends CommonVO implements Serializable {
 
 	private int retryCnt;
 	
+	public String getUserNm() {
+		return userNm;
+	}
+
+	public void setUserNm(String userNm) {
+		this.userNm = userNm;
+	}
+
 	public int getRetryCnt() {
 		return retryCnt;
 	}
