@@ -36,6 +36,10 @@ function MultiSelector( list_target, max ){
 		this.max = this.max + 1;
 	};
 	
+	this.resetInput = function() {
+		//this.parentNode.element.multi_selector.current_element.disabled = false;
+	}
+	
 	/**
 	 * Add a new file input element
 	 */
@@ -120,16 +124,12 @@ function MultiSelector( list_target, max ){
 		new_row_button.onclick= function(){
 			// Remove element from form
 			this.parentNode.element.parentNode.removeChild( this.parentNode.element );
-
 			// Remove this row from the list
 			this.parentNode.parentNode.removeChild( this.parentNode );
-
 			// Decrement counter
 			this.parentNode.element.multi_selector.count--;
-
 			// Re-enable input element (if it's disabled)
 			this.parentNode.element.multi_selector.current_element.disabled = false;
-			console.log(this.parentNode);
 			//    which nixes your already queued uploads
 			return false;
 		};
@@ -142,13 +142,10 @@ function MultiSelector( list_target, max ){
 
 			//if (confirm("삭제 하시겠습니까?")) {
 				this.element.parentNode.removeChild( this.element );
-
 				// Remove this row from the list
 				this.parentNode.removeChild( this );
-
 				// Decrement counter
 				this.element.multi_selector.count--;
-
 				// Re-enable input element (if it's disabled)
 				this.element.multi_selector.current_element.disabled = false;
 			//}
