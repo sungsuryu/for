@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 <script type="text/javascript">
@@ -268,7 +269,9 @@
 						</c:if>
 					</td>
 					<td><c:out value="${result.userName}" /></td>
-					<td><c:out value="${result.updtDate}"/></td>
+						<fmt:parseDate value="${result.updtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
+						<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
+					<td><c:out value="${insrtDate }" /></td>
 					<td><c:out value="${result.viewCnt}" /></td>
 				</tr>
 				</c:forEach>
