@@ -624,7 +624,7 @@ public class BoardController {
 	public String boardPdsView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model)
 			throws Exception {
 		if(boardVO.getBoardIdx() == 0){
-			return "redirect:/board/pds.do";
+			return "redirect:/board/notice.do";
 		}
 		BoardVO resultboardVO = new BoardVO();
 		boardService.updateBoardViewCnt(boardVO.getBoardIdx());
