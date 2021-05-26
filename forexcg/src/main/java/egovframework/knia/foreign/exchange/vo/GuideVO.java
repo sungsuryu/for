@@ -5,13 +5,9 @@ import java.io.Serializable;
 public class GuideVO implements Serializable {
 	private static final long serialVersionUID = -2524203977749965426L;
 	
-	private int uiNum;
-	
-	private int guideNum;
+	private String uiId;
 	
 	private String guideContent;
-	
-	private String useYn;
 	
 	private String userNm;
 
@@ -23,36 +19,20 @@ public class GuideVO implements Serializable {
 	
 	private String updtDate = null;
 	
-	public int getUiNum() {
-		return uiNum;
+	public String getUiId() {
+		return uiId;
 	}
 
-	public void setUiNum(int uiNum) {
-		this.uiNum = uiNum;
+	public void setUiId(String uiId) {
+		this.uiId = uiId;
 	}
-
-	public int getGuideNum() {
-		return guideNum;
-	}
-
-	public void setGuideNum(int guideNum) {
-		this.guideNum = guideNum;
-	}
-
+	
 	public String getGuideContent() {
 		return guideContent;
 	}
 
 	public void setGuideContent(String guideContent) {
 		this.guideContent = guideContent;
-	}
-
-	public String getUseYn() {
-		return useYn;
-	}
-
-	public void setUseYn(String useYn) {
-		this.useYn = useYn;
 	}
 
 	public String getUserNm() {

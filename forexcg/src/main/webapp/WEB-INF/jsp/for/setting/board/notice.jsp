@@ -7,6 +7,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 <script type="text/javascript">
+
+	$(function(){
+		selectGuide();
+	});
 	//페이지 전환 함수
 	function fn_egov_link_page(page){
 		$("#page").val(page);
@@ -19,24 +23,48 @@
 		$("#boardForm").submit();
 	}
 	
-	function setGuide(){
+	function selectGuide(){
+		var formData = $("#guideForm").serialize();
 		$.ajax({
 	        type:"POST",
-	        url:"/guide.ajax",
-	        data : pData,
-	        success: function(e){
-	        	var cdlist = e.subCodeList;
-	        	var cdSiz = cdlist.length;
-	        	
-	        	$("#subCodeList .subCode").remove();
-	        	
-	        	if (cdSiz > 0) {
-					for (var i in cdlist) {
-						addSubCode(cdlist[i]);
-					}		        		
+	        url:"/selectGuide.ajax",
+	        data : formData,
+	        success: function(data){
+	        	if(data.result.status == "SUCCESS"){
+	        		if(data.result.levelCheck == "N"){
+	        			$("#updateGuide").css("display", "none");
+	        			$("#guideContent").attr("readonly", true);
+	        			$("#guideContent").attr("disable", true);
+	        		}
+	        		$("#guideContent").text(data.result.guideVO.guideContent);
 	        	}
-	        	
-	        }
+	        	else{
+	        		alert("도움말 불러오기 실패");
+	        	}
+	        },
+			error: function(e){
+				alert("도움말 불러오기 실패");
+			}			
+    	});
+	}
+	
+	function updateGuide(){
+		var formData = $("#guideForm").serialize();
+		$.ajax({
+	        type:"POST",
+	        url:"/updateGuide.ajax",
+	        data : formData,
+	        success: function(data){
+	        	if(data.result.status == "SUCCESS"){
+	        		$("#guideContent").text(data.result.guideVO.guideContent);
+	        	}
+	        	else{
+	        		alert("도움말 수정 실패");
+	        	}
+	        },
+			error: function(e){
+				alert("도움말 수정 실패");
+			}			
     	});
 	}
 	
@@ -325,8 +353,11 @@
 		<a href="javascript:;" class="btn_close">창닫기</a>
 	</header>
 	<div class="aside_right_con">
-		<textarea id="guideContent" name="guideContent">도움말 내용</textarea>
-		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+		<form id="guideForm" name="guideForm" method="post">
+			<input id="uiId" name="uiId" type="hidden" value="MID03003006000" />
+			<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;">도움말 내용</textarea>
+			<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+		</form>
 	</div>
 </aside>
 <!--+++++ /우측 레이어(도움말) +++++-->

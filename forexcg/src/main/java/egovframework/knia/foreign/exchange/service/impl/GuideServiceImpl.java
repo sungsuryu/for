@@ -18,14 +18,8 @@ public class GuideServiceImpl implements GuideService {
 	private GuideMapper guideMapper;
 	
 	@Override
-	public List<?> selectGuide(GuideVO guideVO) throws Exception {
+	public GuideVO selectGuide(GuideVO guideVO) throws Exception {
 		return guideMapper.selectGuide(guideVO);
-	}
-
-	@Override
-	public void insertGuide(GuideVO guideVO) throws Exception {
-		guideMapper.insertGuide(guideVO);
-		
 	}
 
 	@Override
@@ -33,10 +27,4 @@ public class GuideServiceImpl implements GuideService {
 		guideMapper.updateGuide(guideVO);
 		
 	}
-
-	@Override
-	public void deleteGuide(GuideVO guideVO) throws Exception {
-		guideMapper.deleteGuide(guideVO);
-	}
-
 }

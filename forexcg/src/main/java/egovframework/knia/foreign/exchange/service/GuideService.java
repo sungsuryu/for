@@ -11,14 +11,7 @@ public interface GuideService {
 	 * @return List<?> 도움말정보
 	 * @throws Exception
 	 */
-	List<?> selectGuide(GuideVO guideVO) throws Exception;
-	
-	/**
-	 * 도움말 생성
-	 * @param GuideVO 도움말 생성정보
-	 * @throws Exception
-	 */
-	void insertGuide(GuideVO guideVO) throws Exception;
+	GuideVO selectGuide(GuideVO guideVO) throws Exception;
 	
 	/**
 	 * 도움말 수정
@@ -26,11 +19,4 @@ public interface GuideService {
 	 * @throws Exception
 	 */
 	void updateGuide(GuideVO guideVO) throws Exception;
-	
-	/**
-	 * 도움말 삭제
-	 * @param GuideVO 도움말 삭제정보
-	 * @throws Exception
-	 */
-	void deleteGuide(GuideVO guideVO) throws Exception;
 }
