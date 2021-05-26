@@ -11,11 +11,11 @@ public class CommonVO implements Serializable {
 	
 	private String insrtId;
 	
-	private Date insrtDate;
+	private Date insrtDate = null;
 	
 	private String updtId;
 	
-	private Date updtDate;
+	private Date updtDate = null;
 
 	public String getIsDel() {
 		return isDel;

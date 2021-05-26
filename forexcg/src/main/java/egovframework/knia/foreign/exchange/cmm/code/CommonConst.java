@@ -2,6 +2,8 @@ package egovframework.knia.foreign.exchange.cmm.code;
 
 public final class CommonConst {
 
+	public static final String KNIA = "KNIA";
+	
 	public static final int LOGIN_STEP0 = 0;
 	
 	public static final int LOGIN_STEP1 = 1;

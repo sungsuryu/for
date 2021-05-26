@@ -20,6 +20,16 @@ public class CommonCodeVO extends CommonVO implements Serializable {
 	
 	private String useYn;
 
+	private String uri;
+	
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
 	public String getCmmCd() {
 		return cmmCd;
 	}

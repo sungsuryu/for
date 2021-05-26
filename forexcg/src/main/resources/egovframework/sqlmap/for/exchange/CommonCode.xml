@@ -17,7 +17,30 @@
 		<result property="updtDate" column="UPDT_DATE" />
 	</resultMap>
 
+	<select id="selectMxSortNum" parameterType="commonCodeVO" resultType="int">
+		/** CommonCode.selectMxSortNum */
+		SELECT
+			IFNULL(MAX(SORT_NUM), 0)+1 MXCNT FROM TB_FOR_CMM_CD
+		WHERE
+			PRT_CMM_CD=#{prtCmmCd } AND IS_DEL='N'
+	</select>
+		
+	<insert id="insertCode" parameterType="commonCodeVO">
+		/** CommonCode.insertCode */
+		INSERT INTO
+			TB_FOR_CMM_CD (
+				CMM_CD, CMM_CD_NM, LVL, PRT_CMM_CD, 
+				CD_DESC, SORT_NUM, USE_YN, IS_DEL, 
+				INSRT_ID, INSRT_DATE, UPDT_ID, UPDT_DATE
+			) VALUES (
+				#{cmmCd}, #{cmmCdNm}, #{lvl}, #{prtCmmCd}, 
+				#{cdDesc}, #{sortNum}, #{useYn}, 'N', 
+				#{insrtId}, now(), #{insrtId}, now()
+			)
+	</insert>
+	
 	<select id="selectCode" parameterType="String" resultMap="mapCommonCodeVO">
+		/** CommonCode.selectCode */
 		SELECT
 			CMM_CD, CMM_CD_NM, LVL, PRT_CMM_CD, CD_DESC, SORT_NUM, USE_YN, 
 			INSRT_ID, INSRT_DATE, UPDT_ID, UPDT_DATE
@@ -29,6 +52,7 @@
 	</select>
 	
 	<select id="selectGroupCodeList" resultMap="mapCommonCodeVO">
+		/** CommonCode.selectGroupCodeList */
 		SELECT
 			CMM_CD, CMM_CD_NM, LVL, PRT_CMM_CD, CD_DESC, SORT_NUM, USE_YN, 
 			INSRT_ID, INSRT_DATE, UPDT_ID, UPDT_DATE
@@ -42,6 +66,7 @@
 	</select>
 	
 	<select id="selectCodeList" parameterType="String" resultMap="mapCommonCodeVO">
+		/** CommonCode.selectCodeList */
 		SELECT
 			CMM_CD, CMM_CD_NM, LVL, PRT_CMM_CD, CD_DESC, SORT_NUM, USE_YN, 
 			INSRT_ID, INSRT_DATE, UPDT_ID, UPDT_DATE
@@ -53,6 +78,7 @@
 	</select>
 	
 	<update id="updateCode" parameterType="commonCodeVO">
+		/** CommonCode.updateCode */
 		UPDATE TB_FOR_CMM_CD
 			SET
 				CMM_CD_NM=#{cmmCdNm}, 
@@ -66,13 +92,25 @@
 			CMM_CD=#{cmmCd}
 	</update>
 	
-	<delete id="deleteCode" parameterType="String">
+	<delete id="deleteCode" parameterType="commonCodeVO">
+		/** CommonCode.deleteCode */
 		UPDATE TB_FOR_CMM_CD
 			SET
 				IS_DEL='Y', 
 				UPDT_ID=#{updtId}, 
 				UPDT_DATE=now()
 		WHERE
-			CMM_CD=#{cmmCd}
+			LVL=#{lvl}
+			<choose>
+				<when test="uri == 'addGrpCode'">
+					AND PRT_CMM_CD=#{prtCmmCd}
+				</when>
+				<when test="uri == 'addSubCode'">
+					AND CMM_CD=#{cmmCd}
+				</when>
+				<otherwise>
+					AND CMM_CD = '1'
+				</otherwise>
+			</choose>
 	</delete>
 </mapper>

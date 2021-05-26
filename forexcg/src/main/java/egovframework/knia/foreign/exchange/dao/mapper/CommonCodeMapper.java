@@ -14,9 +14,11 @@ public interface CommonCodeMapper {
 
 	List<?> selectGroupCodeList() throws Exception;
 	
+	int selectMxSortNum(CommonCodeVO commonCodeVO) throws Exception;
+	
 	void insertCode(CommonCodeVO commonCodeVO) throws Exception;
 	
 	void updateCode(CommonCodeVO commonCodeVO) throws Exception;
 	
-	void deleteCode(String cmmCd) throws Exception;
+	void deleteCode(CommonCodeVO commonCodeVO) throws Exception;
 }

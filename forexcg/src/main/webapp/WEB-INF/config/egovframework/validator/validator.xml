@@ -60,5 +60,10 @@
 			</field>
 		</form>
 		
+		<form name="commonCodeVO">
+			<field property="cmmCd" depends="required">
+				<arg0 key="title.common.code.cmmCd" />
+			</field>
+		</form>
 	</formset>
 </form-validation>
