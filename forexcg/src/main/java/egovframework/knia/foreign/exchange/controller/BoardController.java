@@ -34,6 +34,7 @@ import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.util.EgovBasicLogger;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.com.cmm.util.EgovStringUtil;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.knia.foreign.exchange.cmm.code.BoardCode;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.service.BoardService;
@@ -96,10 +97,9 @@ public class BoardController {
 	@RequestMapping(value = "/setting/board/noticeWrite.do")
 	public String settingBoardNoticeWrite(HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 작성 화면");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		
-		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("userName", getLoginVO.getUserNm().toString());
 		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 		return "setting/board/noticeWrite";
 	}
@@ -108,14 +108,13 @@ public class BoardController {
 	public String settingBoardNoticeWriteInsert(final MultipartHttpServletRequest multiRequest,
 			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request) throws Exception {
 		logger.debug("공지사항 추가");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		int boardIdx = 0;
 
-		boardVO.setUserName(loginVO.getUserNm().toString());
-		boardVO.setUserId(loginVO.getLoginId().toString());
-		boardVO.setInsrtId(loginVO.getLoginId().toString());
-		boardVO.setUpdtId(loginVO.getLoginId().toString());
+		boardVO.setUserName(getLoginVO.getUserNm().toString());
+		boardVO.setUserId(getLoginVO.getLoginId().toString());
+		boardVO.setInsrtId(getLoginVO.getLoginId().toString());
+		boardVO.setUpdtId(getLoginVO.getLoginId().toString());
 		boardVO.setViewCnt(0);
 		boardVO.setIsDel("N");
 		if(EgovStringUtil.isEmpty(boardVO.getAlarmYn())){
@@ -161,8 +160,7 @@ public class BoardController {
 	@RequestMapping(value = "/setting/board/noticeEdit.do")
 	public String settingBoardNoticeEdit(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 수정 화면");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		
 		if(boardVO.getBoardIdx() == 0){
 			return "redirect:/setting/board/notice.do";
@@ -187,7 +185,7 @@ public class BoardController {
 		}
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("boardVO", resultboardVO);
-		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("userName", getLoginVO.getUserNm().toString());
 		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 		return "setting/board/noticeEdit";
 	}
@@ -196,14 +194,13 @@ public class BoardController {
 	public String settingBoardNoticeEditUpdate(final MultipartHttpServletRequest multiRequest,
 			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
 		logger.debug("공지사항 수정");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 
 		String check[] = request.getParameterValues("deleteOriginFileId");
 		String isOriginFile = request.getParameter("isOriginFile").toString();
 
-		boardVO.setUserName(loginVO.getUserNm().toString());
-		boardVO.setUpdtId(loginVO.getLoginId().toString());
+		boardVO.setUserName(getLoginVO.getUserNm().toString());
+		boardVO.setUpdtId(getLoginVO.getLoginId().toString());
 		if(EgovStringUtil.isEmpty(boardVO.getAlarmYn())){
 			boardVO.setAlarmYn("N");
 		}
@@ -239,8 +236,7 @@ public class BoardController {
 	@RequestMapping(value = "/setting/board/noticeDeleteAction.do")
 	public String settingBoardNoticeEditDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
 		logger.debug("공지사항 삭제");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		
 		String isOriginFile = request.getParameter("isOriginFile").toString();
 
@@ -258,7 +254,7 @@ public class BoardController {
 				checkfileVO = (FileVO) fileList.get(i);
 				fileVO.setFileId(checkfileVO.getFileId());
 				fileVO.setFileGrpNum(boardVO.getBoardIdx());
-				fileVO.setUserId(loginVO.getLoginId().toString());
+				fileVO.setUserId(getLoginVO.getLoginId().toString());
 				fileVO.setFileGrpCd(BoardCode.NOTICE.toString());
 				boardService.deleteFile(fileVO);
 			}
@@ -304,9 +300,9 @@ public class BoardController {
 	public String settingBoardPdsWrite(HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 작성 화면");
 		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		
-		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("userName", getLoginVO.getUserNm().toString());
 		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 		return "setting/board/pdsWrite";
 	}
@@ -315,14 +311,13 @@ public class BoardController {
 	public String settingBoardPdsWriteInsert(final MultipartHttpServletRequest multiRequest,
 			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request) throws Exception {
 		logger.debug("자료실 추가");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		int boardIdx = 0;
 
-		boardVO.setUserName(loginVO.getUserNm().toString());
-		boardVO.setUserId(loginVO.getLoginId().toString());
-		boardVO.setInsrtId(loginVO.getLoginId().toString());
-		boardVO.setUpdtId(loginVO.getLoginId().toString());
+		boardVO.setUserName(getLoginVO.getUserNm().toString());
+		boardVO.setUserId(getLoginVO.getLoginId().toString());
+		boardVO.setInsrtId(getLoginVO.getLoginId().toString());
+		boardVO.setUpdtId(getLoginVO.getLoginId().toString());
 		boardVO.setViewCnt(0);
 		boardVO.setIsDel("N");
 		if(EgovStringUtil.isEmpty(boardVO.getAlarmYn())){
@@ -368,8 +363,7 @@ public class BoardController {
 	@RequestMapping(value = "/setting/board/pdsEdit.do")
 	public String settingBoardPdsEdit(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 수정 화면");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		
 		if(boardVO.getBoardIdx() == 0){
 			return "redirect:/setting/board/pds.do";
@@ -394,7 +388,7 @@ public class BoardController {
 		}
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("boardVO", resultboardVO);
-		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("userName", getLoginVO.getUserNm().toString());
 		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 
 		return "setting/board/pdsEdit";
@@ -404,14 +398,13 @@ public class BoardController {
 	public String settingBoardPdsEditUpdate(final MultipartHttpServletRequest multiRequest,
 			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
 		logger.debug("자료실 수정");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 
 		String check[] = request.getParameterValues("deleteOriginFileId");
 		String isOriginFile = request.getParameter("isOriginFile").toString();
 
-		boardVO.setUserName(loginVO.getUserNm().toString());
-		boardVO.setUpdtId(loginVO.getLoginId().toString());
+		boardVO.setUserName(getLoginVO.getUserNm().toString());
+		boardVO.setUpdtId(getLoginVO.getLoginId().toString());
 		if(EgovStringUtil.isEmpty(boardVO.getAlarmYn())){
 			boardVO.setAlarmYn("N");
 		}
@@ -447,8 +440,7 @@ public class BoardController {
 	@RequestMapping(value = "/setting/board/pdsDeleteAction.do")
 	public String settingBoardPdsEditDelete(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
 		logger.debug("자료실 삭제");
-		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		String isOriginFile = request.getParameter("isOriginFile").toString();
 
 		boardService.deleteBoard(boardVO.getBoardIdx());
@@ -465,7 +457,7 @@ public class BoardController {
 				checkfileVO = (FileVO) fileList.get(i);
 				fileVO.setFileId(checkfileVO.getFileId());
 				fileVO.setFileGrpNum(boardVO.getBoardIdx());
-				fileVO.setUserId(loginVO.getLoginId().toString());
+				fileVO.setUserId(getLoginVO.getLoginId().toString());
 				fileVO.setFileGrpCd(BoardCode.PDS.toString());
 				boardService.deleteFile(fileVO);
 			}

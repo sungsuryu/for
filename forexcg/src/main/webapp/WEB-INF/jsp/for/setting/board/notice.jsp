@@ -9,7 +9,6 @@
 <script type="text/javascript">
 
 	$(function(){
-		selectGuide();
 	});
 	//페이지 전환 함수
 	function fn_egov_link_page(page){
@@ -27,7 +26,7 @@
 		var formData = $("#guideForm").serialize();
 		$.ajax({
 	        type:"POST",
-	        url:"/selectGuide.ajax",
+	        url:"/help/guide.ajax",
 	        data : formData,
 	        success: function(data){
 	        	if(data.result.status == "SUCCESS"){
@@ -36,7 +35,7 @@
 	        			$("#guideContent").attr("readonly", true);
 	        			$("#guideContent").attr("disable", true);
 	        		}
-	        		$("#guideContent").text(data.result.guideVO.guideContent);
+	        		$("#guideContent").val(data.result.guideVO.guideContent);
 	        	}
 	        	else{
 	        		alert("도움말 불러오기 실패");
@@ -52,15 +51,10 @@
 		var formData = $("#guideForm").serialize();
 		$.ajax({
 	        type:"POST",
-	        url:"/updateGuide.ajax",
+	        url:"/help/updateGuide.ajax",
 	        data : formData,
 	        success: function(data){
-	        	if(data.result.status == "SUCCESS"){
-	        		$("#guideContent").text(data.result.guideVO.guideContent);
-	        	}
-	        	else{
-	        		alert("도움말 수정 실패");
-	        	}
+	        	alert("도움말 수정 완료");
 	        },
 			error: function(e){
 				alert("도움말 수정 실패");
@@ -150,7 +144,7 @@
 		<div class="info_area">
 			<div class="user"><i class="fa fa-user-o" aria-hidden="true"></i> 관리자 <a href="javascript:;" class="btn btn-xs">정보수정</a></div>
 			<div class="timer"><i class="fa fa-clock-o" aria-hidden="true"></i> 남은시간 : 54분 41초 <a href="javascript:;" class="btn btn-xs">시간연장</a></div>
-			<a href="javascript:;" class="btn btn-primary btn_help"><i class="fa fa-question-circle" aria-hidden="true"></i> 도움말</a>
+			<a href="javascript:selectGuide();" class="btn btn-primary btn_help"><i class="fa fa-question-circle" aria-hidden="true"></i> 도움말</a>
 			<a href="javascript:;" class="btn btn-info"><i class="fa fa-sign-out" aria-hidden="true"></i> 로그아웃</a>
 		</div>		
 	</div>

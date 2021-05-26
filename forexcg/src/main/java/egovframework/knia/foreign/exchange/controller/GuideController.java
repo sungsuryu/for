@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import egovframework.com.cmm.service.EgovFileMngUtil;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
@@ -32,9 +33,8 @@ public class GuideController {
 	@Resource(name = "EgovFileMngUtil")
 	private EgovFileMngUtil fileUtil;
 	
-	@RequestMapping(value = "/selectGuide.ajax")
+	@RequestMapping(value = "/help/guide.ajax")
 	public String selectGuide(@ModelAttribute("guideVO") GuideVO guideVO, HttpServletRequest request, ModelMap model) throws Exception {
-		logger.debug("도움말 불러오기");
 		GuideVO resultGuideVO = new GuideVO();
 		resultGuideVO = guideService.selectGuide(guideVO);
 		
@@ -45,19 +45,14 @@ public class GuideController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(value = "/updateGuide.ajax")
+	@RequestMapping(value = "/help/updateGuide.ajax")
 	public String updateGuide(@ModelAttribute("guideVO") GuideVO guideVO, HttpServletRequest request, ModelMap model) throws Exception {
-		logger.debug("도움말 수정");
 		HttpSession session = request.getSession();
-		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
-		guideVO.setUpdtId(loginVO.getLoginId());
-		GuideVO resultGuideVO = new GuideVO();
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+		guideVO.setUpdtId(getLoginVO.getLoginId());
 		guideService.updateGuide(guideVO);
-		resultGuideVO = guideService.selectGuide(guideVO);
 		
-		HashMap<String, Object> rMap = new HashMap<String, Object>();
-		rMap.put("guideVO", resultGuideVO);
-		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(rMap));
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0));
 		return "jsonView";
 	}
 	
