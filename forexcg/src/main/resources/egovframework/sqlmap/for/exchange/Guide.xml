@@ -27,8 +27,12 @@
 			,INSRT_DATE
 			,UPDT_ID
 			,UPDT_DATE
-		FROM TB_FOR_GUIDE
-		WHERE guideNum = #{board_idx};
+		FROM
+			TB_FOR_GUIDE
+		WHERE
+			UI_NUM = #{uiNum}
+		AND
+			USE_YN = 'Y'
 	</select>
 	
 	<insert id="insertGuide" parameterType="guideVO">
