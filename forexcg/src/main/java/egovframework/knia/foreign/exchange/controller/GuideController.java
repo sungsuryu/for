@@ -26,10 +26,10 @@ public class GuideController {
 	@Resource(name = "EgovFileMngUtil")
 	private EgovFileMngUtil fileUtil;
 	
-	@RequestMapping(value = "/guide.do")
+	@RequestMapping(value = "/guide.ajax")
 	public String selectGuide(@ModelAttribute("guideVO") GuideVO guideVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("도움말 불러오기");
-		
+		guideVO.setUiNum(1);
 		List<?> guideList = guideService.selectGuide(guideVO);
 		return null;
 	}

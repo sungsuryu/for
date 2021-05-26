@@ -42,7 +42,7 @@ public class BoardVO implements Serializable {
 	
 	private int totalCnt;
 	
-	private int pageNo = 0;
+	private int page = 0;
 	
 	private int firstIndex;
 	
@@ -212,12 +212,12 @@ public class BoardVO implements Serializable {
 		this.totalCnt = totalCnt;
 	}
 
-	public int getPageNo() {
-		return pageNo;
+	public int getPage() {
+		return page;
 	}
 
-	public void setPageNo(int pageNo) {
-		this.pageNo = pageNo;
+	public void setPage(int page) {
+		this.page = page;
 	}
 
 	public int getFileCnt() {

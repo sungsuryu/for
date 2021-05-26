@@ -8,16 +8,38 @@
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 <script type="text/javascript">
 	//페이지 전환 함수
-	function fn_egov_link_page(pageNo){
-		$("#pageNum").val(pageNo);
-		$("#pageNo").val(pageNo);
-		$("#pagingForm").submit();
-	}
-	
-	function goBoardView(boardIdx){
-		$("#boardIdx").val(boardIdx);
+	function fn_egov_link_page(page){
+		$("#page").val(page);
+		$("#boardForm").attr("action", "/setting/board/notice.do");
 		$("#boardForm").submit();
 	}
+	function goBoardView(boardIdx){
+		$("#boardIdx").val(boardIdx);
+		$("#boardForm").attr("action", "/setting/board/noticeView.do");
+		$("#boardForm").submit();
+	}
+	
+	function setGuide(){
+		$.ajax({
+	        type:"POST",
+	        url:"/guide.ajax",
+	        data : pData,
+	        success: function(e){
+	        	var cdlist = e.subCodeList;
+	        	var cdSiz = cdlist.length;
+	        	
+	        	$("#subCodeList .subCode").remove();
+	        	
+	        	if (cdSiz > 0) {
+					for (var i in cdlist) {
+						addSubCode(cdlist[i]);
+					}		        		
+	        	}
+	        	
+	        }
+    	});
+	}
+	
 </script>
 </head>
 
@@ -289,13 +311,9 @@
 			<a href="/setting/board/noticeWrite.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
-	
-	<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/notice.do">
-		<input type="hidden" id = "pageNo" name = "pageNo" value="${pageNo}">
-	</form>
-	<form id="boardForm" name="boardForm" method="post" action="/setting/board/noticeView.do">
-		<input type="hidden" id = "boardIdx" name = "boardIdx">
-		<input type="hidden" id = "pageNum" name = "pageNum" value="${pageNo}">
+	<form id="boardForm" name="boardForm" method="post" action="/setting/board/notice.do">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type='hidden' id="boardIdx" name='boardIdx' value="0" />
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->
@@ -307,7 +325,7 @@
 		<a href="javascript:;" class="btn_close">창닫기</a>
 	</header>
 	<div class="aside_right_con">
-		<textarea>도움말 내용</textarea>
+		<textarea id="guideContent" name="guideContent">도움말 내용</textarea>
 		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 	</div>
 </aside>

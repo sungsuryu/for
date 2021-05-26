@@ -44,7 +44,7 @@ function valueCheck(){
 }
 
 function makeFileAttachment(){
-	 var maxFileNum = 10;
+	 var maxFileNum = ${maxFile};
 
 	 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum );
 	 multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );

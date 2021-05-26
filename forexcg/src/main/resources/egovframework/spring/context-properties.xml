@@ -8,6 +8,8 @@
 	        	<entry key="pageUnit" value="10"/>
 	        	<entry key="pageSize" value="10"/>
 	        	<entry key="authInterval" value="90"/>
+	        	<entry key="maxFile" value="10"/>
+	        	<entry key="pageData" value="10"/>
 	        </map>
 		</property>
 	</bean>

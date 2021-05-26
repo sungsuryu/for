@@ -7,14 +7,15 @@
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 <script>
 	//페이지 전환 함수
-	function fn_egov_link_page(pageNo){
-		$("#pageNum").val(pageNo);
-		$("#pageNo").val(pageNo);
-		$("#pagingForm").submit();
+	function fn_egov_link_page(page){
+		$("#page").val(page);
+		$("#boardForm").attr("action", "/setting/board/pds.do");
+		$("#boardForm").submit();
 	}
 	
 	function goBoardView(boardIdx){
 		$("#boardIdx").val(boardIdx);
+		$("#boardForm").attr("action", "/setting/board/pdsView.do");
 		$("#boardForm").submit();
 	}
 </script>
@@ -284,12 +285,9 @@
 			<a href="/setting/board/pdsWrite.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
 		</div>
 	</div>
-	<form id="pagingForm" name="pagingForm" method="post" action="/setting/board/pds.do">
-		<input type="hidden" id = "pageNo" name = "pageNo" value="${pageNo}">
-	</form>
-	<form id="boardForm" name="boardForm" method="post" action="/setting/board/pdsView.do">
-		<input type="hidden" id = "boardIdx" name = "boardIdx">
-		<input type="hidden" id = "pageNum" name = "pageNum" value="${pageNo}">
+	<form id="boardForm" name="boardForm" method="post" action="/setting/board/pds.do">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type='hidden' id="boardIdx" name='boardIdx' value="0" />
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->

@@ -240,7 +240,7 @@ function goPds(){
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input type='hidden' id="alarmYn" name='alarmYn'>
 		<input type='hidden' id="boardIdx" name='boardIdx' value="${boardVO.boardIdx}">
-		<input type='hidden' id="pageNo" name='pageNo' value="${boardVO.pageNo}">
+		<input type='hidden' id="page" name='page' value="${boardVO.page}">
 		<div class="table_v01">
 			<table>
 				<colgroup>

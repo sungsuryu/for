@@ -41,7 +41,7 @@
 	
 	function getUploadableNum(){
 		var existFileNum = ${fileCnt};
-		var maxFileNum = 10;	//파일 최대 첨부갯수
+		var maxFileNum = ${maxFile};	//파일 최대 첨부갯수
 	
 		if (existFileNum=="undefined" || existFileNum ==null) {
 			existFileNum = 0;
@@ -306,7 +306,7 @@
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input id="boardIdx" name="boardIdx" type="hidden" value="<c:out value="${boardVO.boardIdx}" />">
-		<input id="pageNo" name="pageNo" type="hidden" value="<c:out value="${boardVO.pageNo}" />">
+		<input id="page" name="page" type="hidden" value="<c:out value="${boardVO.page}" />">
 		<input id="isOriginFile" name="isOriginFile" type="hidden" value="<c:out value="${isOriginFile}" />">
 		<input type='hidden' id="board_alarm" name='board_alarm'>
 		<div class="table_v01">

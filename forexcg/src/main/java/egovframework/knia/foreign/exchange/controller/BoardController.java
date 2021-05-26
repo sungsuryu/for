@@ -41,6 +41,7 @@ import egovframework.knia.foreign.exchange.service.FileService;
 import egovframework.knia.foreign.exchange.vo.BoardVO;
 import egovframework.knia.foreign.exchange.vo.FileVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
@@ -56,25 +57,28 @@ public class BoardController {
 	@Resource(name = "EgovFileMngUtil")
 	private EgovFileMngUtil fileUtil;
 
+    @Resource(name="propertiesService")
+    protected EgovPropertyService propertyService;
+    
 	@RequestMapping(value = "/setting/board/notice.do")
 	public String settingBoardNotice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 관리 화면");
 		Map<String, ?> pageInfo = RequestContextUtils.getInputFlashMap(request);
-		if (boardVO.getPageNo() == 0) {
+		if (boardVO.getPage() == 0) {
 			if(null != pageInfo){
-				int pageNo = (int) pageInfo.get("pageNo");
-				boardVO.setPageNo(pageNo);
+				int pageNo = (int) pageInfo.get("page");
+				boardVO.setPage(pageNo);
 			}else{
-				boardVO.setPageNo(1);
+				boardVO.setPage(1);
 			}
 		}
 		PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(boardVO.getPageNo());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
+		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
-		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -82,7 +86,7 @@ public class BoardController {
 		List<?> boardList = boardService.selectBoardList(boardVO);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("total_cnt", total_cnt);
-		model.addAttribute("pageNo", boardVO.getPageNo());
+		model.addAttribute("page", boardVO.getPage());
 		paginationInfo.setTotalRecordCount(total_cnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
@@ -96,6 +100,7 @@ public class BoardController {
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
 		
 		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 		return "setting/board/noticeWrite";
 	}
 
@@ -130,66 +135,45 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/setting/board/noticeView.do")
-	public String settingBoardNoticeView(HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNoticeView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 상세내용 화면");
-		HttpSession session = request.getSession();
-		int boardIdx;
-		int pageNo;
 		
-//		KJW 세션 이용방법
-		if(request.getParameter("boardIdx") != null && request.getParameter("pageNum") != null){
-			session.setAttribute("boardIdx", Integer.parseInt(request.getParameter("boardIdx").toString()));
-			session.setAttribute("pageNo", Integer.parseInt(request.getParameter("pageNum").toString()));
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
+		if(boardVO.getBoardIdx() == 0){
+			return "redirect:/setting/board/notice.do";
 		}
-		else{
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
-		}
+		boardService.updateBoardViewCnt(boardVO.getBoardIdx());
 		
-//		KJW 파라미터 이용방법
-//		boardIdx = Integer.parseInt(request.getParameter("boardIdx").toString());
-//		pageNo = Integer.parseInt(request.getParameter("pageNum").toString());
-
-		boardService.updateBoardViewCnt(boardIdx);
-		
-		BoardVO boardVO = new BoardVO();
-		boardVO = boardService.selectBoard(boardIdx);
-		boardVO.setPageNo(pageNo);
+		BoardVO resultBoardVO = new BoardVO();
+		resultBoardVO = boardService.selectBoard(boardVO.getBoardIdx());
+		resultBoardVO.setPage(boardVO.getPage());
 		FileVO fileVO = new FileVO();
 
-		fileVO.setFileGrpNum(boardIdx);
+		fileVO.setFileGrpNum(boardVO.getBoardIdx());
 		fileVO.setFileGrpCd(BoardCode.NOTICE.toString());
 
 		List<?> fileList = boardService.selectFileList(fileVO);
 
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("boardVO", resultBoardVO);
 		return "setting/board/noticeView";
 	}
 
 	@RequestMapping(value = "/setting/board/noticeEdit.do")
-	public String settingBoardNoticeEdit(HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardNoticeEdit(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 수정 화면");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
-//		KJW 파라미터 이용방법
-//		int boardIdx = Integer.parseInt(request.getParameter("boardIdx").toString());
-//		int pageNo = Integer.parseInt(request.getParameter("pageNo").toString());
-
-//		KJW 세션 이용방법
-		int boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-		int pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
 		
-		
-		BoardVO boardVO = new BoardVO();
-		boardVO = boardService.selectBoard(boardIdx);
-		boardVO.setPageNo(pageNo);
+		if(boardVO.getBoardIdx() == 0){
+			return "redirect:/setting/board/notice.do";
+		}
+		BoardVO resultboardVO = new BoardVO();
+		resultboardVO = boardService.selectBoard(boardVO.getBoardIdx());
+		resultboardVO.setPage(boardVO.getPage());
 		
 		FileVO fileVO = new FileVO();
 
-		fileVO.setFileGrpNum(boardIdx);
+		fileVO.setFileGrpNum(boardVO.getBoardIdx());
 		fileVO.setFileGrpCd(BoardCode.NOTICE.toString());
 
 		List<?> fileList = boardService.selectFileList(fileVO);
@@ -202,8 +186,9 @@ public class BoardController {
 			model.addAttribute("fileCnt", fileList.size());
 		}
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("boardVO", resultboardVO);
 		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 		return "setting/board/noticeEdit";
 	}
 
@@ -229,7 +214,6 @@ public class BoardController {
 
 		fileVO.setFileGrpNum(boardVO.getBoardIdx());
 		fileVO.setFileGrpCd(BoardCode.NOTICE.toString());
-		List<?> fileList = boardService.selectFileList(fileVO);
 		
 		if (check != null) {
 			for (int i = 0; i < check.length; i++) {
@@ -248,7 +232,7 @@ public class BoardController {
 
 			int insertFileCnt = fileService.insertFileInfo(result, "");
 		}
-		attr.addFlashAttribute("pageNo", boardVO.getPageNo());
+		attr.addFlashAttribute("page", boardVO.getPage());
 		return "redirect:/setting/board/notice.do";
 	}
 
@@ -279,7 +263,7 @@ public class BoardController {
 				boardService.deleteFile(fileVO);
 			}
 		}
-		attr.addFlashAttribute("pageNo", boardVO.getPageNo());
+		attr.addFlashAttribute("page", boardVO.getPage());
 		return "redirect:/setting/board/notice.do";
 	}
 
@@ -287,23 +271,21 @@ public class BoardController {
 	public String settingBoardPds(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 관리 화면");
 		Map<String, ?> pageInfo = RequestContextUtils.getInputFlashMap(request);
-		if (boardVO.getPageNo() == 0) {
+		if (boardVO.getPage() == 0) {
 			if(null != pageInfo){
-				int pageNo = (int) pageInfo.get("pageNo");
-				boardVO.setPageNo(pageNo);
-				System.out.println("여기탐!" + pageNo);
+				int pageNo = (int) pageInfo.get("page");
+				boardVO.setPage(pageNo);
 			}else{
-				boardVO.setPageNo(1);
-				System.out.println("여기탐!");
+				boardVO.setPage(1);
 			}
 		}
 		PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(boardVO.getPageNo());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
+		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.PDS.toString());// 개발용
-		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -311,7 +293,7 @@ public class BoardController {
 		List<?> boardList = boardService.selectBoardList(boardVO);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("total_cnt", total_cnt);
-		model.addAttribute("pageNo", boardVO.getPageNo());
+		model.addAttribute("page", boardVO.getPage());
 		paginationInfo.setTotalRecordCount(total_cnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
@@ -325,6 +307,7 @@ public class BoardController {
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
 		
 		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 		return "setting/board/pdsWrite";
 	}
 	
@@ -359,68 +342,46 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/setting/board/pdsView.do")
-	public String settingBoardPdsView(HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardPdsView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 상세내용 화면");
-		HttpSession session = request.getSession();
-		int boardIdx;
-		int pageNo;
 		
-//		KJW 세션 이용방법
-		if(request.getParameter("boardIdx") != null && request.getParameter("pageNum") != null){
-			session.setAttribute("boardIdx", Integer.parseInt(request.getParameter("boardIdx").toString()));
-			session.setAttribute("pageNo", Integer.parseInt(request.getParameter("pageNum").toString()));
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
+		if(boardVO.getBoardIdx() == 0){
+			return "redirect:/setting/board/pds.do";
 		}
-		else{
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
-		}
+		boardService.updateBoardViewCnt(boardVO.getBoardIdx());
 		
-//		KJW 파라미터 이용방법
-//		boardIdx = Integer.parseInt(request.getParameter("boardIdx").toString());
-//		pageNo = Integer.parseInt(request.getParameter("pageNum").toString());
-		
-		boardService.updateBoardViewCnt(boardIdx);
-		
-		BoardVO boardVO = new BoardVO();
-		boardVO = boardService.selectBoard(boardIdx);
-		boardVO.setPageNo(pageNo);
+		BoardVO resultBoardVO = new BoardVO();
+		resultBoardVO = boardService.selectBoard(boardVO.getBoardIdx());
+		resultBoardVO.setPage(boardVO.getPage());
 		FileVO fileVO = new FileVO();
 
-		fileVO.setFileGrpNum(boardIdx);
+		fileVO.setFileGrpNum(boardVO.getBoardIdx());
 		fileVO.setFileGrpCd(BoardCode.PDS.toString());
 
 		List<?> fileList = boardService.selectFileList(fileVO);
 
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("boardVO", resultBoardVO);
 		return "setting/board/pdsView";
 	}
 	
-
 	@RequestMapping(value = "/setting/board/pdsEdit.do")
-	public String settingBoardPdsEdit(HttpServletRequest request, ModelMap model) throws Exception {
+	public String settingBoardPdsEdit(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 수정 화면");
 		HttpSession session = request.getSession();
 		LoginVO loginVO = (LoginVO) session.getAttribute(ConstCode.loginVO.toString());
-//		KJW 파라미터 이용방법
-//		int boardIdx = Integer.parseInt(request.getParameter("boardIdx").toString());
-//		int pageNo = Integer.parseInt(request.getParameter("pageNo").toString());
-
-//		KJW 세션 이용방법
-		int boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-		int pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
 		
+		if(boardVO.getBoardIdx() == 0){
+			return "redirect:/setting/board/pds.do";
+		}
+		BoardVO resultboardVO = new BoardVO();
+		resultboardVO = boardService.selectBoard(boardVO.getBoardIdx());
+		resultboardVO.setPage(boardVO.getPage());
 		
-		BoardVO boardVO = new BoardVO();
-		boardVO = boardService.selectBoard(boardIdx);
-
 		FileVO fileVO = new FileVO();
 
-		fileVO.setFileGrpNum(boardIdx);
+		fileVO.setFileGrpNum(boardVO.getBoardIdx());
 		fileVO.setFileGrpCd(BoardCode.PDS.toString());
-		boardVO.setPageNo(pageNo);
 
 		List<?> fileList = boardService.selectFileList(fileVO);
 
@@ -432,8 +393,9 @@ public class BoardController {
 			model.addAttribute("fileCnt", fileList.size());
 		}
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("boardVO", resultboardVO);
 		model.addAttribute("userName", loginVO.getUserNm().toString());
+		model.addAttribute("maxFile", propertyService.getInt("maxFile"));
 
 		return "setting/board/pdsEdit";
 	}
@@ -460,7 +422,6 @@ public class BoardController {
 
 		fileVO.setFileGrpNum(boardVO.getBoardIdx());
 		fileVO.setFileGrpCd(BoardCode.PDS.toString());
-		List<?> fileList = boardService.selectFileList(fileVO);
 		
 		if (check != null) {
 			for (int i = 0; i < check.length; i++) {
@@ -479,7 +440,7 @@ public class BoardController {
 
 			int insertFileCnt = fileService.insertFileInfo(result, "");
 		}
-		attr.addFlashAttribute("pageNo", boardVO.getPageNo());
+		attr.addFlashAttribute("page", boardVO.getPage());
 		return "redirect:/setting/board/pds.do";
 	}
 
@@ -509,7 +470,7 @@ public class BoardController {
 				boardService.deleteFile(fileVO);
 			}
 		}
-		attr.addFlashAttribute("pageNo", boardVO.getPageNo());
+		attr.addFlashAttribute("page", boardVO.getPage());
 		return "redirect:/setting/board/pds.do";
 	}
 	
@@ -574,18 +535,18 @@ public class BoardController {
 	public String boardNotice(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model)
 			throws Exception {
 		logger.debug("공지사항 화면");
-		if (boardVO.getPageNo() == 0) {
-			boardVO.setPageNo(1);
+		if (boardVO.getPage() == 0) {
+			boardVO.setPage(1);
 		}
 		
 		PaginationInfo paginationInfo = new PaginationInfo();
 
-		paginationInfo.setCurrentPageNo(boardVO.getPageNo());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
+		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
-		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -594,7 +555,7 @@ public class BoardController {
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("total_cnt", total_cnt);
 		model.addAttribute("searchName", boardVO.getSearchName());
-		model.addAttribute("pageNo", boardVO.getPageNo());
+		model.addAttribute("page", boardVO.getPage());
 		paginationInfo.setTotalRecordCount(total_cnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
@@ -602,42 +563,16 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/board/noticeView.do")
-	public String boardNoticeView(HttpServletRequest request, ModelMap model) throws Exception {
+	public String boardNoticeView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("공지사항 상세내용 화면");
-		HttpSession session = request.getSession();
-		int boardIdx;
-		int pageNo;
-		String searchName;
-		
-//		KJW 세션 이용방법
-		if(request.getParameter("boardIdx") != null && request.getParameter("pageNum") != null){
-			session.setAttribute("boardIdx", Integer.parseInt(request.getParameter("boardIdx").toString()));
-			session.setAttribute("pageNo",Integer.parseInt(request.getParameter("pageNum").toString()));
-			if(EgovStringUtil.isEmpty(request.getParameter("searchNm"))){
-				session.setAttribute("searchName", "");
-			}
-			else{
-				session.setAttribute("searchName", request.getParameter("searchNm").toString());
-			}
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
-			searchName = session.getAttribute("searchName").toString();
+		if(boardVO.getBoardIdx() == 0){
+			return "redirect:/board/notice.do";
 		}
-		else{
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
-			searchName = session.getAttribute("searchName").toString();
-		}
-		
-//		KJW 파라미터 이용방법
-//		boardIdx = Integer.parseInt(request.getParameter("boardIdx").toString());
-//		pageNo = Integer.parseInt(request.getParameter("pageNum").toString());
-//		searchName = request.getParameter("searchNm").toString();
-		BoardVO boardVO = new BoardVO();
-		boardService.updateBoardViewCnt(boardIdx);
-		boardVO = boardService.selectBoard(boardIdx);
-		boardVO.setPageNo(pageNo);
-		boardVO.setSearchName(searchName);
+		BoardVO resultboardVO = new BoardVO();
+		boardService.updateBoardViewCnt(boardVO.getBoardIdx());
+		resultboardVO = boardService.selectBoard(boardVO.getBoardIdx());
+		resultboardVO.setPage(boardVO.getPage());
+		resultboardVO.setSearchName(boardVO.getSearchName());
 		
 		FileVO fileVO = new FileVO();
 
@@ -648,7 +583,7 @@ public class BoardController {
 		List<?> fileList = boardService.selectFileList(fileVO);
 
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("boardVO", resultboardVO);
 
 		return "board/noticeView";
 	}
@@ -658,18 +593,18 @@ public class BoardController {
 			throws Exception {
 		logger.debug("자료실 화면");
 
-		if (boardVO.getPageNo() == 0) {
-			boardVO.setPageNo(1);
+		if (boardVO.getPage() == 0) {
+			boardVO.setPage(1);
 		}
 
 		PaginationInfo paginationInfo = new PaginationInfo();
 
-		paginationInfo.setCurrentPageNo(boardVO.getPageNo());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
-		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
+		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.PDS.toString());// 개발용
-		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -678,7 +613,7 @@ public class BoardController {
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("total_cnt", total_cnt);
 		model.addAttribute("searchName", boardVO.getSearchName());
-		model.addAttribute("pageNo", boardVO.getPageNo());
+		model.addAttribute("page", boardVO.getPage());
 		paginationInfo.setTotalRecordCount(total_cnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
@@ -686,55 +621,27 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/board/pdsView.do")
-	public String boardPdsView(HttpServletRequest request, ModelMap model)
+	public String boardPdsView(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model)
 			throws Exception {
-		logger.debug("자료실 상세내용 화면");
-		HttpSession session = request.getSession();
-		int boardIdx;
-		int pageNo;
-		String searchName;
-		
-//		KJW 세션 이용방법
-		if(request.getParameter("boardIdx") != null && request.getParameter("pageNum") != null){
-			session.setAttribute("boardIdx", Integer.parseInt(request.getParameter("boardIdx").toString()));
-			session.setAttribute("pageNo",Integer.parseInt(request.getParameter("pageNum").toString()));
-			if(EgovStringUtil.isEmpty(request.getParameter("searchNm"))){
-				session.setAttribute("searchName", "");
-			}
-			else{
-				session.setAttribute("searchName", request.getParameter("searchNm").toString());
-			}
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
-			searchName = session.getAttribute("searchName").toString();
+		if(boardVO.getBoardIdx() == 0){
+			return "redirect:/board/pds.do";
 		}
-		else{
-			boardIdx = Integer.parseInt(session.getAttribute("boardIdx").toString());
-			pageNo = Integer.parseInt(session.getAttribute("pageNo").toString());
-			searchName = session.getAttribute("searchName").toString();
-		}
+		BoardVO resultboardVO = new BoardVO();
+		boardService.updateBoardViewCnt(boardVO.getBoardIdx());
+		resultboardVO = boardService.selectBoard(boardVO.getBoardIdx());
+		resultboardVO.setPage(boardVO.getPage());
+		resultboardVO.setSearchName(boardVO.getSearchName());
 		
-//		KJW 파라미터 이용방법
-//		boardIdx = Integer.parseInt(request.getParameter("boardIdx").toString());
-//		pageNo = Integer.parseInt(request.getParameter("pageNum").toString());
-//		searchName = request.getParameter("searchNm").toString();
-		
-		
-		BoardVO boardVO = new BoardVO();
-		boardService.updateBoardViewCnt(boardIdx);
-		boardVO = boardService.selectBoard(boardIdx);
-		boardVO.setPageNo(pageNo);
-		boardVO.setSearchName(searchName);
-
 		FileVO fileVO = new FileVO();
 
-		fileVO.setFileGrpNum(boardIdx);
+		fileVO.setFileGrpNum(boardVO.getBoardIdx());
+
 		fileVO.setFileGrpCd(BoardCode.PDS.toString());
 
 		List<?> fileList = boardService.selectFileList(fileVO);
 
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("boardVO", resultboardVO);
 
 		return "board/pdsView";
 	}

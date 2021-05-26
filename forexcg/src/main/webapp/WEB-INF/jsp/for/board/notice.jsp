@@ -9,22 +9,23 @@
 </head>
 <script>
 	//페이지 전환 함수
-	function fn_egov_link_page(pageNo){
-		$("#pageNo").val(pageNo);
-		$("#pageNum").val(pageNo);
-		$("#pagingForm").submit();
-	}
-	
-	function goBoardView(boardIdx){
-		$("#boardIdx").val(boardIdx);
+	function fn_egov_link_page(page){
+		$("#page").val(page);
+		$("#boardForm").attr("action", "/board/notice.do");
 		$("#boardForm").submit();
 	}
 	
 	function doSearchList(){
 		$("#searchName").val($("#search").val());
-		$("#pageNo").val(1);
-		$("#pageNum").val(1);
-		$("#pagingForm").submit();
+		$("#page").val(1);
+		$("#boardForm").attr("action", "/board/notice.do");
+		$("#boardForm").submit();
+	}
+	
+	function goBoardView(boardIdx){
+		$("#boardIdx").val(boardIdx);
+		$("#boardForm").attr("action", "/board/noticeView.do");
+		$("#boardForm").submit();
 	}
 </script>
 
@@ -266,14 +267,17 @@
 			</div>
 		</div>
 	</div>
-	<form id="pagingForm" name="pagingForm" method="post" action="/board/notice.do">
-		<input type="hidden" id = "pageNo" name = "pageNo" value="<c:out value="${pageNo}" />">
-		<input type="hidden" id = "searchName" name = "searchName" value="<c:out value="${searchName}" />">
-	</form>
-	<form id="boardForm" name="boardForm" method="post" action="/board/noticeView.do">
-		<input type="hidden" id = "boardIdx" name = "boardIdx">
-		<input type="hidden" id = "pageNum" name = "pageNum" value="<c:out value="${pageNo}" />">
-		<input type="hidden" id = "searchNm" name = "searchNm" value="<c:out value="${searchName}" />">
+	<form id="boardForm" name="boardForm" method="post">
+		<input type="hidden" id = "boardIdx" name = "boardIdx" value="0">
+		<input type="hidden" id = "page" name = "page" value="<c:out value="${page}" />">
+		<c:choose>
+			<c:when test="${searchName ne ''}">
+				<input type="hidden" id = "searchName" name = "searchName" value="<c:out value="${searchName}" />">
+			</c:when>
+			<c:otherwise>
+				<input type="hidden" id = "searchName" name = "searchName" value="">
+			</c:otherwise>
+		</c:choose>
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->
