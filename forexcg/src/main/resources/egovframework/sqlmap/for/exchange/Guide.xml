@@ -6,15 +6,14 @@
 		<result property="guideNum" column="GUIDE_NUM"/>
 		<result property="guideContent" column="GUIDE_CONTENT"/>
 		<result property="useYn" column="USE_YN"/>
-		<result property="userId" column="USER_ID"/>
-		<result property="userName" column="USER_NM"/>
+		<result property="userNm" column="USER_NM"/>
 		<result property="insrtId" column="INSRT_ID"/>
 		<result property="insrtDate" column="INSRT_DATE"/>
 		<result property="updtId" column="UPDT_ID"/>
 		<result property="updtDate" column="UPDT_DATE"/>
 	</resultMap>
 	
-	<select id="selectGuide" parameterType="guideVO" resultMap="mapBoardVO">
+	<select id="selectGuide" parameterType="guideVO" resultMap="mapGuideVO">
 		/** Guide.selectGuide */
 		SELECT 
 			 UI_NUM

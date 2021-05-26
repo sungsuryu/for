@@ -13,8 +13,6 @@ public class GuideVO implements Serializable {
 	
 	private String useYn;
 	
-	private String userId;
-	
 	private String userNm;
 
 	private String insrtId;
