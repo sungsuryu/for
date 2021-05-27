@@ -39,18 +39,27 @@ public class GuideController {
 		resultGuideVO = guideService.selectGuide(guideVO);
 		
 		HashMap<String, Object> rMap = new HashMap<String, Object>();
-		rMap.put("guideVO", resultGuideVO);
-		rMap.put("levelCheck", "Y");//개발용 권한체크
+		
+		if(resultGuideVO == null){
+			rMap.put("isYn", "N");
+			rMap.put("levelCheck", "Y");//개발용 권한체크
+		}
+		else{
+			rMap.put("isYn", "Y");
+			rMap.put("guideVO", resultGuideVO);
+			rMap.put("levelCheck", "Y");//개발용 권한체크
+		}
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(rMap));
 		return "jsonView";
 	}
 	
 	@RequestMapping(value = "/help/updateGuide.ajax")
 	public String updateGuide(@ModelAttribute("guideVO") GuideVO guideVO, HttpServletRequest request, ModelMap model) throws Exception {
-		HttpSession session = request.getSession();
 		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+		guideVO.setUserNm(getLoginVO.getUserNm());
 		guideVO.setUpdtId(getLoginVO.getLoginId());
-		guideService.updateGuide(guideVO);
+		guideVO.setInsrtId(getLoginVO.getLoginId());
+		guideService.mergeInsertGuide(guideVO);
 		
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0));
 		return "jsonView";

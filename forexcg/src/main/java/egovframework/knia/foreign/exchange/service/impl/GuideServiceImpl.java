@@ -23,8 +23,8 @@ public class GuideServiceImpl implements GuideService {
 	}
 
 	@Override
-	public void updateGuide(GuideVO guideVO) throws Exception {
-		guideMapper.updateGuide(guideVO);
+	public void mergeInsertGuide(GuideVO guideVO) throws Exception {
+		guideMapper.mergeInsertGuide(guideVO);
 		
 	}
 }

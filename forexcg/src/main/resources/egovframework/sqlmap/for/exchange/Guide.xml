@@ -21,16 +21,30 @@
 		WHERE
 			UI_ID = #{uiId}
 	</select>
-	
-	<update id="updateGuide" parameterType="guideVO">
-		/** Guide.updateGuide */
-		UPDATE
-			TB_FOR_GUIDE
-		SET
+		
+	<insert id="mergeInsertGuide" parameterType="guideVO">
+		/** Guide.mergeInsertGuide */
+		INSERT INTO TB_FOR_GUIDE(
+			UI_ID
+			,GUIDE_CONTENT
+			,USER_NM
+			,INSRT_ID
+			,INSRT_DATE
+			,UPDT_ID
+			,UPDT_DATE
+		)
+		VALUES(
+			#{uiId}
+			,#{guideContent}
+			,#{userNm}
+			,#{insrtId}
+			,NOW()
+			,#{updtId}
+			,NOW()
+		)
+		ON DUPLICATE KEY UPDATE
 			GUIDE_CONTENT = #{guideContent}
 			,UPDT_ID = #{updtId}
 			,UPDT_DATE = NOW()
-		WHERE
-			UI_ID = #{uiId}
-	</update>
+	</insert>
 </mapper>

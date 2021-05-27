@@ -35,7 +35,9 @@
 	        			$("#guideContent").attr("readonly", true);
 	        			$("#guideContent").attr("disable", true);
 	        		}
-	        		$("#guideContent").val(data.result.guideVO.guideContent);
+	        		if(data.result.isYn == "Y"){
+	        			$("#guideContent").val(data.result.guideVO.guideContent);
+	        		}
 	        	}
 	        	else{
 	        		alert("도움말 불러오기 실패");
@@ -54,7 +56,6 @@
 	        url:"/help/updateGuide.ajax",
 	        data : formData,
 	        success: function(data){
-	        	alert("도움말 수정 완료");
 	        },
 			error: function(e){
 				alert("도움말 수정 실패");
@@ -349,7 +350,7 @@
 	<div class="aside_right_con">
 		<form id="guideForm" name="guideForm" method="post">
 			<input id="uiId" name="uiId" type="hidden" value="MID03003006000" />
-			<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;">도움말 내용</textarea>
+			<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;"></textarea>
 			<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 		</form>
 	</div>

@@ -14,9 +14,9 @@ public interface GuideService {
 	GuideVO selectGuide(GuideVO guideVO) throws Exception;
 	
 	/**
-	 * 도움말 수정
+	 * 도움말 생성 및 수정
 	 * @param GuideVO 도움말 수정정보
 	 * @throws Exception
 	 */
-	void updateGuide(GuideVO guideVO) throws Exception;
+	void mergeInsertGuide(GuideVO guideVO) throws Exception;
 }

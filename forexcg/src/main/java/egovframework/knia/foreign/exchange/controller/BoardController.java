@@ -299,7 +299,6 @@ public class BoardController {
 	@RequestMapping(value = "/setting/board/pdsWrite.do")
 	public String settingBoardPdsWrite(HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 작성 화면");
-		HttpSession session = request.getSession();
 		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		
 		model.addAttribute("userName", getLoginVO.getUserNm().toString());
@@ -510,7 +509,6 @@ public class BoardController {
 	public String settingBoardFaqInsert(final MultipartHttpServletRequest multiRequest,
 			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("자료실 추가");
-		HttpSession session = request.getSession();
 		
 		List<FileVO> result = null;
 
