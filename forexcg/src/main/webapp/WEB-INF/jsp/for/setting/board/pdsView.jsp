@@ -12,10 +12,11 @@ var editors = [];
 $(document).ready(function() {
 });
 
-function fn_egov_downFile(fileId){
-	window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
-	//location.href = "/board/downloadFile.do?fileId=" + fileId;
-}
+	function fn_egov_downFile(fileId){
+		$("#fileId").val(fileId);
+		$("#fileForm").attr("action", "/board/downloadFile.do");
+		$("#fileForm").submit();
+	}
 
 function goEdit(){
 	$("#boardForm").attr("action", "/setting/board/pdsEdit.do");
@@ -279,6 +280,9 @@ function goPds(){
 				</tbody>
 			</table>
 		</div>
+	</form>
+	<form id="fileForm" name="fileForm" method="post">
+		<input id="fileId" name="fileId" type="hidden">
 	</form>
 	
 	<div class="tbl_btm">

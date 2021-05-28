@@ -12,9 +12,10 @@
 	$(document).ready(function() {
 	});
 	
-	function fn_egov_downFile(fileId){
-		window.open("<c:url value='/board/downloadFile.do?fileId="+fileId+"'/>");
-		//location.href = "/board/downloadFile.do?fileId=" + fileId;
+ 	function fn_egov_downFile(fileId){
+		$("#fileId").val(fileId);
+		$("#fileForm").attr("action", "/board/downloadFile.do");
+		$("#fileForm").submit();
 	}
 	
 	function goEdit(){
@@ -280,7 +281,9 @@
 			</table>
 		</div>
 	</form>
-	
+	<form id="fileForm" name="fileForm" method="post">
+		<input id="fileId" name="fileId" type="hidden">
+	</form>
 	<div class="tbl_btm">
 		<div class="f_right">
 			<a href="javascript:goEdit();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 수정</a>

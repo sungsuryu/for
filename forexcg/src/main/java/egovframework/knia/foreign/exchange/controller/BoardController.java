@@ -4,12 +4,17 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -35,8 +40,10 @@ import egovframework.com.cmm.util.EgovBasicLogger;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.com.cmm.util.EgovStringUtil;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.BoardCode;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
+import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.BoardService;
 import egovframework.knia.foreign.exchange.service.FileService;
 import egovframework.knia.foreign.exchange.vo.BoardVO;
@@ -75,11 +82,11 @@ public class BoardController {
 		}
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한페이지에 표시할 데이터 갯수
 		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
-		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -125,6 +132,7 @@ public class BoardController {
 		List<FileVO> result = null;
 
 		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		
 		if (!files.isEmpty()) {
 			result = fileUtil.parseFileInf(files, BoardCode.NOTICE.toString(), 0, boardIdx, "");
 
@@ -277,11 +285,11 @@ public class BoardController {
 		}
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한페이지에 표시할 데이터 갯수
 		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.PDS.toString());// 개발용
-		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -532,11 +540,11 @@ public class BoardController {
 		PaginationInfo paginationInfo = new PaginationInfo();
 
 		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한페이지에 표시할 데이터 갯수
 		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
-		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -590,11 +598,11 @@ public class BoardController {
 		PaginationInfo paginationInfo = new PaginationInfo();
 
 		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
-		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한페이지에 표시할 데이터 갯수
 		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
 		boardVO.setBoardType(BoardCode.PDS.toString());// 개발용
-		boardVO.setRecordCountPerPage(propertyService.getInt("pageData"));// 개발용:한번에 조회할 데이터 수
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
 
 		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
@@ -643,18 +651,15 @@ public class BoardController {
 		return "board/faq";
 	}
 
-	@RequestMapping(value = "/board/downloadFile.do", method = RequestMethod.GET)
-	public void downloadFile(HttpServletRequest request, HttpServletResponse response)
+	@RequestMapping(value = "/board/downloadFile.do")
+	public void downloadFile(@ModelAttribute("fileVO") FileVO fileVO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("첨부파일 다은로드");
-		String fileId = request.getParameter("fileId").toString();
-		FileVO fileVO = new FileVO();
-		fileVO.setFileId(fileId);
-
+		FileVO resultfileVO = new FileVO();
 		List<?> fileList = boardService.selectFile(fileVO);
-		fileVO = (FileVO) fileList.get(0);
+		resultfileVO = (FileVO) fileList.get(0);
 
-		File uFile = new File(fileVO.getFilePath(), fileVO.getFileNm());
+		File uFile = new File(resultfileVO.getFilePath(), resultfileVO.getFileNm());
 		long fSize = uFile.length();
 
 		if (fSize > 0) {
@@ -665,7 +670,7 @@ public class BoardController {
 			// response.setHeader("Content-Disposition", "attachment;
 			// filename=\"" + URLEncoder.encode(fvo.getOrignlFileNm(), "utf-8")
 			// + "\"");
-			setDisposition(fileVO.getPhyFileNm(), request, response);
+			setDisposition(resultfileVO.getPhyFileNm(), request, response);
 			// response.setContentLength(fSize);
 
 			/*
@@ -696,7 +701,105 @@ public class BoardController {
 			PrintWriter printwriter = response.getWriter();
 
 			printwriter.println("<html>");
-			printwriter.println("<br><br><br><h2>Could not get file name:<br>" + fileVO.getPhyFileNm() + "</h2>");
+			printwriter.println("<br><br><br><h2>Could not get file name:<br>" + resultfileVO.getPhyFileNm() + "</h2>");
+			printwriter.println("<br><br><br><center><h3><a href='javascript: history.go(-1)'>Back</a></h3></center>");
+			printwriter.println("<br><br><br>&copy; webAccess");
+			printwriter.println("</html>");
+
+			printwriter.flush();
+			printwriter.close();
+		}
+	}
+	
+	@RequestMapping(value = "/board/downloadZipFile.do")
+	public void downloadZipFile(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		logger.debug("첨부파일 묶음 다은로드");
+		ZipOutputStream zout = null;
+		String zipName = propertyService.getString("downloadZipName") + boardVO.getBoardType() + ".zip";
+		FileVO fileVO = new FileVO();
+		fileVO.setFileGrpNum(boardVO.getBoardIdx());
+		fileVO.setFileGrpCd(boardVO.getBoardType());
+
+		List<?> fileList = boardService.selectFileList(fileVO);
+		
+		List<FileVO> iniFileLst = new ArrayList<FileVO>();
+		
+		int fileSize = fileList.size();
+		for (int i=0; i<fileSize; i++) {
+			FileVO itm = (FileVO)fileList.get(i);
+			String getName = itm.getPhyFileNm();
+			int k = 1;
+			if (iniFileLst.size() > 0) {
+				for (int m=0; m<iniFileLst.size(); m++) {
+					FileVO sItm = iniFileLst.get(m);
+					if (getName.equals(sItm.getPhyFileNm())) {
+						itm.setPhyFileNm(k+"-"+itm.getPhyFileNm());
+						k++;
+						getName = itm.getPhyFileNm();
+					}
+				}
+			}
+			iniFileLst.add(itm);
+			System.out.println("KJWKJWKJW 확인 : " + itm.getPhyFileNm());
+		}
+		
+		System.out.println(Pattern.matches("^[0-9]-", "test"));
+		System.out.println(Pattern.matches("^[1-9]-", "1-test"));	
+		System.out.println(Pattern.matches("^[0-9]-", "1-1test"));
+		System.out.println(Pattern.matches("^[0-9]-", "9-ㅎtest"));
+		
+		if(fileList.size() > 0){
+			String mimetype = "application/x-msdownload";
+			
+			BufferedInputStream bin = null;
+			BufferedOutputStream out = null;
+
+			response.setContentType(mimetype);
+			setDisposition(zipName, request, response);
+			try{
+				zout = new ZipOutputStream(new FileOutputStream(zipName));
+				byte[] buffer = new byte[1024];
+				FileInputStream in = null;
+				for(int i=0; i<fileList.size(); i++){
+					FileVO tempVO = new FileVO();
+					tempVO = (FileVO) fileList.get(i);
+					
+					ZipEntry zipEntry = new ZipEntry(tempVO.getPhyFileNm());
+				    zout.putNextEntry(zipEntry);
+					
+					//File uFile = new File(tempVO.getFilePath(), tempVO.getFileNm());
+					in = new FileInputStream(tempVO.getFilePath() + tempVO.getFileNm());
+			        int length;
+
+			        // input file을 1024바이트로 읽음, zip stream에 읽은 바이트를 씀
+			        while((length = in.read(buffer)) > 0){
+			            zout.write(buffer, 0, length);
+			        }
+					zout.closeEntry();
+					in.close();
+				}
+				zout.close();
+				bin = new BufferedInputStream(new FileInputStream(zipName));
+				out = new BufferedOutputStream(response.getOutputStream());
+				
+				FileCopyUtils.copy(bin, out);
+				
+				out.flush();
+			}
+			catch (IOException ex) {
+				EgovBasicLogger.ignore("IO Exception", ex);
+			}finally {
+				zout = null;
+				EgovResourceCloseHelper.close(bin, out);
+			}
+		}else{
+			response.setContentType("application/x-msdownload");
+
+			PrintWriter printwriter = response.getWriter();
+
+			printwriter.println("<html>");
+			printwriter.println("<br><br><br><h2>Could not get file name:<br>" + zipName + "</h2>");
 			printwriter.println("<br><br><br><center><h3><a href='javascript: history.go(-1)'>Back</a></h3></center>");
 			printwriter.println("<br><br><br>&copy; webAccess");
 			printwriter.println("</html>");

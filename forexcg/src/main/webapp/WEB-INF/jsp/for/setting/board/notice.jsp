@@ -22,6 +22,12 @@
 		$("#boardForm").submit();
 	}
 	
+	function doDownloadZip(boardIdx){
+		$("#boardIdx").val(boardIdx);
+		$("#boardForm").attr("action", "/board/downloadZipFile.do");
+		$("#boardForm").submit();
+	}
+	
 	function selectGuide(){
 		var formData = $("#guideForm").serialize();
 		$.ajax({
@@ -309,7 +315,7 @@
 					<td class="left"><a href="javascript:goBoardView(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
 					<td>
 						<c:if test = "${result.fileCnt > 0}">
-							<a href="javascript:void(0)" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+							<a href="javascript:doDownloadZip(<c:out value="${result.boardIdx}" />)" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a>
 						</c:if>
 					</td>
 					<td><c:out value="${result.userName}" /></td>
@@ -337,6 +343,7 @@
 	<form id="boardForm" name="boardForm" method="post" action="/setting/board/notice.do">
 		<input type="hidden" id="page" name="page" value="${page}" />
 		<input type='hidden' id="boardIdx" name='boardIdx' value="0" />
+		<input type='hidden' id="boardType" name="boardType" value="NOTICE" />
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->

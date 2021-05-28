@@ -28,6 +28,12 @@
 		$("#boardForm").attr("action", "/board/pdsView.do");
 		$("#boardForm").submit();
 	}
+	
+	function doDownloadZip(boardIdx){
+		$("#boardIdx").val(boardIdx);
+		$("#boardForm").attr("action", "/board/downloadZipFile.do");
+		$("#boardForm").submit();
+	}
 </script>
 <div id="popLayerBg"></div>
 
@@ -244,7 +250,7 @@
 						<td class="left"><a href="javascript:goBoardView(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
 						<td>
 							<c:if test = "${result.fileCnt > 0}">
-								<a href="javascript:;" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+								<a href="javascript:doDownloadZip(<c:out value="${result.boardIdx}" />)" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a>
 							</c:if>
 						<td><c:out value="${result.userName}" /></td>
 							<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
