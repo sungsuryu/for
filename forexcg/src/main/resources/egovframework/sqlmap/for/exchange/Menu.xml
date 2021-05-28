@@ -10,6 +10,7 @@
 		<result property="lvl" column="LVL" />
 		<result property="sortNum" column="SORT_NUM" />
 		<result property="useYn" column="USE_YN" />
+		<result property="url" column="URL" />
 		<result property="isDel" column="IS_DEL" />
 <!-- 		<result property="insrtId" column="INSRT_ID" /> -->
 <!-- 		<result property="insrtDate" column="INSRT_DATE" /> -->
@@ -20,8 +21,9 @@
 	<sql id="commonMenu">
 		SELECT
 			MNU_ID, MNU_NM, PRT_MNU_ID, 
+			IS_INC, 
 			MNU_TYPE, LVL, SORT_NUM, 
-			USE_YN, IS_DEL
+			USE_YN, URL, IS_DEL
 		FROM
 			${tableName}
 	</sql>
@@ -38,6 +40,9 @@
 			</if>
 			<if test="prtMnuId != null and prtMnuId !=''">
 				AND PRT_MNU_ID=#{prtMnuId}
+			</if>
+			<if test="isInc != null and isInc !=''">
+				AND IS_INC=#{isInc}
 			</if>
 			<if test="mnuType != null and mnuType !=''">
 				AND MNU_TYPE=#{mnuType}
@@ -61,6 +66,8 @@
 			<if test="mnuType != null and mnuType !=''">
 				AND MNU_TYPE=#{mnuType}
 			</if>
+		ORDER BY
+			SORT_NUM
 	</select>
 	
 	<insert id="insertMenu" parameterType="menuVO">
@@ -72,6 +79,9 @@
 				LVL, 
 				SORT_NUM, 
 				USE_YN, 
+				IS_INC,
+				MNU_TYPE,
+				URL, 
 				IS_DEL
 				INSRT_ID, 
 				INSRT_DATE, 
@@ -85,6 +95,9 @@
 				#{lvl}, 
 				#{sortNum}, 
 				#{useYn}, 
+				#{isInc }, 
+				#{mnuType },
+				#{url }
 				#{isDel}, 
 				#{insrtId}, 
 				NOW(), 
@@ -93,7 +106,24 @@
 			)
 	</insert>
 	
-	
+	<update id="updateMenu" parameterType="menuVO">
+		UPDATE
+			TB_FOR_MNU
+			SET
+				MNU_NM=#{mnuNm }, 
+				PRT_MNU_ID=#{prtMnuId}, 
+				LVL=#{lvl}, 
+				SORT_NUM=#{sortNum}, 
+				USE_YN=#{useYn},
+				IS_INC=#{isInc }, 
+				MNU_TYPE=#{mnuType }, 
+				URL=#{url } 
+				IS_DEL=#{isDel}, 
+				UPDT_ID=#{updtId}, 
+				UPDT_DATE=now()
+		WHERE
+			MNU_ID=#{mnuId }
+	</update>
 	
 	
 <!-- 	//no property  -->

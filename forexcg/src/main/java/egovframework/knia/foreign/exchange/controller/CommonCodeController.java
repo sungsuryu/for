@@ -38,6 +38,7 @@ public class CommonCodeController {
 	@Resource(name = "commonCodeService")
 	private CommonCodeService commonCodeService;
 	
+	@Deprecated
 	@RequestMapping(value="/setting/ajx/group")
 	public String listGroupCode(HttpServletRequest request, ModelMap model) throws Exception {
 		

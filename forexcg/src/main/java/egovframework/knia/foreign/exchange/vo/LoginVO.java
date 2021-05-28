@@ -24,6 +24,16 @@ public class LoginVO extends CommonVO implements Serializable {
 
 	private int retryCnt;
 	
+	private String roleId;
+	
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
 	public String getUserNm() {
 		return userNm;
 	}

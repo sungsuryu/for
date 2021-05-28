@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.UserRoleMapper">
+
+	<resultMap id="mapRoleGroup" type="egovframework.knia.foreign.exchange.vo.UserRoleVO">
+		<result property="roleId" column="ROLE_ID" />
+		<result property="mnuId" column="MNU_ID" />
+		<result property="roleNm" column="ROLE_NM" />
+		<result property="useYn" column="USE_YN" />
+		<result property="url" column="URL" />
+	</resultMap>
+	
+	<select id="selectUserRoleGroupByRoleId" resultType="String">
+		SELECT
+			ROLE_ID
+		FROM
+			TB_FOR_ROLE_GRP
+		WHERE
+			IS_DEL='N' AND USE_YN='Y'
+		GROUP BY ROLE_ID
+	</select>
+	
+	<select id="selectUserRoleFindByRoleId" parameterType="userRoleVO" resultMap="mapRoleGroup">
+		SELECT
+			ROLE_ID, 
+			MNU_ID, 
+			ROLE_NM
+		FROM
+			TB_FOR_ROLE_GRP
+		WHERE
+			ROLE_ID=#{roleId }
+			AND IS_DEL='N' AND USE_YN='Y'
+	</select>
+
+	<select id="selectMenuIdFindByRoleId" parameterType="userRoleVO" resultMap="mapRoleGroup">
+		SELECT
+			RG.ROLE_ID,
+			RG.MNU_ID, 
+			MN.URL
+		FROM
+			TB_FOR_ROLE_GRP RG
+			INNER JOIN TB_FOR_MNU MN ON RG.MNU_ID=MN.MNU_ID
+		WHERE
+			RG.ROLE_ID=#{roleId }
+			AND INSTR(MN.URL, #{url }) > 0
+			AND RG.USE_YN='Y' AND RG.IS_DEL='N'
+	</select>
+</mapper>

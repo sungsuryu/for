@@ -1,9 +1,13 @@
 package egovframework.com.cmm.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import egovframework.knia.foreign.exchange.vo.LoginVO;
+import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 import egovframework.com.cmm.service.EgovUserDetailsService;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -12,6 +16,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
+import egovframework.knia.foreign.exchange.dao.mapper.LoginMapper;
+import egovframework.knia.foreign.exchange.dao.mapper.UserRoleMapper;
 /**
  * 
  * @author 공통서비스 개발팀 서준식
@@ -32,6 +38,9 @@ import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 
 public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl implements EgovUserDetailsService {
 
+	@Resource(name="userRoleMapper")
+	private UserRoleMapper userRoleMapper;
+	
 	public Object getAuthenticatedUser() {
 		if (RequestContextHolder.getRequestAttributes() == null) {
 			return null;
@@ -47,10 +56,28 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 
 	public List<String> getAuthorities() {
 
-		// 권한 설정을 리턴한다.
 		List<String> listAuth = new ArrayList<String>();
+		try {
+			listAuth = userRoleMapper.selectUserRoleGroupByRoleId();
+		} catch (Exception e) {
+			;
+		}
 
 		return listAuth;
+	}
+	
+	public boolean isAuthorities(UserRoleVO userRoleVO) {
+		
+		try {
+			List<?> userRole = userRoleMapper.selectMenuIdFindByRoleId(userRoleVO);
+			if (userRole.size() > 0) {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return false;
 	}
 
 	public Boolean isAuthenticated() {

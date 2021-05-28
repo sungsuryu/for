@@ -1,6 +1,9 @@
 package egovframework.com.cmm.service;
 
+import java.util.HashMap;
 import java.util.List;
+
+import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 
 public interface EgovUserDetailsService {
 
@@ -16,6 +19,13 @@ public interface EgovUserDetailsService {
 	 * @return List - 사용자 권한정보 목록
 	 */
 	public List<String> getAuthorities();
+	
+	/**
+	 * 사용자 권한 체크
+	 * @param isMap
+	 * @return
+	 */
+	public boolean isAuthorities(UserRoleVO userRoleVO);
 	
 	/**
 	 * 인증된 사용자 여부를 체크한다.

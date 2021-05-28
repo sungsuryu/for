@@ -9,6 +9,7 @@
 		<result property="insurCd" column="INSUR_CD" />
 		<result property="emlAddr" column="EML_ADDR" />
 		<result property="cellNum" column="CELL_NUM" />
+		<result property="roleId" column="ROLE_ID" />
 	</resultMap>
 	
 	<resultMap id="mapAuthHistVO" type="egovframework.knia.foreign.exchange.vo.LoginAuthHistVO">
@@ -22,11 +23,12 @@
 		<result property="retryCnt" column="RETRY_CNT" />
 	</resultMap>
 
-	<select id="selectUser" parameterType="loginVO" resultMap="mapUserVO">
-		/** Login.selectUser */
+	<select id="selectUserByLoginId" parameterType="loginVO" resultMap="mapUserVO">
+		/** Login.selectUserByLoginId */
 			SELECT
 				USER_ID, USER_NM, PASSWORD, 
-				INSUR_CD, EML_ADDR, CELL_NUM
+				INSUR_CD, EML_ADDR, CELL_NUM,
+				ROLE_ID
 			FROM
 				TB_FOR_USER
 			WHERE

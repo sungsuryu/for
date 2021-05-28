@@ -3,6 +3,7 @@ package egovframework.com.cmm.util;
 import java.util.List;
 
 import egovframework.com.cmm.service.EgovUserDetailsService;
+import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 
 /**
  * EgovUserDetails Helper 클래스
@@ -51,6 +52,9 @@ public class EgovUserDetailsHelper {
 		return egovUserDetailsService.getAuthorities();
 	}
 
+	public static boolean isAuthorities(UserRoleVO userRoleVO) {
+		return egovUserDetailsService.isAuthorities(userRoleVO);
+	}
 	/**
 	 * 인증된 사용자 여부를 체크한다.
 	 * @return Boolean - 인증된 사용자 여부(TRUE / FALSE)

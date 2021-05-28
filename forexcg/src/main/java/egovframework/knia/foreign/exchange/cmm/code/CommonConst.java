@@ -15,4 +15,8 @@ public final class CommonConst {
 	public static final String AJX_FAIL = "FAIL";
 	
 	public static final String AJX_SUCCESS = "SUCCESS";
+	
+	public static final String MENU_TYPE = "MENU_TYPE";
+	
+	public static final String ROLE_USER = "ROLE_USER";
 }

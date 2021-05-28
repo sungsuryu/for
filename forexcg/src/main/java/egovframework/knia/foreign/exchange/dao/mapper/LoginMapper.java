@@ -15,7 +15,7 @@ public interface LoginMapper {
 	 * @return UserVO 사용자정보
 	 * @throws Exception
 	 */
-	UserVO selectUser(LoginVO loginVO) throws Exception;
+	UserVO selectUserByLoginId(LoginVO loginVO) throws Exception;
 	
 	/**
 	 * 2차인증 AuthNum 생성

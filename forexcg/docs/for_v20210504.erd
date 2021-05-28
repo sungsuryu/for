@@ -1026,7 +1026,7 @@
                       <defaultValue></defaultValue>
                     </net.java.amateras.db.visual.model.ColumnModel>
                     <net.java.amateras.db.visual.model.ColumnModel>
-                      <columnName>GRP_ID</columnName>
+                      <columnName>ROLE_ID</columnName>
                       <logicalName>권한그룹번호</logicalName>
                       <columnType class="net.java.amateras.db.dialect.ColumnType">
                         <name>VARCHAR2</name>
@@ -1263,13 +1263,13 @@
             </targetConnections>
             <error></error>
             <linkedPath></linkedPath>
-            <tableName>TB_FOR_RULE_GRP</tableName>
+            <tableName>TB_FOR_ROLE_GRP</tableName>
             <logicalName>권한그룹</logicalName>
             <description></description>
             <columns>
               <net.java.amateras.db.visual.model.ColumnModel>
-                <columnName>GRP_ID</columnName>
-                <logicalName>그룹ID</logicalName>
+                <columnName>ROLE_ID</columnName>
+                <logicalName>권한ID</logicalName>
                 <columnType class="net.java.amateras.db.dialect.ColumnType">
                   <name>VARCHAR2</name>
                   <logicalName>String</logicalName>
@@ -1286,8 +1286,13 @@
               <net.java.amateras.db.visual.model.ColumnModel>
                 <columnName>MNU_ID</columnName>
                 <logicalName>메뉴ID</logicalName>
-                <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/columns/net.java.amateras.db.visual.model.ColumnModel[6]/columnType"/>
-                <size>10</size>
+                <columnType class="net.java.amateras.db.dialect.ColumnType">
+                  <name>VARCHAR2</name>
+                  <logicalName>String</logicalName>
+                  <supportSize>true</supportSize>
+                  <type>12</type>
+                </columnType>
+                <size>20</size>
                 <notNull>true</notNull>
                 <primaryKey>false</primaryKey>
                 <description></description>
@@ -1295,9 +1300,9 @@
                 <defaultValue></defaultValue>
               </net.java.amateras.db.visual.model.ColumnModel>
               <net.java.amateras.db.visual.model.ColumnModel>
-                <columnName>GRP_NM</columnName>
-                <logicalName>그룹명</logicalName>
-                <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/columns/net.java.amateras.db.visual.model.ColumnModel[6]/columnType"/>
+                <columnName>ROLE_NM</columnName>
+                <logicalName>권한명</logicalName>
+                <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel/columnType"/>
                 <size>128</size>
                 <notNull>true</notNull>
                 <primaryKey>false</primaryKey>
@@ -1441,6 +1446,22 @@
           <defaultValue></defaultValue>
         </net.java.amateras.db.visual.model.ColumnModel>
         <net.java.amateras.db.visual.model.ColumnModel>
+          <columnName>IS_INC</columnName>
+          <logicalName>포함여부</logicalName>
+          <columnType class="net.java.amateras.db.dialect.ColumnType">
+            <name>CHAR</name>
+            <logicalName>Character</logicalName>
+            <supportSize>true</supportSize>
+            <type>1</type>
+          </columnType>
+          <size>1</size>
+          <notNull>false</notNull>
+          <primaryKey>false</primaryKey>
+          <description></description>
+          <autoIncrement>false</autoIncrement>
+          <defaultValue></defaultValue>
+        </net.java.amateras.db.visual.model.ColumnModel>
+        <net.java.amateras.db.visual.model.ColumnModel>
           <columnName>MNU_TYPE</columnName>
           <logicalName>메뉴구분</logicalName>
           <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel/columnType"/>
@@ -1534,6 +1555,22 @@
           <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/columns/net.java.amateras.db.visual.model.ColumnModel[7]/columnType"/>
           <size>10</size>
           <notNull>true</notNull>
+          <primaryKey>false</primaryKey>
+          <description></description>
+          <autoIncrement>false</autoIncrement>
+          <defaultValue></defaultValue>
+        </net.java.amateras.db.visual.model.ColumnModel>
+        <net.java.amateras.db.visual.model.ColumnModel>
+          <columnName>URL</columnName>
+          <logicalName>링크</logicalName>
+          <columnType class="net.java.amateras.db.dialect.ColumnType">
+            <name>VARCHAR2</name>
+            <logicalName>String</logicalName>
+            <supportSize>true</supportSize>
+            <type>12</type>
+          </columnType>
+          <size>1024</size>
+          <notNull>false</notNull>
           <primaryKey>false</primaryKey>
           <description></description>
           <autoIncrement>false</autoIncrement>

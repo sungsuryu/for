@@ -20,5 +20,6 @@
 		<typeAlias alias="cellAuthVO" type="egovframework.knia.foreign.exchange.vo.CellAuthVO" />
 		<typeAlias alias="kaTalkVO" type="egovframework.knia.foreign.exchange.vo.KaTalkVO" />
 		<typeAlias alias="guideVO" type="egovframework.knia.foreign.exchange.vo.GuideVO" />
+		<typeAlias alias="userRoleVO" type="egovframework.knia.foreign.exchange.vo.UserRoleVO" />
     </typeAliases>
 </configuration>

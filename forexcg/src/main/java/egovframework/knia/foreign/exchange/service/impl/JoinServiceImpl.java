@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import egovframework.com.cmm.service.EgovSmsInfoService;
 import egovframework.com.cmm.util.EgovFileScrty;
 import egovframework.com.cmm.util.EgovNumberUtil;
+import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
 import egovframework.knia.foreign.exchange.dao.mapper.AuthNumMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.LoginMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.TermsAgreeHistMapper;
@@ -54,6 +55,7 @@ public class JoinServiceImpl implements JoinService {
 		// 전화번호 형식 렌더링
 		userVO.setOfficeTelNum(egovSmsInfoService.phoneNumber(userVO.getOfficeTelNum()));
 		userVO.setCellNum(egovSmsInfoService.phoneNumber(userVO.getCellNum()));
+		userVO.setRoleId(CommonConst.ROLE_USER);	// 일반 사용자
 		
 		// 신규사용자 등록
 		userMapper.insertNewUser(userVO);

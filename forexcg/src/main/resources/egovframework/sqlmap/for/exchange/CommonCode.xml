@@ -75,6 +75,8 @@
 		WHERE
 			PRT_CMM_CD=#{value}
 			AND IS_DEL='N'
+		ORDER BY
+			SORT_NUM
 	</select>
 	
 	<update id="updateCode" parameterType="commonCodeVO">

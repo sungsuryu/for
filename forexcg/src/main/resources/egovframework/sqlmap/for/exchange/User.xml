@@ -56,7 +56,7 @@
 			IS_RCV_EML, CELL_NUM, 
 			IS_RCV_CELL, IS_APPROVE, 
 			IS_CHG_PASSWORD, IS_LOCK, 
-			USE_YN, IS_DEL 
+			ROLE_ID, USE_YN, IS_DEL 
 			INSRT_ID, INSRT_DATE, 
 			UPDT_ID, UPDT_DATE
 		) VALUES (
@@ -65,7 +65,7 @@
 			#{dptNm}, #{officeTelNum},
 			#{insurCd}, #{emlAddr}, 
 			#{isRcvEml}, #{cellNum},
-			'N', 'N',
+			#{roleId }, 'N', 'N',
 			'N', #{isRcvCell}, 
 			'N', 'Y', 
 			#{userId}, now(), 

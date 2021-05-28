@@ -13,6 +13,8 @@ public class MenuVO extends CommonVO implements Serializable {
 	
 	private String prtMnuId;
 	
+	private String isInc;
+	
 	private String mnuType;
 	
 	private int lvl;
@@ -21,15 +23,7 @@ public class MenuVO extends CommonVO implements Serializable {
 	
 	private String useYn = "Y";
 	
-	private String isDel = "N";
-	
-	private String insrtId;
-	
-	private Date insrtDate = null;
-	
-	private String updtId;
-	
-	private Date updtDate = null;
+	private String url = "N";
 
 	public String getMnuId() {
 		return mnuId;
@@ -87,43 +81,19 @@ public class MenuVO extends CommonVO implements Serializable {
 		this.useYn = useYn;
 	}
 
-	public String getIsDel() {
-		return isDel;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setIsDel(String isDel) {
-		this.isDel = isDel;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
-	public String getInsrtId() {
-		return insrtId;
+	public String getIsInc() {
+		return isInc;
 	}
 
-	public void setInsrtId(String insrtId) {
-		this.insrtId = insrtId;
-	}
-
-	public Date getInsrtDate() {
-		return insrtDate;
-	}
-
-	public void setInsrtDate(Date insrtDate) {
-		this.insrtDate = insrtDate;
-	}
-
-	public String getUpdtId() {
-		return updtId;
-	}
-
-	public void setUpdtId(String updtId) {
-		this.updtId = updtId;
-	}
-
-	public Date getUpdtDate() {
-		return updtDate;
-	}
-
-	public void setUpdtDate(Date updtDate) {
-		this.updtDate = updtDate;
+	public void setIsInc(String isInc) {
+		this.isInc = isInc;
 	}
 }

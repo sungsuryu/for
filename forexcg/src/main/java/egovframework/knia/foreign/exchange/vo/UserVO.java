@@ -55,6 +55,16 @@ public class UserVO implements Serializable {
 	
 	private int retryCnt;
 	
+	private String roleId;
+	
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
 	public int getRetryCnt() {
 		return retryCnt;
 	}
