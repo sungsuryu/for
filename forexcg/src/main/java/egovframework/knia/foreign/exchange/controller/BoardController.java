@@ -730,24 +730,29 @@ public class BoardController {
 			FileVO itm = (FileVO)fileList.get(i);
 			String getName = itm.getPhyFileNm();
 			int k = 1;
+			boolean firstCheck = false;
 			if (iniFileLst.size() > 0) {
 				for (int m=0; m<iniFileLst.size(); m++) {
 					FileVO sItm = iniFileLst.get(m);
 					if (getName.equals(sItm.getPhyFileNm())) {
-						itm.setPhyFileNm(k+"-"+itm.getPhyFileNm());
-						k++;
-						getName = itm.getPhyFileNm();
+						if(firstCheck == false){
+							itm.setPhyFileNm(k+"-"+itm.getPhyFileNm());
+							k++;
+							getName = itm.getPhyFileNm();
+							firstCheck = true;
+						}
+						else{
+							String subText = itm.getPhyFileNm().substring(2);
+							itm.setPhyFileNm(k+"-"+subText);
+							k++;
+							getName = itm.getPhyFileNm();
+						}
 					}
 				}
 			}
 			iniFileLst.add(itm);
 			System.out.println("KJWKJWKJW 확인 : " + itm.getPhyFileNm());
 		}
-		
-		System.out.println(Pattern.matches("^[0-9]-", "test"));
-		System.out.println(Pattern.matches("^[1-9]-", "1-test"));	
-		System.out.println(Pattern.matches("^[0-9]-", "1-1test"));
-		System.out.println(Pattern.matches("^[0-9]-", "9-ㅎtest"));
 		
 		if(fileList.size() > 0){
 			String mimetype = "application/x-msdownload";
