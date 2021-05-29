@@ -751,7 +751,6 @@ public class BoardController {
 				}
 			}
 			iniFileLst.add(itm);
-			System.out.println("KJWKJWKJW 확인 : " + itm.getPhyFileNm());
 		}
 		
 		if(fileList.size() > 0){
