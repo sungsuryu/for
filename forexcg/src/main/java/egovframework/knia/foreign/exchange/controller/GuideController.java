@@ -25,7 +25,7 @@ import egovframework.knia.foreign.exchange.vo.LoginVO;
 
 @Controller
 public class GuideController {
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(GuideController.class);
 	
 	@Resource(name = "guideService")
 	private GuideService guideService;
