@@ -8,6 +8,45 @@
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 </head>
 <script>
+	// 파일 드롭 다운
+	function fileDropDown(){
+	    var dropZone = $("#dropZone");
+	    //Drag기능 
+	    dropZone.on('dragenter',function(e){
+	        e.stopPropagation();
+	        e.preventDefault();
+	        // 드롭다운 영역 css
+	        dropZone.css('background-color','#E3F2FC');
+	    });
+	    dropZone.on('dragleave',function(e){
+	        e.stopPropagation();
+	        e.preventDefault();
+	        // 드롭다운 영역 css
+	        dropZone.css('background-color','#FFFFFF');
+	    });
+	    dropZone.on('dragover',function(e){
+	        e.stopPropagation();
+	        e.preventDefault();
+	        // 드롭다운 영역 css
+	        dropZone.css('background-color','#E3F2FC');
+	    });
+	    dropZone.on('drop',function(e){
+	        e.preventDefault();
+	        // 드롭다운 영역 css
+	        dropZone.css('background-color','#FFFFFF');
+	        
+	        var files = e.originalEvent.dataTransfer.files;
+	        if(files != null){
+	            if(files.length < 1){
+	                alert("폴더 업로드 불가");
+	                return;
+	            }
+	        }else{
+	            alert("ERROR");
+	        }
+	    });
+	}
+	
 	function insertFaq(){
 		var fileName = $("#file")[0].files;
 		if(fileName.length <= 0){

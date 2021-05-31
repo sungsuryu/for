@@ -56,7 +56,6 @@ public class GuideController {
 	@RequestMapping(value = "/help/updateGuide.ajax")
 	public String updateGuide(@ModelAttribute("guideVO") GuideVO guideVO, HttpServletRequest request, ModelMap model) throws Exception {
 		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
-		guideVO.setUserNm(getLoginVO.getUserNm());
 		guideVO.setUpdtId(getLoginVO.getLoginId());
 		guideVO.setInsrtId(getLoginVO.getLoginId());
 		guideService.mergeInsertGuide(guideVO);

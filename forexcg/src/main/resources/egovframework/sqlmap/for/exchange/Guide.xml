@@ -4,7 +4,6 @@
 	<resultMap id="mapGuideVO" type="egovframework.knia.foreign.exchange.vo.GuideVO">
 		<result property="uiId" column="UI_ID"/>
 		<result property="guideContent" column="GUIDE_CONTENT"/>
-		<result property="userNm" column="USER_NM"/>
 		<result property="insrtId" column="INSRT_ID"/>
 		<result property="insrtDate" column="INSRT_DATE"/>
 		<result property="updtId" column="UPDT_ID"/>
@@ -27,7 +26,6 @@
 		INSERT INTO TB_FOR_GUIDE(
 			UI_ID
 			,GUIDE_CONTENT
-			,USER_NM
 			,INSRT_ID
 			,INSRT_DATE
 			,UPDT_ID
@@ -36,7 +34,6 @@
 		VALUES(
 			#{uiId}
 			,#{guideContent}
-			,#{userNm}
 			,#{insrtId}
 			,NOW()
 			,#{updtId}
