@@ -1,53 +1,23 @@
 <%@ page contentType="text/html; charset=utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<nav class="gnb">
 		<ul>
-			<!-- 현재 메뉴 addClass="on" -->
-			<li class="depth1 on">
-				<a href="javascript:;">공통관리</a>
-				<ul>
-					<!-- 현재 메뉴 addClass="on" -->
-					<li class="depth2"><a href="for_007.htm">사용자 등록관리</a></li>
-					<li class="depth2"><a href="for_008.htm">내정보 관리</a></li>
-					<li class="depth2 on"><a href="javascript:;">시스템 설정관리</a>
-						<ul>
-							<!-- 현재 메뉴 addClass="on" -->
-							<li class="depth3 on"><a href="for_009.htm">공통코드 관리</a></li>
-							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
-							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
-							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
-							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
-							<li class="depth3"><a href="for_014.htm">게시판 관리</a></li>
-							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
-						</ul>
-					</li>
-					<li class="depth2"><a href="javascript:;">통계 및 조회</a>
-						<ul>
-							<!-- 현재 메뉴 addClass="on" -->
-							<li class="depth3"><a href="for_017.htm">사용자 알림 조회</a></li>
-							<li class="depth3"><a href="for_018.htm">시스템 사용내역 조회</a></li>
-							<li class="depth3"><a href="for_019.htm">일괄배치 실행내역 조회</a></li>
-						</ul>
-					</li>
-				</ul>				
-			</li>
+		<c:forEach var="tMenu" items="${gnbMenu.tMnu }" varStatus="status">
 			<li class="depth1">
-				<a href="javascript:;">게시판</a>
+			<a href="javascript:void(0)"><c:out value="${tMenu.mnuNm }" /></a>
 				<ul>
-					<li class="depth2"><a href="for_020.htm">FAQ</a></li>
-					<li class="depth2"><a href="for_021.htm">공지사항</a></li>
-					<li class="depth2"><a href="for_022.htm">보고관련 자료실</a></li>
-				</ul>				
+				<c:forEach var="mMenu" items="${gnbMenu.mMnu }" varStatus="status">
+					<c:if test="${mMenu.prtMnuId eq tMenu.mnuId }"><li class="depth2"><a href="javascript:void(0)"><c:out value="${mMenu.mnuNm }" /></a></li></c:if>
+				</c:forEach>
+					<ul>
+					<c:forEach var="lMenu" items="${gnbMenu.lMnu }" varStatus="status">
+						<c:forEach var="lMenu" items="${gnbMenu.lMnu }" varStatus="status">
+							<c:if test="${lMenu.prtMnuId eq mMenu.mnuId }"><li class="depth3"><a href="javascript:void(0)"><c:out value="${lMenu.mnuNm }" /></a></li></c:if>
+						</c:forEach>
+					</c:forEach>
+					</ul>
+				</ul>
 			</li>
-			<li class="depth1">
-				<a href="for_023.htm">보고서</a>
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">조회</a>
-				<ul>
-					<li class="depth2"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li class="depth2"><a href="for_025.htm">주요계수현황</a></li>
-					<li class="depth2"><a href="for_026.htm">차액상세표</a></li>
-				</ul>				
-			</li>
+		</c:forEach>
 		</ul>
 	</nav>

@@ -1,17 +1,23 @@
 package egovframework.com.cmm.interceptor;
 
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
+import egovframework.knia.foreign.exchange.service.MenuService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
+import egovframework.knia.foreign.exchange.vo.MenuVO;
 import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -39,6 +45,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthenticInterceptor.class);
+	
+	@Resource(name="menuService")
+	MenuService menuService;
 	
 	/**
 	 * 세션에 계정정보(LoginVO)가 있는지 여부로 인증 여부를 체크한다.
@@ -83,5 +92,17 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 		} else {
 			return true;
 		}
+	}
+	
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView model) throws Exception {
+		
+		logger.debug("postHandle");
+		
+		Map<String, Object> gnbMenu = menuService.selectMenuTree(new MenuVO());
+		
+		model.addObject("gnbMenu", gnbMenu);
+		
+		super.postHandle(request, response, handler, model);
 	}
 }

@@ -29,6 +29,7 @@
 	</sql>
 	
 	<select id="selectMenu" parameterType="menuVO" resultMap="mapMenuVO">
+		/** menu.selectMenu */
 		<include refid="commonMenu">
 			<property name="tableName" value="TB_FOR_MNU" />
 		</include>
@@ -51,6 +52,7 @@
 	</select>
 	
 	<select id="selectMenuList" parameterType="menuVO" resultMap="mapMenuVO">
+		/** menu.selectMenuList */
 		<include refid="commonMenu">
 			<property name="tableName" value="TB_FOR_MNU" />
 		</include>
@@ -70,7 +72,19 @@
 			SORT_NUM
 	</select>
 	
+	<select id="selectMenuTree" parameterType="menuVO" resultMap="mapMenuVO">
+		/** menu.selectMenuTree */
+		<include refid="commonMenu">
+			<property name="tableName" value="TB_FOR_MNU" />
+		</include>
+		WHERE
+			IS_DEL='N'
+			AND IS_INC='Y'
+		ORDER BY SORT_NUM
+	</select>
+	
 	<insert id="insertMenu" parameterType="menuVO">
+		/** menu.selectMenuTree */
 		INSERT INTO
 			TB_FOR_MNU (
 				MNU_ID, 
@@ -107,6 +121,7 @@
 	</insert>
 	
 	<update id="updateMenu" parameterType="menuVO">
+		/** menu.updateMenu */
 		UPDATE
 			TB_FOR_MNU
 			SET

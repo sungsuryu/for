@@ -1,6 +1,9 @@
 package egovframework.knia.foreign.exchange.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,9 +20,38 @@ public class MenuServiceImpl implements MenuService {
 	MenuMapper menuMapper;
 	
 	@Override
-	public List<?> selectMenuList(MenuVO memuVO) throws Exception {
+	public List<?> selectMenuList(MenuVO menuVO) throws Exception {
 		
-		return menuMapper.selectMenuList(memuVO);
+		return menuMapper.selectMenuList(menuVO);
 	}
 
+	public Map<String, Object> selectMenuTree(MenuVO menuVO) throws Exception {
+		
+		@SuppressWarnings("unchecked")
+		List<MenuVO> mnuLst = (List<MenuVO>) menuMapper.selectMenuTree(menuVO);
+
+		List<MenuVO> tMnu = new ArrayList<MenuVO>();
+		List<MenuVO> mMnu = new ArrayList<MenuVO>();
+		List<MenuVO> lMnu = new ArrayList<MenuVO>();
+		
+		for (MenuVO itm : mnuLst) {
+			int lvl = itm.getLvl();
+			
+			switch(lvl) {
+				case 1:
+					tMnu.add(itm);
+				case 2:
+					mMnu.add(itm);
+				case 3:
+					lMnu.add(itm);
+			}
+		}
+		
+		Map<String, Object> forMenu = new HashMap<String, Object>();
+		forMenu.put("tMnu", tMnu);
+		forMenu.put("mMnu", mMnu);
+		forMenu.put("lMnu", lMnu);
+		
+		return forMenu;
+	}
 }

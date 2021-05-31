@@ -15,4 +15,6 @@ public interface MenuMapper {
 	void insertMenu(MenuVO menuVO) throws Exception;
 	
 	void updateMenu(MenuVO menuVO) throws Exception;
+	
+	List<?> selectMenuTree(MenuVO menuVO) throws Exception;
 }
