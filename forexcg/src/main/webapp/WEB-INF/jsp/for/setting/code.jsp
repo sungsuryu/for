@@ -280,7 +280,7 @@
 
 	<header class="contents_header">
 		<h2>공통코드 관리</h2>
-<%@ include file="/WEB-INF/jsp/for/inc/setting/_location.jsp" %>
+<%@ include file="/WEB-INF/jsp/for/inc/_location.jsp" %>
 	</header>
 	
 	<div class="clear layout_for009">

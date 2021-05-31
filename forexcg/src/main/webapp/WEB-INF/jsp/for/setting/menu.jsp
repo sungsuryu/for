@@ -95,29 +95,8 @@
 			<i class="fa fa-angle-down" aria-hidden="true"></i>
 			<i class="fa fa-angle-up" aria-hidden="true"></i>
 		</a>
-		<div class="page_area">
-			<a href="javascript:;" class="btn_move btn_prev" title="이전"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-			<a href="javascript:;" class="btn_move btn_next" title="다음"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-			<!-- 활성화 된 페이지 addClass="on" -->
-			<div class="page_unit on">
-				<h3>페이지명1</h3>
-				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-			</div>
-			<div class="page_unit">
-				<h3>페이지명2</h3>
-				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-			</div>
-			<div class="page_unit">
-				<h3>페이지명3</h3>
-				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-			</div>
-		</div>
-		<div class="info_area">
-			<div class="user"><i class="fa fa-user-o" aria-hidden="true"></i> 관리자 <a href="javascript:;" class="btn btn-xs">정보수정</a></div>
-			<div class="timer"><i class="fa fa-clock-o" aria-hidden="true"></i> 남은시간 : 54분 41초 <a href="javascript:;" class="btn btn-xs">시간연장</a></div>
-			<a href="javascript:;" class="btn btn-primary btn_help"><i class="fa fa-question-circle" aria-hidden="true"></i> 도움말</a>
-			<a href="javascript:;" class="btn btn-info"><i class="fa fa-sign-out" aria-hidden="true"></i> 로그아웃</a>
-		</div>		
+		<%@ include file="/WEB-INF/jsp/for/inc/_menu_history.jsp" %>
+		<%@ include file="/WEB-INF/jsp/for/inc/_setting.jsp" %>	
 	</div>
 </header>
 <!--+++++ /상단 +++++-->
