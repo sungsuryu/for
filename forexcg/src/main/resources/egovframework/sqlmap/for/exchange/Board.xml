@@ -20,9 +20,15 @@
 		<result property="totalCnt" column="TOTAL_CNT"/>
 		<result property="listNum" column="LIST_NUM"/>
 		<result property="fileCnt" column="FILE_CNT"/>
+		<!-- FAQ 정보 -->
+		<result property="faqIdx" column="FAQ_IDX"/>
+		<result property="faqFileNm" column="FAQ_FILENM"/>
+		<result property="fileId" column="FILE_ID"/>
+		<result property="useYn" column="USE_YN"/>
 	</resultMap>
 	
 	<select id="selectBoardCnt" parameterType="boardVO" resultType="int">
+			/** board.selectBoardCnt */
 			SELECT
 				COUNT(*) AS TOTAL_CNT
 			FROM
@@ -35,49 +41,15 @@
 			</if>
 	</select>
 
-	<!-- <select id="selectBoardList" resultMap="mapBoardVO">
-		SELECT 
-			 TB.LIST_NUM
-			,TB.BOARD_IDX
-			,TB.BOARD_TITLE
-			,TB.USER_ID
-			,TB.USER_NM
-			,TB.UPDT_DATE
-			,TB.VIEW_CNT
-			,TB.FILE_CNT
-		FROM
-		(SELECT
-			@ROWNUM:=@ROWNUM+1 AS LIST_NUM,
-			 TB.BOARD_IDX
-			,TB.BOARD_TITLE
-			,TB.USER_ID
-			,TB.USER_NM
-			,TB.UPDT_DATE
-			,TB.VIEW_CNT
-			,TB.FILE_CNT
-		FROM
-			(SELECT
-				TB.*,
-				COUNT(TBF.BOARD_IDX) AS FILE_CNT
-			FROM
-				TB_FOR_BOARD TB LEFT OUTER JOIN TB_FOR_BOARD_FILES TBF ON TB.BOARD_IDX = TBF.BOARD_IDX
-			WHERE 1=1
-			GROUP BY TB.BOARD_IDX) TB, (SELECT @rownum:=0) temp
-		WHERE
-			TB.BOARD_TYPE = #{boardtype}
-			AND TB.IS_DEL = 'N'
-		ORDER BY TB.BOARD_IDX DESC) TB
-		WHERE TB.LIST_NUM BETWEEN #{start_num} AND #{end_num}
-	</select> -->
-	
 	<select id="selectBoardList" parameterType="boardVO" resultMap="mapBoardVO">
+			/** board.selectBoardList */
 		SELECT 
 			 TB.LIST_NUM
 			,TB.BOARD_IDX
 			,TB.BOARD_TITLE
 			,TB.USER_ID
 			,TB.USER_NM
-			,DATE_FORMAT(TB.INSRT_DATE, '%Y-%m-%d') AS INSRT_DATE
+			,TB.INSRT_DATE
 			,TB.VIEW_CNT
 			,TB.FILE_CNT
 		FROM
@@ -109,6 +81,7 @@
 	</select>
 	
 	<select id="selectBoard" parameterType="int" resultMap="mapBoardVO">
+		/** board.selectBoard */
 		SELECT 
 			 BOARD_IDX
 			,BOARD_TITLE
@@ -120,6 +93,7 @@
 	</select>
 	
 	<update id="updateBoardViewCnt" parameterType="boardVO">
+		/** board.updateBoardViewCnt */
 		UPDATE
 			TB_FOR_BOARD
 		SET
@@ -129,6 +103,7 @@
 	</update>
 	
 	<insert id="insertBoard" parameterType="boardVO" useGeneratedKeys="true" keyProperty="boardIdx">
+		/** board.insertBoard */
 		INSERT INTO TB_FOR_BOARD
 		(
 				BOARD_TITLE,
@@ -168,6 +143,7 @@
 	</insert>
 	
 	<update id="updateBoard" parameterType="boardVO">
+		/** board.updateBoard */
 		UPDATE
 			TB_FOR_BOARD
 		SET
@@ -182,6 +158,7 @@
 	</update>
 	
 	<update id="deleteBoard" parameterType="int">
+		/** board.deleteBoard */
 		UPDATE
 			TB_FOR_BOARD
 		SET
@@ -189,4 +166,81 @@
 		WHERE
 			BOARD_IDX = #{boardIdx}
 	</update>
+	
+	<select id="selectFaqCnt" parameterType="boardVO" resultType="int">
+		/** board.selectFaqCnt */
+		SELECT
+			COUNT(*) AS TOTAL_CNT
+		FROM
+			TB_FOR_FAQ
+		WHERE
+			BOARD_TYPE = #{boardType}
+	</select>
+	
+	<select id="selectFaqList" parameterType="boardVO" resultMap="mapBoardVO">
+		/** board.selectFaqList */
+		SELECT 
+			 TB.LIST_NUM
+			,TB.FAQ_IDX
+			,TB.FAQ_FILENM
+			,TB.USER_NM
+			,TB.INSRT_DATE
+			,TB.USE_YN
+			,TB.FILE_ID
+		FROM
+		(SELECT
+			@ROWNUM:=@ROWNUM+1 AS LIST_NUM
+			,TB.FAQ_IDX
+			,TB.FAQ_FILENM
+			,TB.USER_NM
+			,TB.INSRT_DATE
+			,TB.USE_YN
+			,TB.FILE_ID
+		FROM
+			(SELECT
+				TB.*,
+				TBF.FILE_ID
+			FROM
+				TB_FOR_FAQ TB LEFT OUTER JOIN TB_FOR_ATCH_FILES TBF ON TB.FAQ_IDX = TBF.FILE_GRP_NUM AND TBF.FILE_GRP_CD = #{boardType}
+			WHERE 1=1
+			GROUP BY TB.FAQ_IDX) TB, (SELECT @rownum:=0) temp
+		WHERE
+			TB.BOARD_TYPE = #{boardType}
+		ORDER BY TB.FAQ_IDX DESC) TB
+	</select>
+	
+	<update id="updateFaqUseYn" parameterType="boardVO">
+		/** board.updateFaqUseYn */
+		UPDATE
+			TB_FOR_FAQ
+		SET
+			USE_YN = #{useYn}
+		WHERE
+			FAQ_IDX = #{faqIdx}
+	</update>
+	
+	<insert id="insertFaq" parameterType="boardVO" useGeneratedKeys="true" keyProperty="faqIdx">
+		/** board.insertFaq */
+		INSERT INTO TB_FOR_FAQ
+		(
+				FAQ_FILENM,
+				USER_NM,
+				USE_YN,
+				INSRT_ID,
+				INSRT_DATE,
+				UPDT_ID,
+				UPDT_DATE,
+				BOARD_TYPE
+		)
+		VALUE(
+			#{faqFileNm},
+			#{userName},
+			#{useYn},
+			#{insrtId},
+			NOW(),
+			#{updtId},
+			NOW(),
+			#{boardType}
+		)
+	</insert>
 </mapper>

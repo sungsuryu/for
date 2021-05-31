@@ -308,7 +308,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				
 				<c:forEach var="result" items="${boardList}" varStatus="status">
 				<tr>
 					<td><c:out value="${result.listNum}" /></td>
@@ -325,7 +324,6 @@
 					<td><c:out value="${result.viewCnt}" /></td>
 				</tr>
 				</c:forEach>
-				
 			</tbody>
 		</table>
 	</div>

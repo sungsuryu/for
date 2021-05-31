@@ -49,7 +49,6 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.insertBoard(boardVO);
 		int boardIdx = boardVO.getBoardIdx();
 		return boardIdx;
-		
 	}
 
 	@Override
@@ -82,5 +81,34 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void deleteFile(FileVO fileVO) throws Exception {
 		fileServiceMapper.deleteFile(fileVO);
+	}
+	
+	@Override
+	public int selectFaqCnt(BoardVO boardVO) throws Exception {
+		int cnt = boardMapper.selectFaqCnt(boardVO);
+		return cnt;
+	}
+	
+	@Override
+	public List<?> selectFaqList(BoardVO boardVO) throws Exception {
+		return boardMapper.selectFaqList(boardVO);
+	}
+	
+	@Override
+	public void updateFaqUseYn(BoardVO boardVO) throws Exception {
+		boardMapper.updateFaqUseYn(boardVO);
+		
+	}
+	
+	@Override
+	public int insertFaq(BoardVO boardVO) throws Exception {
+		boardMapper.insertFaq(boardVO);
+		int faqIdx = boardVO.getFaqIdx();
+		return faqIdx;
+	}
+
+	@Override
+	public void updateFaqFile(FileVO fileVO) throws Exception {
+		fileServiceMapper.updateFaqFile(fileVO);
 	}
 }
