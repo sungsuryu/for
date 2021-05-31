@@ -275,6 +275,7 @@
 	<form id="boardForm" name="boardForm" method="post">
 		<input type="hidden" id = "boardIdx" name = "boardIdx" value="0">
 		<input type="hidden" id = "page" name = "page" value="<c:out value="${page}" />">
+		<input type='hidden' id="boardType" name="boardType" value="NOTICE" />
 		<c:choose>
 			<c:when test="${searchName ne ''}">
 				<input type="hidden" id = "searchName" name = "searchName" value="<c:out value="${searchName}" />">
