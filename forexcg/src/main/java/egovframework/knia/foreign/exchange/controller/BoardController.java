@@ -479,12 +479,25 @@ public class BoardController {
 	public String settingBoardFaq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request,
 			ModelMap model) throws Exception {
 		logger.debug("FAQ 관리  화면");
+		
+		if (boardVO.getPage() == 0) {
+			boardVO.setPage(1);
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
+
 		boardVO.setBoardType(BoardCode.FAQ.toString());// 개발용
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
+		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
 		int total_cnt = boardService.selectFaqCnt(boardVO);// 개발용
 
 		List<?> faqList = boardService.selectFaqList(boardVO);
-		
+		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("page", boardVO.getPage());
 		model.addAttribute("faqList", faqList);
 		model.addAttribute("total_cnt", total_cnt);
 		

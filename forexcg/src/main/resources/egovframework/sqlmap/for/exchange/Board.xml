@@ -207,6 +207,7 @@
 		WHERE
 			TB.BOARD_TYPE = #{boardType}
 		ORDER BY TB.FAQ_IDX DESC) TB
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
 	
 	<update id="updateFaqUseYn" parameterType="boardVO">

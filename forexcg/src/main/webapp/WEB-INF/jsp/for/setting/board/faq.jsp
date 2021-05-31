@@ -47,6 +47,13 @@
 	    });
 	}
 	
+	//페이지 전환 함수
+	function fn_egov_link_page(page){
+		$("#page").val(page);
+		$("#boardForm").attr("action", "/setting/board/faq.do");
+		$("#boardForm").submit();
+	}
+	
 	function insertFaq(){
 		var fileName = $("#file")[0].files;
 		if(fileName.length <= 0){
@@ -312,52 +319,59 @@
 				</tr>
 			</thead>
 		</table>
-		<div class="overflow_y">
-		<table>
-			<colgroup>
-				<col style="width:70px">
-				<col style="">
-				<col style="">
-				<col style="">
-				<col style="">
-			</colgroup>
-			<tbody>
-				<c:forEach var="result" items="${faqList}" varStatus="status">
-				<tr>
-					<td><c:out value="${result.listNum}" /></td>
-					<td><a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}" />')" class="link01"><c:out value="${result.faqFileNm}" /></a></td>
-					<td><c:out value="${result.userName}" /></td>
-					<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
-					<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
-					<td><c:out value="${insrtDate}"/></td>
-					<td>
-						<c:choose>
-							<c:when test="${result.useYn eq 'N'}">
-								<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'Y')">
-									<strong class="txt_red">
-										<c:out value="${result.useYn}" />
-									</strong>
-								</a>
-							</c:when>
-							<c:otherwise>
-								<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'N')">
-									<strong class="txt_blue">
-										<c:out value="${result.useYn}" />
-									</strong>
-								</a>
-							</c:otherwise>
-						</c:choose>
-					</td>
-				</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+		<div>
+			<table>
+				<colgroup>
+					<col style="width:70px">
+					<col style="">
+					<col style="">
+					<col style="">
+					<col style="">
+				</colgroup>
+				<tbody>
+					<c:forEach var="result" items="${faqList}" varStatus="status">
+					<tr>
+						<td><c:out value="${result.listNum}" /></td>
+						<td><a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}" />')" class="link01"><c:out value="${result.faqFileNm}" /></a></td>
+						<td><c:out value="${result.userName}" /></td>
+						<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
+						<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
+						<td><c:out value="${insrtDate}"/></td>
+						<td>
+							<c:choose>
+								<c:when test="${result.useYn eq 'N'}">
+									<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'Y')">
+										<strong class="txt_red">
+											<c:out value="${result.useYn}" />
+										</strong>
+									</a>
+								</c:when>
+								<c:otherwise>
+									<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'N')">
+										<strong class="txt_blue">
+											<c:out value="${result.useYn}" />
+										</strong>
+									</a>
+								</c:otherwise>
+							</c:choose>
+						</td>
+					</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			<div class="f_left">
+				<div class="pagenum">
+					<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+				</div>
+			</div>
 		</div>
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input id="faqFileNm" name="faqFileNm" type="hidden" value="">
 		<input id="faqIdx" name="faqIdx" type="hidden", value="0">
 		<input id="useYn" name="useYn" type="hidden", value="N">
+		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type='hidden' id="boardType" name="boardType" value="FAQ" />
 		<div class="table_v01">
 			<table>
 				<colgroup>
