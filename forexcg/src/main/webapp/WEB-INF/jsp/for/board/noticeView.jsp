@@ -28,82 +28,14 @@
 
 <!--+++++ 상단 +++++-->
 <header id="header">
-	<nav class="gnb">
-		<ul>
-			<li class="depth1">
-				<a href="javascript:;">공통관리</a>
-				<ul>
-					<li class="depth2"><a href="for_007.htm">사용자 등록관리</a></li>
-					<li class="depth2"><a href="for_008.htm">내정보 관리</a></li>
-					<li class="depth2"><a href="for_009.htm">시스템 설정관리</a>
-						<ul>
-							<li class="depth3"><a href="for_009.htm">공통코드 관리</a></li>
-							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
-							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
-							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
-							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
-							<li class="depth3"><a href="for_014.htm">게시판 관리</a></li>
-							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
-						</ul>
-					</li>
-					<li class="depth2"><a href="for_017.htm">통계 및 조회</a>
-						<ul>
-							<li class="depth3"><a href="for_017.htm">사용자 알림 조회</a></li>
-							<li class="depth3"><a href="for_018.htm">시스템 사용내역 조회</a></li>
-							<li class="depth3"><a href="for_019.htm">일괄배치 실행내역 조회</a></li>
-						</ul>
-					</li>
-				</ul>				
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">게시판</a>
-				<ul>
-					<li class="depth2"><a href="for_020.htm">FAQ</a></li>
-					<li class="depth2"><a href="for_021.htm">공지사항</a></li>
-					<li class="depth2"><a href="for_022.htm">보고관련 자료실</a></li>
-				</ul>				
-			</li>
-			<li class="depth1">
-				<a href="for_023.htm">보고서 전송 및 결과확인</a>
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">조회</a>
-				<ul>
-					<li class="depth2"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li class="depth2"><a href="for_025.htm">주요계수현황</a></li>
-					<li class="depth2"><a href="for_026.htm">차액상세표</a></li>
-				</ul>				
-			</li>
-		</ul>
-	</nav>
+<%@ include file="/WEB-INF/jsp/for/inc/_gnb.jsp" %>		
 	<div class="top_con">
 		<a href="javascript:" class="btn_sh" title="상단메뉴 열기/닫기">
 			<i class="fa fa-angle-down" aria-hidden="true"></i>
 			<i class="fa fa-angle-up" aria-hidden="true"></i>
 		</a>
-		<div class="page_area">
-			<a href="javascript:;" class="btn_move btn_prev" title="이전"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-			<a href="javascript:;" class="btn_move btn_next" title="다음"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-			<!-- 활성화 된 페이지 addClass="on" -->
-			<div class="page_unit on">
-				<h3>페이지명1</h3>
-				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-			</div>
-			<div class="page_unit">
-				<h3>페이지명2</h3>
-				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-			</div>
-			<div class="page_unit">
-				<h3>페이지명3</h3>
-				<a href="javascript:;" class="btn_page_close" title="페이지 닫기"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-			</div>
-		</div>
-		<div class="info_area">
-			<div class="user"><i class="fa fa-user-o" aria-hidden="true"></i> 관리자 <a href="javascript:;" class="btn btn-xs">정보수정</a></div>
-			<div class="timer"><i class="fa fa-clock-o" aria-hidden="true"></i> 남은시간 : 54분 41초 <a href="javascript:;" class="btn btn-xs">시간연장</a></div>
-			<a href="javascript:;" class="btn btn-primary btn_help"><i class="fa fa-question-circle" aria-hidden="true"></i> 도움말</a>
-			<a href="javascript:;" class="btn btn-info"><i class="fa fa-sign-out" aria-hidden="true"></i> 로그아웃</a>
-		</div>		
+		<%@ include file="/WEB-INF/jsp/for/inc/_menu_history.jsp" %>
+		<%@ include file="/WEB-INF/jsp/for/inc/_setting.jsp" %>		
 	</div>
 </header>
 <!--+++++ /상단 +++++-->
@@ -118,58 +50,7 @@
 		<h1><a href="main.htm"><img src="img/ci.png" alt="ci"></a></h1>
 		<h2>외환정보시스템</h2>
 	</header>
-	<nav class="gnb">
-		<ul>
-			<!-- 현재 메뉴 addClass="on" -->
-			<li class="depth1">
-				<a href="javascript:;">공통관리</a>
-				<ul>
-					<!-- 현재 메뉴 addClass="on" -->
-					<li class="depth2"><a href="for_007.htm">사용자 등록관리</a></li>
-					<li class="depth2"><a href="for_008.htm">내정보 관리</a></li>
-					<li class="depth2"><a href="javascript:;">시스템 설정관리</a>
-						<ul>
-							<!-- 현재 메뉴 addClass="on" -->
-							<li class="depth3"><a href="for_009.htm">공통코드 관리</a></li>
-							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
-							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
-							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
-							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
-							<li class="depth3"><a href="for_014.htm">게시판 관리</a></li>
-							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
-						</ul>
-					</li>
-					<li class="depth2"><a href="javascript:;">통계 및 조회</a>
-						<ul>
-							<!-- 현재 메뉴 addClass="on" -->
-							<li class="depth3"><a href="for_017.htm">사용자 알림 조회</a></li>
-							<li class="depth3"><a href="for_018.htm">시스템 사용내역 조회</a></li>
-							<li class="depth3"><a href="for_019.htm">일괄배치 실행내역 조회</a></li>
-						</ul>
-					</li>
-				</ul>				
-			</li>
-			<li class="depth1 on">
-				<a href="javascript:;">게시판</a>
-				<ul>
-					<li class="depth2"><a href="for_020.htm">FAQ</a></li>
-					<li class="depth2 on"><a href="for_021.htm">공지사항</a></li>
-					<li class="depth2"><a href="for_022.htm">보고관련 자료실</a></li>
-				</ul>				
-			</li>
-			<li class="depth1">
-				<a href="for_023.htm">보고서</a>
-			</li>
-			<li class="depth1">
-				<a href="javascript:;">조회</a>
-				<ul>
-					<li class="depth2"><a href="for_024.htm">보고서 입수현황 점검표</a></li>
-					<li class="depth2"><a href="for_025.htm">주요계수현황</a></li>
-					<li class="depth2"><a href="for_026.htm">차액상세표</a></li>
-				</ul>				
-			</li>
-		</ul>
-	</nav>
+<%@ include file="/WEB-INF/jsp/for/inc/_lnb.jsp" %>		
 </aside>
 <!--+++++ /좌측 레이어 +++++-->
 
@@ -178,26 +59,7 @@
 	
 	<header class="contents_header">
 		<h2>공지사항</h2>
-		<div class="navi">
-			<a href="main.htm" class="btn_home" title="홈"><i class="fa fa-home" aria-hidden="true"></i></a>
-			<span class="styled_select">
-				<select>
-					<option>게시판</option>
-					<option>공통관리</option>					
-					<option>보고서 전송 및 결과확인</option>
-					<option>조회</option>
-				</select>
-				<i class="fa fa-chevron-down" aria-hidden="true"></i>
-			</span>
-			<span class="styled_select">
-				<select>
-					<option>공지사항</option>
-					<option>FAQ</option>
-					<option>보고관련 자료실</option>
-				</select>
-				<i class="fa fa-chevron-down" aria-hidden="true"></i>
-			</span>
-		</div>
+<%@ include file="/WEB-INF/jsp/for/inc/_location.jsp" %>
 	</header>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
 		<input type='hidden' id="alarmYn" name='alarmYn'>
