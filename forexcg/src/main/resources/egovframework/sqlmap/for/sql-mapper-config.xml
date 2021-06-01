@@ -21,6 +21,6 @@
 		<typeAlias alias="kaTalkVO" type="egovframework.knia.foreign.exchange.vo.KaTalkVO" />
 		<typeAlias alias="guideVO" type="egovframework.knia.foreign.exchange.vo.GuideVO" />
 		<typeAlias alias="userRoleVO" type="egovframework.knia.foreign.exchange.vo.UserRoleVO" />
-		<typeAlias alias="userRoleVO" type="egovframework.knia.foreign.exchange.vo.PopupVO" />
+		<typeAlias alias="popupVO" type="egovframework.knia.foreign.exchange.vo.PopupVO" />
     </typeAliases>
 </configuration>
