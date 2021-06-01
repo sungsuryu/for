@@ -56,9 +56,40 @@ public interface BoardMapper {
 	
 	/**
 	 * 게시판 삭제
-	 * @param INT 게시판 등록번호
+	 * @param int 게시판 등록번호
 	 * @throws Exception
 	 */
 	void deleteBoard(int boardIdx) throws Exception;
+	
+	/**
+	 * FAQ 총 문서 개수 조회
+	 * @param BoardVO FAQ정보
+	 * @return int 총 문서 갯수
+	 * @throws Exception
+	 */
+	int selectFaqCnt(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * FAQ 조회
+	 * @param BoardVO FAQ 조회정보
+	 * @return List<?> FAQ정보
+	 * @throws Exception
+	 */
+	List<?> selectFaqList(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * FAQ 최종반영여부 업데이트
+	 * @param BoardVO FAQ 정보
+	 * @throws Exception
+	 */
+	void updateFaqUseYn(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * FAQ 등록
+	 * @param BoardVO 게시판 등록 정보
+	 * @return BoardVO 게시판정보
+	 * @throws Exception
+	 */
+	void insertFaq(BoardVO boardVO) throws Exception;
 	
 }

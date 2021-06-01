@@ -52,6 +52,15 @@ public class BoardVO implements Serializable {
 	
 	private String searchName = "";
 	
+	//FAQ 정보
+	private int faqIdx;
+	
+	private String faqFileNm;
+	
+	private String fileId;
+
+	private String useYn;
+	
 	public int getFirstIndex() {
 		return firstIndex;
 	}
@@ -235,5 +244,37 @@ public class BoardVO implements Serializable {
 	public void setSearchName(String searchName) {
 		this.searchName = searchName;
 	}
+
+	//FAQ 정보
+	public int getFaqIdx() {
+		return faqIdx;
+	}
+
+	public void setFaqIdx(int faqIdx) {
+		this.faqIdx = faqIdx;
+	}
+
+	public String getFaqFileNm() {
+		return faqFileNm;
+	}
+
+	public void setFaqFileNm(String faqFileNm) {
+		this.faqFileNm = faqFileNm;
+	}
 	
+	public String getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
+	
+	public String getUseYn() {
+		return useYn;
+	}
+
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
 }

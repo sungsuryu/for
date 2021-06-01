@@ -40,7 +40,7 @@ public interface BoardService {
 	/**
 	 * 게시판 등록
 	 * @param BoardVO 게시판 등록 정보
-	 * @return BoardVO 게시판정보
+	 * @return int 게시판 순번
 	 * @throws Exception
 	 */
 	int insertBoard(BoardVO boardVO) throws Exception;
@@ -88,4 +88,42 @@ public interface BoardService {
 	 * @throws Exception
 	 */
 	void deleteFile(FileVO fileVO) throws Exception;
+	
+	/**
+	 * FAQ 총 문서 개수 조회
+	 * @param BoardVO FAQ정보
+	 * @return int 총 문서 갯수
+	 * @throws Exception
+	 */
+	int selectFaqCnt(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * FAQ 조회
+	 * @param BoardVO FAQ 조회정보
+	 * @return List<?> FAQ정보
+	 * @throws Exception
+	 */
+	List<?> selectFaqList(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * FAQ 최종반영여부 업데이트
+	 * @param BoardVO FAQ 정보
+	 * @throws Exception
+	 */
+	void updateFaqUseYn(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * FAQ 등록
+	 * @param BoardVO 게시판 등록 정보
+	 * @return int FAQ 순번
+	 * @throws Exception
+	 */
+	int insertFaq(BoardVO boardVO) throws Exception;
+	
+	/**
+	 * FAQ파일 반영여부 업데이트
+	 * @param FileVO 파일정보
+	 * @throws Exception
+	 */
+	void updateFaqFile(FileVO fileVO) throws Exception;
 }

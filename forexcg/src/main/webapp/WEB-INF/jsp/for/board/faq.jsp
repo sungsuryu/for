@@ -13,7 +13,8 @@ $(document).ready(function() {
 });
 
 function fn_egov_downFile(){
-	window.open("<c:url value='/board/downloadFaqFile.do'/>");
+	$("#fileForm").attr("action", "/board/downloadFaqFile.do");
+	$("#fileForm").submit();
 }
 </script>
 <body>
@@ -193,6 +194,8 @@ function fn_egov_downFile(){
 			</span>
 		</div>
 	</header>
+	<form id="fileForm" name="fileForm" method="post">
+	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->
 <!--+++++ 우측 레이어(도움말) +++++-->

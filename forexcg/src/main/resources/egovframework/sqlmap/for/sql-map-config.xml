@@ -11,4 +11,5 @@
 	<sqlMap resource="egovframework/sqlmap/for/exchange/User.xml"/>
 	<sqlMap resource="egovframework/sqlmap/for/exchange/Board.xml"/>
 	<sqlMap resource="egovframework/sqlmap/for/exchange/Guide.xml"/>
+	<sqlMap resource="egovframework/sqlmap/for/exchange/Popup.xml"/>
 </sqlMapConfig>

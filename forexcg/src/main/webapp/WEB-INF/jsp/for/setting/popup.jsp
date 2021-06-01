@@ -8,70 +8,8 @@
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 <script type="text/javascript">
 
-	$(function(){
-	});
-	//페이지 전환 함수
-	function fn_egov_link_page(page){
-		$("#page").val(page);
-		$("#boardForm").attr("action", "/setting/board/notice.do");
-		$("#boardForm").submit();
-	}
-	function goBoardView(boardIdx){
-		$("#boardIdx").val(boardIdx);
-		$("#boardForm").attr("action", "/setting/board/noticeView.do");
-		$("#boardForm").submit();
-	}
-	
-	function doDownloadZip(boardIdx){
-		$("#boardIdx").val(boardIdx);
-		$("#boardForm").attr("action", "/board/downloadZipFile.do");
-		$("#boardForm").submit();
-	}
-	
-	function selectGuide(){
-		var formData = $("#guideForm").serialize();
-		$.ajax({
-	        type:"POST",
-	        url:"/help/guide.ajax",
-	        data : formData,
-	        success: function(data){
-	        	if(data.result.status == "SUCCESS"){
-	        		if(data.result.levelCheck == "N"){
-	        			$("#updateGuide").css("display", "none");
-	        			$("#guideContent").attr("readonly", true);
-	        			$("#guideContent").attr("disable", true);
-	        		}
-	        		if(data.result.isYn == "Y"){
-	        			$("#guideContent").val(data.result.guideVO.guideContent);
-	        		}
-	        	}
-	        	else{
-	        		alert("도움말 불러오기 실패");
-	        	}
-	        },
-			error: function(e){
-				alert("도움말 불러오기 실패");
-			}			
-    	});
-	}
-	
-	function updateGuide(){
-		var formData = $("#guideForm").serialize();
-		$.ajax({
-	        type:"POST",
-	        url:"/help/updateGuide.ajax",
-	        data : formData,
-	        success: function(data){
-	        },
-			error: function(e){
-				alert("도움말 수정 실패");
-			}			
-    	});
-	}
-	
 </script>
 </head>
-
 <body>
 
 <div id="popLayerBg"></div>
@@ -151,7 +89,7 @@
 		<div class="info_area">
 			<div class="user"><i class="fa fa-user-o" aria-hidden="true"></i> 관리자 <a href="javascript:;" class="btn btn-xs">정보수정</a></div>
 			<div class="timer"><i class="fa fa-clock-o" aria-hidden="true"></i> 남은시간 : 54분 41초 <a href="javascript:;" class="btn btn-xs">시간연장</a></div>
-			<a href="javascript:selectGuide();" class="btn btn-primary btn_help"><i class="fa fa-question-circle" aria-hidden="true"></i> 도움말</a>
+			<a href="javascript:;" class="btn btn-primary btn_help"><i class="fa fa-question-circle" aria-hidden="true"></i> 도움말</a>
 			<a href="javascript:;" class="btn btn-info"><i class="fa fa-sign-out" aria-hidden="true"></i> 로그아웃</a>
 		</div>		
 	</div>
@@ -184,8 +122,8 @@
 							<li class="depth3"><a href="for_010.htm">보고서 관리</a></li>
 							<li class="depth3"><a href="for_011.htm">메뉴 관리</a></li>
 							<li class="depth3"><a href="for_012.htm">그룹별 메뉴 관리</a></li>
-							<li class="depth3"><a href="for_013.htm">팝업 관리</a></li>
-							<li class="depth3 on"><a href="for_014.htm">게시판 관리</a></li>
+							<li class="depth3 on"><a href="for_013.htm">팝업 관리</a></li>
+							<li class="depth3"><a href="for_014.htm">게시판 관리</a></li>
 							<li class="depth3"><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
 						</ul>
 					</li>
@@ -232,14 +170,14 @@
 			<li><a href="for_010.htm">보고서 관리</a></li>
 			<li><a href="for_011.htm">메뉴 관리</a></li>
 			<li><a href="for_012.htm">그룹별 메뉴 관리</a></li>
-			<li><a href="for_013.htm">팝업 관리</a></li>
-			<li class="on"><a href="for_014.htm">게시판 관리</a></li>
+			<li class="on"><a href="for_013.htm">팝업 관리</a></li>
+			<li><a href="for_014.htm">게시판 관리</a></li>
 			<li><a href="for_015.htm">한국은행 시스템 정보 관리</a></li>
 		</ul>
 	</div-->
 	
 	<header class="contents_header">
-		<h2>게시판 관리</h2>
+		<h2>팝업 관리</h2>
 		<div class="navi">
 			<a href="main.htm" class="btn_home" title="홈"><i class="fa fa-home" aria-hidden="true"></i></a>
 			<span class="styled_select">
@@ -262,12 +200,12 @@
 			</span>
 			<span class="styled_select">
 				<select>					
-					<option>게시판 관리</option>											
+					<option>팝업 관리</option>								
 					<option>공통코드 관리</option>
 					<option>보고서 관리</option>
 					<option>메뉴 관리</option>	
 					<option>그룹별 메뉴 관리</option>		
-					<option>팝업 관리</option>		
+					<option>게시판 관리</option>
 					<option>한국은행 시스템 정보 관리</option>
 				</select>
 				<i class="fa fa-chevron-down" aria-hidden="true"></i>
@@ -275,19 +213,52 @@
 		</div>
 	</header>
 	
-	<div class="catg_area">
-		<ul>
-			<li class="on"><a href="javascript:;">공지사항</a></li>
-			<li><a href="javascript:;">자료실</a></li>
-			<li><a href="for_014_faq.htm">FAQ</a></li>
-		</ul>
+	<div class="top_search_area">
+		<span class="label">검색항목</span>
+		<span class="styled_select">
+			<select>
+				<option>전체</option>
+				<option></option>
+				<option></option>
+				<option></option>
+			</select>
+		<i class="fa fa-sort" aria-hidden="true"></i>
+		</span>
+		<span class="space"></span>
+		<span class="label">검색어</span>
+		<input type="text">
+		<a href="javascript:;" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
 	</div>
 	
 	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${total_cnt}" /></strong>건</p>
+		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong>10</strong>건</p>
 	</div>
 	
-	<div class="table_h01">
+	<div class="table_h01 paragraph" style="height:calc(100% - 495px)">
+		<table>
+			<colgroup>
+				<col style="width:70px">
+				<col style="">
+				<col style="width:120px">
+				<col style="width:120px">
+				<col style="width:120px">
+				<col style="width:120px">
+				<!--스크롤바 영역 빈th-->
+				<col class="col_scrollbar">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>순번</th>
+					<th>제목</th>
+					<th>작성일자</th>
+					<th>작성자</th>
+					<th>게시 시작일</th>
+					<th>게시 종료일</th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+		<div class="overflow_y">
 		<table>
 			<colgroup>
 				<col style="width:70px">
@@ -297,52 +268,78 @@
 				<col style="width:120px">
 				<col style="width:120px">
 			</colgroup>
-			<thead>
-				<tr>
-					<th>순번</th>
-					<th>제목</th>
-					<th>첨부파일</th>
-					<th>작성자</th>
-					<th>작성일자</th>
-					<th>조회</th>
-				</tr>
-			</thead>
 			<tbody>
-				<c:forEach var="result" items="${boardList}" varStatus="status">
-				<tr>
-					<td><c:out value="${result.listNum}" /></td>
-					<td class="left"><a href="javascript:goBoardView(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
-					<td>
-						<c:if test = "${result.fileCnt > 0}">
-							<a href="javascript:doDownloadZip(<c:out value="${result.boardIdx}" />)" title="다운로드"><i class="fa fa-download" aria-hidden="true"></i></a>
-						</c:if>
-					</td>
-					<td><c:out value="${result.userName}" /></td>
-					<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
-					<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
-					<td><c:out value="${insrtDate}"/></td>
-					<td><c:out value="${result.viewCnt}" /></td>
+				<!-- 선택 된 tr class="on" -->
+				<tr class="on">
+					<td>1</td>
+					<td class="left">제목이 들어갑니다.</td>
+					<td>2021-01-11</td>
+					<td>작성자</td>
+					<td>2021-01-11</td>
+					<td>2021-12-31</td>
 				</tr>
-				</c:forEach>
+				<tr>
+					<td>2</td>
+					<td class="left">제목이 들어갑니다.</td>
+					<td>2021-01-11</td>
+					<td>작성자</td>
+					<td>2021-01-11</td>
+					<td>2021-12-31</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td class="left">제목이 들어갑니다.</td>
+					<td>2021-01-11</td>
+					<td>작성자</td>
+					<td>2021-01-11</td>
+					<td>2021-12-31</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>	
+	
+	<div class="table_v01">
+		<table>
+			<colgroup>
+				<col style="width:150px">
+				<col style="">
+				<col style="width:150px">
+				<col style="">
+			</colgroup>
+			<tbody>
+				<tr>
+					<th>제목</th>
+					<td colspan="3"><input type="text" style="width:100%"></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td colspan="3">
+						<textarea rows="4" style="height:100px"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>첨부파일</th>
+					<td colspan="3"><input type="file" style="width:100%"></td>
+				</tr>
+				<tr>
+					<th>게시 시작일</th>
+					<td><input type="text" class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i></td>
+					<th>게시 종료일</th>
+					<td><input type="text" class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i></td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
 	
 	<div class="tbl_btm">
-		<div class="f_left">
-			<div class="pagenum">
-				<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-			</div>
-		</div>
 		<div class="f_right">
-			<a href="/setting/board/noticeWrite.do" class="btn btn-lg btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 글쓰기</a>
+			<a href="javascript:;" class="btn btn-lg btn-green"><i class="fa fa-plus-circle" aria-hidden="true"></i> 신규</a>
+			<a href="javascript:;" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a href="javascript:;" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
 		</div>
 	</div>
-	<form id="boardForm" name="boardForm" method="post" action="/setting/board/notice.do">
-		<input type="hidden" id="page" name="page" value="${page}" />
-		<input type='hidden' id="boardIdx" name='boardIdx' value="0" />
-		<input type='hidden' id="boardType" name="boardType" value="NOTICE" />
-	</form>
+	
 </div>
 <!--+++++ /컨텐츠 +++++-->
 
@@ -353,11 +350,8 @@
 		<a href="javascript:;" class="btn_close">창닫기</a>
 	</header>
 	<div class="aside_right_con">
-		<form id="guideForm" name="guideForm" method="post">
-			<input id="uiId" name="uiId" type="hidden" value="MID03003006000" />
-			<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;"></textarea>
-			<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-		</form>
+		<textarea>도움말 내용</textarea>
+		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 	</div>
 </aside>
 <!--+++++ /우측 레이어(도움말) +++++-->

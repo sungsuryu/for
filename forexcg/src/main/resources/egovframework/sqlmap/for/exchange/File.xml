@@ -72,9 +72,25 @@
 			<include refid="sqlSelectFile" />
 		WHERE
 			FILE_GRP_CD = 'FAQ'
+		AND
+			IS_DEL = 'N'
 		ORDER BY INSRT_DATE DESC
 		LIMIT 1
 	</select>
+	
+	<update id="updateFaqFile" parameterType="fileVO">
+		/** File.updateFaqFile */
+		UPDATE
+			TB_FOR_ATCH_FILES
+			SET
+				IS_DEL=#{isDel}, 
+				UPDT_ID=#{userId}, 
+				UPDT_DATE=now()
+		WHERE
+			FILE_GRP_CD=#{fileGrpCd}
+		AND
+			FILE_GRP_NUM=#{fileGrpNum}
+	</update>
 
 	<insert id="insertFileInfo" parameterType="fileVO">
 		/** File.insertFileInfo */

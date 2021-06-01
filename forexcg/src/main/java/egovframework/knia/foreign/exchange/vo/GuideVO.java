@@ -9,8 +9,6 @@ public class GuideVO implements Serializable {
 	
 	private String guideContent;
 	
-	private String userNm;
-
 	private String insrtId;
 	
 	private String insrtDate = null;
@@ -33,14 +31,6 @@ public class GuideVO implements Serializable {
 
 	public void setGuideContent(String guideContent) {
 		this.guideContent = guideContent;
-	}
-
-	public String getUserNm() {
-		return userNm;
-	}
-
-	public void setUserNm(String userNm) {
-		this.userNm = userNm;
 	}
 
 	public String getInsrtId() {

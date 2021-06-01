@@ -19,4 +19,6 @@ public interface FileServiceMapper {
 	void insertFileInfo(FileVO fileVO) throws Exception;
 	
 	void deleteFile(FileVO fileVO) throws Exception;
+	
+	void updateFaqFile(FileVO fileVO) throws Exception;
 }

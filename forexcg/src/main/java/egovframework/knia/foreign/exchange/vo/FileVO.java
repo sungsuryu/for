@@ -31,6 +31,8 @@ public class FileVO extends CommonVO implements Serializable {
 
 	private String userId;
 	
+	private String isDel;
+
 	public int getFileIdx() {
 		return fileIdx;
 	}
@@ -125,5 +127,14 @@ public class FileVO extends CommonVO implements Serializable {
 
 	public void setFileGrpVal(String fileGrpVal) {
 		this.fileGrpVal = fileGrpVal;
+	}
+	
+	
+	public String getIsDel() {
+		return isDel;
+	}
+
+	public void setIsDel(String isDel) {
+		this.isDel = isDel;
 	}
 }

@@ -10,8 +10,10 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -477,52 +479,71 @@ public class BoardController {
 	public String settingBoardFaq(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request,
 			ModelMap model) throws Exception {
 		logger.debug("FAQ 관리  화면");
-//		int pageIndex;
-//		if (EgovStringUtil.isEmpty(request.getParameter("pageIndex"))) {
-//			pageIndex = 1;
-//		} else {
-//			pageIndex = Integer.parseInt(request.getParameter("pageIndex").toString());
-//		}
-//		PaginationInfo paginationInfo = new PaginationInfo();
-//
-//		paginationInfo.setCurrentPageNo(pageIndex);// 개발용:현재 페이지 번호
-//		paginationInfo.setRecordCountPerPage(10);// 개발용:한페이지에 표시할 데이터 갯수
-//		paginationInfo.setPageSize(10);// 개발용:페이지 리스트에 게시되는 페이지 건수
-//
-//		boardVO.setBoardType(BoardCode.NOTICE.toString());// 개발용
-//		boardVO.setRecordCountPerPage(10);// 개발용:한번에 조회할 데이터 수
-//		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
-//																	// 첫번째 데이터
-//																	// 번호
-//
-//		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
-//
-//		List<?> boardList = boardService.selectBoardList(boardVO);
-//		model.addAttribute("boardList", boardList);
-//		model.addAttribute("total_cnt", total_cnt);
-//		paginationInfo.setTotalRecordCount(total_cnt);
-//		model.addAttribute("paginationInfo", paginationInfo);
+		
+		if (boardVO.getPage() == 0) {
+			boardVO.setPage(1);
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(boardVO.getPage());// 개발용:현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한페이지에 표시할 데이터 갯수
+		paginationInfo.setPageSize(propertyService.getInt("pageSize"));// 개발용:페이지 리스트에 게시되는 페이지 건수
 
-		FileVO fileVO = new FileVO();
-		
-		fileVO.setFileGrpCd(BoardCode.FAQ.toString());
-		List<?> fileList = boardService.selectFileList(fileVO);
-		
-		model.addAttribute("boardList", fileList);
+		boardVO.setBoardType(BoardCode.FAQ.toString());// 개발용
+		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
+		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
+
+		int total_cnt = boardService.selectFaqCnt(boardVO);// 개발용
+
+		List<?> faqList = boardService.selectFaqList(boardVO);
+		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("page", boardVO.getPage());
+		model.addAttribute("faqList", faqList);
+		model.addAttribute("total_cnt", total_cnt);
 		
 		return "setting/board/faq";
+	}
+	
+	@RequestMapping(value = "/setting/board/faqUpdateAction.do")
+	public String settingBoardFaqUpdate(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request,
+			ModelMap model) throws Exception {
+		logger.debug("FAQ 최종사용여부 업데이트");
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+		
+		FileVO fileVO = new FileVO();
+		if(boardVO.getUseYn().equals("Y")){
+			fileVO.setIsDel("N");
+		}
+		else{
+			fileVO.setIsDel("Y");
+		}
+		fileVO.setUserId(getLoginVO.getLoginId().toString());
+		fileVO.setFileGrpCd(BoardCode.FAQ.toString());
+		fileVO.setFileGrpNum(boardVO.getFaqIdx());
+		boardService.updateFaqUseYn(boardVO);
+		boardService.updateFaqFile(fileVO);
+		
+		return "redirect:/setting/board/faq.do";
 	}
 	
 	@RequestMapping(value = "/setting/board/faqInsertAction.do")
 	public String settingBoardFaqInsert(final MultipartHttpServletRequest multiRequest,
 			@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, ModelMap model) throws Exception {
-		logger.debug("자료실 추가");
+		logger.debug("FAQ 추가");
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+		int faqIdx = 0;
 		
-		List<FileVO> result = null;
-
+		boardVO.setUserName(getLoginVO.getUserNm().toString());
+		boardVO.setInsrtId(getLoginVO.getLoginId().toString());
+		boardVO.setUpdtId(getLoginVO.getLoginId().toString());
+		boardVO.setUseYn("N");
+		boardVO.setBoardType(BoardCode.FAQ.toString());// 개발용
+		faqIdx = boardService.insertFaq(boardVO);
+		
 		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		List<FileVO> result = null;
 		if (!files.isEmpty()) {
-			result = fileUtil.parseFileInf(files, BoardCode.FAQ.toString(), 0, 0, "");
+			result = fileUtil.parseFileInf(files, BoardCode.FAQ.toString(), 0, faqIdx, "");
 
 			int insertFileCnt = fileService.insertFileInfo(result, "");
 		}
