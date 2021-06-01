@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -673,7 +674,7 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/board/downloadFile.do")
-	public void downloadFile(@ModelAttribute("fileVO") FileVO fileVO, HttpServletRequest request, HttpServletResponse response)
+	public String downloadFile(@ModelAttribute("fileVO") FileVO fileVO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("첨부파일 다은로드");
 		FileVO resultfileVO = new FileVO();
@@ -701,7 +702,7 @@ public class BoardController {
 			 */
 			BufferedInputStream in = null;
 			BufferedOutputStream out = null;
-
+			
 			try {
 				in = new BufferedInputStream(new FileInputStream(uFile));
 				out = new BufferedOutputStream(response.getOutputStream());
@@ -730,12 +731,14 @@ public class BoardController {
 			printwriter.flush();
 			printwriter.close();
 		}
+		return null;
 	}
 	
 	@RequestMapping(value = "/board/downloadZipFile.do")
-	public void downloadZipFile(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, HttpServletResponse response)
+	public String downloadZipFile(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("첨부파일 묶음 다은로드");
+			
 		ZipOutputStream zout = null;
 		String zipName = propertyService.getString("downloadZipName") + boardVO.getBoardType() + ".zip";
 		FileVO fileVO = new FileVO();
@@ -779,7 +782,6 @@ public class BoardController {
 			
 			BufferedInputStream bin = null;
 			BufferedOutputStream out = null;
-
 			response.setContentType(mimetype);
 			setDisposition(zipName, request, response);
 			try{
@@ -805,6 +807,7 @@ public class BoardController {
 					in.close();
 				}
 				zout.close();
+				
 				bin = new BufferedInputStream(new FileInputStream(zipName));
 				out = new BufferedOutputStream(response.getOutputStream());
 				
@@ -828,14 +831,14 @@ public class BoardController {
 			printwriter.println("<br><br><br><center><h3><a href='javascript: history.go(-1)'>Back</a></h3></center>");
 			printwriter.println("<br><br><br>&copy; webAccess");
 			printwriter.println("</html>");
-
 			printwriter.flush();
 			printwriter.close();
 		}
+		return null;
 	}
 
 	@RequestMapping(value = "/board/downloadFaqFile.do")
-	public void downloadFaqFile(HttpServletRequest request, HttpServletResponse response)
+	public String downloadFaqFile(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("FAQ첨부파일 다은로드");
 		FileVO fileVO = new FileVO();
@@ -863,7 +866,7 @@ public class BoardController {
 			 */
 			BufferedInputStream in = null;
 			BufferedOutputStream out = null;
-
+			
 			try {
 				in = new BufferedInputStream(new FileInputStream(uFile));
 				out = new BufferedOutputStream(response.getOutputStream());
@@ -892,6 +895,7 @@ public class BoardController {
 			printwriter.flush();
 			printwriter.close();
 		}
+		return null;
 	}
 
 	/**

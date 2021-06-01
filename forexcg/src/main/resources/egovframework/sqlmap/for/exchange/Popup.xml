@@ -6,6 +6,8 @@
 		<result property="popupIdx" column="POPUP_IDX"/>
 		<result property="popupTitle" column="POPUP_TITLE"/>
 		<result property="popupContent" column="POPUP_CONTENT"/>
+		<result property="popupStart" column="POPUP_START"/>
+		<result property="popupEnd" column="POPUP_END"/>
 		<result property="userNm" column="USER_NM"/>
 		<result property="isDel" column="IS_DEL"/>
 		<result property="insrtId" column="INSRT_ID"/>
@@ -15,5 +17,75 @@
 		<result property="totalCnt" column="TOTAL_CNT"/>
 		<result property="listNum" column="LIST_NUM"/>
 	</resultMap>
+	
+	<select id="selectPopupCnt" parameterType="popupVO" resultMap="mapPopupVO">
+			/** popup.selectPopupCnt */
+			SELECT
+				COUNT(*) AS TOTAL_CNT
+			FROM
+				TB_FOR_POPUP
+			WHERE
+				IS_DEL = 'N'
+			<if test='searchName != null or !searchName.equals("")'>
+				AND POPUP_TITLE LIKE CONCAT('%', #{searchName}, '%')
+			</if>
+	</select>
+	
+	<select id="selectPopupList" parameterType="popupVO" resultMap="mapPopupVO">
+		/** popup.selectPopupList */
+		SELECT 
+			TP.LIST_NUM
+			,TP.POPUP_IDX
+			,TP.POPUP_TITLE
+			,TP.POPUP_START
+			,TP.POPUP_END
+			,TP.USER_NM
+			,TP.INSRT_DATE
+		FROM
+		(SELECT
+			@ROWNUM:=@ROWNUM+1 AS LIST_NUM
+			,TP.POPUP_IDX
+			,TP.POPUP_TITLE
+			,TP.POPUP_START
+			,TP.POPUP_END
+			,TP.USER_NM
+			,TP.INSRT_DATE
+		FROM
+			TB_FOR_POPUP TP, (SELECT @rownum:=0) temp
+		WHERE
+			TP.IS_DEL = 'N'
+		ORDER BY TP.POPUP_IDX DESC) TP
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
+	</select>
+	
+	<insert id="insertPopup" parameterType="popupVO" useGeneratedKeys="true" keyProperty="popupIdx">
+		/** board.insertPopup */
+		INSERT INTO TB_FOR_POPUP
+		(
+				POPUP_TITLE,
+				POPUP_CONTENT,
+				POPUP_START,
+				POPUP_END,
+				USER_NM,
+				IS_DEL,
+				INSRT_ID,
+				INSRT_DATE,
+				UPDT_ID,
+				UPDT_DATE
+		)
+		VALUE(
+			#{popupTitle},
+			#{popupContent},
+			#{popupStart},
+			#{popupEnd},
+			#{userNm},
+			#{isDel},
+			#{insrtId},
+			NOW(),
+			#{updtId},
+			NOW()
+		)
+	</insert>
+	
 	
 </mapper>

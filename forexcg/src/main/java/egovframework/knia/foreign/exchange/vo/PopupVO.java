@@ -1,6 +1,7 @@
 package egovframework.knia.foreign.exchange.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class PopupVO implements Serializable{
 	private static final long serialVersionUID = -7913238605797099585L;
@@ -15,13 +16,35 @@ public class PopupVO implements Serializable{
 	
 	private String popupContent;
 	
-	private String popupStart;
+	private Date popupStart = null;
 	
-	private String popupEnd;
+	private Date popupEnd = null;
+	
+	private String popupStartDt;
+	
+	private String popupEndDt;
 	
 	private String userNm;
 	
 	private String isDel;
+	
+	private String insrtId;
+	
+	private Date insrtDate = null;
+	
+	private String updtId;
+	
+	private Date updtDate = null;
+	
+	private int page = 0;
+	
+	private int firstIndex;
+	
+	private int recordCountPerPage;
+	
+	private int fileCnt;
+	
+	private String searchName = "";
 	
 	public int getListNum() {
 		return listNum;
@@ -63,20 +86,36 @@ public class PopupVO implements Serializable{
 		this.popupContent = popupContent;
 	}
 
-	public String getPopupStart() {
+	public Date getPopupStart() {
 		return popupStart;
 	}
 
-	public void setPopupStart(String popupStart) {
+	public void setPopupStart(Date popupStart) {
 		this.popupStart = popupStart;
 	}
 
-	public String getPopupEnd() {
+	public Date getPopupEnd() {
 		return popupEnd;
 	}
 
-	public void setPopupEnd(String popupEnd) {
+	public void setPopupEnd(Date popupEnd) {
 		this.popupEnd = popupEnd;
+	}
+	
+	public String getPopupStartDt() {
+		return popupStartDt;
+	}
+
+	public void setPopupStartDt(String popupStartDt) {
+		this.popupStartDt = popupStartDt;
+	}
+
+	public String getPopupEndDt() {
+		return popupEndDt;
+	}
+
+	public void setPopupEndDt(String popupEndDt) {
+		this.popupEndDt = popupEndDt;
 	}
 
 	public String getUserNm() {
@@ -103,11 +142,11 @@ public class PopupVO implements Serializable{
 		this.insrtId = insrtId;
 	}
 
-	public String getInsrtDate() {
+	public Date getInsrtDate() {
 		return insrtDate;
 	}
 
-	public void setInsrtDate(String insrtDate) {
+	public void setInsrtDate(Date insrtDate) {
 		this.insrtDate = insrtDate;
 	}
 
@@ -119,20 +158,51 @@ public class PopupVO implements Serializable{
 		this.updtId = updtId;
 	}
 
-	public String getUpdtDate() {
+	public Date getUpdtDate() {
 		return updtDate;
 	}
 
-	public void setUpdtDate(String updtDate) {
+	public void setUpdtDate(Date updtDate) {
 		this.updtDate = updtDate;
 	}
 
-	private String insrtId;
-	
-	private String insrtDate = null;
-	
-	private String updtId;
-	
-	private String updtDate = null;
+	public int getPage() {
+		return page;
+	}
 
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getFirstIndex() {
+		return firstIndex;
+	}
+
+	public void setFirstIndex(int firstIndex) {
+		this.firstIndex = firstIndex;
+	}
+
+	public int getRecordCountPerPage() {
+		return recordCountPerPage;
+	}
+
+	public void setRecordCountPerPage(int recordCountPerPage) {
+		this.recordCountPerPage = recordCountPerPage;
+	}
+
+	public int getFileCnt() {
+		return fileCnt;
+	}
+
+	public void setFileCnt(int fileCnt) {
+		this.fileCnt = fileCnt;
+	}
+
+	public String getSearchName() {
+		return searchName;
+	}
+
+	public void setSearchName(String searchName) {
+		this.searchName = searchName;
+	}
 }

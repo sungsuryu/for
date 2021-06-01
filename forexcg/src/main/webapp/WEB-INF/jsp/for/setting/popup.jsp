@@ -6,12 +6,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/jquery-ui.min.css'/>" />
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/EgovMultiFile.js?ver=1.1'/>" ></script>
 <script type="text/javascript" src="<c:url value='/smartEditor/js/service/HuskyEZCreator.js'/>" ></script>
 <script type="text/javascript">
 	var editors = [];
 	$(document).ready(function() {
-		makeFileAttachment();
+ 		$("#popupStart").datepicker({
+			dateFormat : 'yy-mm-dd'
+		});
+		
+		$("#popupEnd").datepicker({
+			dateFormat : 'yy-mm-dd'
+		});
 		nhn.husky.EZCreator.createInIFrame({
 	 		oAppRef: editors,
 	 		elPlaceHolder: 'popupContent',
@@ -20,11 +28,41 @@
 	 	});
 	});
 	
- 	function makeFileAttachment(){
-		 var maxFileNum = ${maxFile};
+	//신규 팝업 추가
+	function insertPopup(){
+		$("#popupForm").attr("action", "/setting/popupWriteAction.do");
+		$("#popupForm").submit();
+	}
 	
-		 var multi_selector = new MultiSelector( document.getElementById('uploadFileList'), maxFileNum);
-		 multi_selector.addElement(document.getElementById('egovComFileUploader'));
+	function valueCheck(){
+		editors.getById["popupContent"].exec("UPDATE_CONTENTS_FIELD", []);
+		var popupTitle = $("#popupTitle").val();
+		var popupContent = $("#popupContent").val();
+		var popupStart = $("#popupStart").val();
+		var popupEnd = $("#popupEnd").val();
+		
+		if(popupTitle == "" || popupTitle == null){
+			alert("제목을 적어주세요.");
+			return
+		}
+		if( popupContent == ""  || popupContent == null || popupContent == '&nbsp;' || popupContent == '<br>' || popupContent == '<br />' || popupContent == '<p>&nbsp;</p>' || popupContent == '<p><br></p>')  {
+	        alert("내용을 입력하세요.");
+	        oEditors.getById["COMVISION"].exec("FOCUS"); //포커싱
+	        return;
+	    }
+		if(popupStart == "" || popupStart == null){
+			alert("게시 시작일을 선택하여 주세요.");
+			return
+		}
+		if(popupEnd == "" || popupEnd == null){
+			alert("게시 종료일을 선택하여 주세요.");
+			return
+		}
+		insertPopup();
+	}
+	
+	function goPopupView(popupIdx){
+		
 	}
 </script>
 </head>
@@ -124,36 +162,21 @@
 					<col style="width:120px">
 				</colgroup>
 				<tbody>
-					<!-- 선택 된 tr class="on" -->
-					<tr class="on">
-						<td>1</td>
-						<td class="left">제목이 들어갑니다.</td>
-						<td>2021-01-11</td>
-						<td>작성자</td>
-						<td>2021-01-11</td>
-						<td>2021-12-31</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td class="left">제목이 들어갑니다.</td>
-						<td>2021-01-11</td>
-						<td>작성자</td>
-						<td>2021-01-11</td>
-						<td>2021-12-31</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td class="left">제목이 들어갑니다.</td>
-						<td>2021-01-11</td>
-						<td>작성자</td>
-						<td>2021-01-11</td>
-						<td>2021-12-31</td>
-					</tr>
+					<c:forEach var="result" items="${popupList}" varStatus="status">
+						<tr>
+							<td><c:out value="${result.listNum}" /></td>
+							<td class="left"><a href="javascript:goPopupView(<c:out value="${result.popupIdx}" />)"><c:out value="${result.popupTitle}" /></a></td>
+							<td><c:out value="${result.insrtDate}"/></td>
+							<td><c:out value="${result.userNm}" /></td>
+							<td><c:out value="${result.popupStart}" /></td>
+							<td><c:out value="${result.popupEnd}" /></td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
-	</div>	
-	<form id="popupForm" name="popupForm" method="post">
+	</div>
+	<form id="popupForm" name="popupForm" method="post" enctype="multipart/form-data">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -176,22 +199,15 @@
 					<tr>
 						<th>첨부파일</th>
 						<td colspan="3">
-							<div class="add_file_list">
-								<ul id="uploadFileList">
-								</ul>
-								<!-- a href="javascript:;" class="btn btn-sm">삭제</a -->
-							</div>
-							<div class="add_file">
 								<input type="file" name="file" id="egovComFileUploader" title="첨부파일" />
-								<!-- a href="javascript:doUploadFileList();" class="btn btn-sm btn-info">업로드</a -->
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>게시 시작일</th>
-						<td><input id="popupStart" name="popupStart" type="text" class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i></td>
+						<td><input id="popupStart" name="popupStartDt" type="text" readonly class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i></td>
 						<th>게시 종료일</th>
-						<td><input id="popupEnd" name="popupEnd" type="text" class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i></td>
+						<td><input id="popupEnd" name="popupEndDt" type="text" readonly class="input_date"><i class="fa fa-calendar" aria-hidden="true"></i></td>
 					</tr>
 				</tbody>
 			</table>
@@ -200,7 +216,7 @@
 	<div class="tbl_btm">
 		<div class="f_right">
 			<a href="javascript:;" class="btn btn-lg btn-green"><i class="fa fa-plus-circle" aria-hidden="true"></i> 신규</a>
-			<a href="javascript:;" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 			<a href="javascript:;" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
 		</div>
 	</div>
