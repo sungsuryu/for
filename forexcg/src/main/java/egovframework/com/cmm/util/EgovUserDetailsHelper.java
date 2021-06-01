@@ -3,6 +3,7 @@ package egovframework.com.cmm.util;
 import java.util.List;
 
 import egovframework.com.cmm.service.EgovUserDetailsService;
+import egovframework.knia.foreign.exchange.vo.ActiveHistVO;
 import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 
 /**
@@ -48,8 +49,10 @@ public class EgovUserDetailsHelper {
 	 *
 	 * @return List - 사용자 권한정보 목록
 	 */
+	@Deprecated
 	public static List<String> getAuthorities() {
-		return egovUserDetailsService.getAuthorities();
+//		return egovUserDetailsService.getAuthorities();
+		return null;
 	}
 
 	public static boolean isAuthorities(UserRoleVO userRoleVO) {
@@ -61,5 +64,9 @@ public class EgovUserDetailsHelper {
 	 */
 	public static Boolean isAuthenticated() {
 		return egovUserDetailsService.isAuthenticated();
+	}
+	
+	public static List<?> getActiveHistory(ActiveHistVO activeHistVO) {
+		return egovUserDetailsService.getActiveHistory(activeHistVO);
 	}
 }

@@ -6,22 +6,19 @@
 		<result property="mnuId" column="MNU_ID" />
 		<result property="mnuNm" column="MNU_NM" />
 		<result property="prtMnuId" column="PRT_MNU_ID" />
+		<result property="srcMnuId" column="SRC_MNU_ID" />
 		<result property="mnuType" column="MNU_TYPE" />
 		<result property="lvl" column="LVL" />
 		<result property="sortNum" column="SORT_NUM" />
 		<result property="useYn" column="USE_YN" />
 		<result property="url" column="URL" />
 		<result property="isDel" column="IS_DEL" />
-<!-- 		<result property="insrtId" column="INSRT_ID" /> -->
-<!-- 		<result property="insrtDate" column="INSRT_DATE" /> -->
-<!-- 		<result property="updtId" column="UPDT_ID" /> -->
-<!-- 		<result property="updtDate" column="UPDT_DATE" /> -->
 	</resultMap>
 
 	<sql id="commonMenu">
 		SELECT
 			MNU_ID, MNU_NM, PRT_MNU_ID, 
-			IS_INC, 
+			SRC_MNU_ID, IS_INC, 
 			MNU_TYPE, LVL, SORT_NUM, 
 			USE_YN, URL, IS_DEL
 		FROM
@@ -90,6 +87,7 @@
 				MNU_ID, 
 				MNU_NM, 
 				PRT_MNU_ID, 
+				SRC_MNU_ID, 
 				LVL, 
 				SORT_NUM, 
 				USE_YN, 
@@ -105,6 +103,7 @@
 				#{mnuId}, 
 				#{mnuNm}, 
 				#{prtMnuId}, 
+				#{srcMnuId}, 
 				#{mnuType}, 
 				#{lvl}, 
 				#{sortNum}, 
@@ -127,6 +126,7 @@
 			SET
 				MNU_NM=#{mnuNm }, 
 				PRT_MNU_ID=#{prtMnuId}, 
+				SRC_MNU_ID=#{srcMnuId},
 				LVL=#{lvl}, 
 				SORT_NUM=#{sortNum}, 
 				USE_YN=#{useYn},
@@ -139,30 +139,5 @@
 		WHERE
 			MNU_ID=#{mnuId }
 	</update>
-	
-	
-<!-- 	//no property  -->
-<!-- <sql id="example01"> -->
-<!--   FROM -->
-<!-- </sql> -->
 
-<!-- //property 한개 작성 -->
-<!-- <sql id="example02"> -->
-<!--   FROM ${alias(별칭)} -->
-<!-- </sql> -->
-
-<!-- //property 여러 개 작성 -->
-<!-- <sql id="example03"> -->
-<!--   FROM ${alias(별칭)} WHERE id = ${alias02(별칭)} -->
-<!-- </sql> -->
-<!-- <select id="selectUser" resultType="User"> -->
-<!-- SELECT id,name -->
-<!-- <include refid="example03"> -->
-<!--   <property name="alias" value="tablename"/> -->
-<!--   <property name="alias02" value="119"/> -->
-<!-- </include> -->
-<!-- </select> -->
-	
-	
-	
 </mapper>

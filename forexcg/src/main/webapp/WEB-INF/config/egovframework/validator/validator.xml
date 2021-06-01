@@ -65,5 +65,12 @@
 				<arg0 key="title.common.code.cmmCd" />
 			</field>
 		</form>
+		
+		<form name="activeHistVO">
+			<field property="mnuId" depends="required">
+				<arg0 key="title.active.hist.hisNum" />
+			</field>
+		</form>
+		
 	</formset>
 </form-validation>

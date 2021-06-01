@@ -13,6 +13,8 @@ public class MenuVO extends CommonVO implements Serializable {
 	
 	private String prtMnuId;
 	
+	private String srcMnuId;
+	
 	private String isInc;
 	
 	private String mnuType;
@@ -24,6 +26,14 @@ public class MenuVO extends CommonVO implements Serializable {
 	private String useYn = "Y";
 	
 	private String url = "N";
+
+	public String getSrcMnuId() {
+		return srcMnuId;
+	}
+
+	public void setSrcMnuId(String srcMnuId) {
+		this.srcMnuId = srcMnuId;
+	}
 
 	public String getMnuId() {
 		return mnuId;

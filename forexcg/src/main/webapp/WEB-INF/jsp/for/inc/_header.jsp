@@ -8,7 +8,7 @@
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>손해보험협회 외환정보시스템</title>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css'/>" />
-<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/design.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/cmmFunc.js'/>"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/design.css' />" />
+<script type="text/javascript" src="<c:url value='/js/jquery-1.12.4.min.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/design.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/cmmFunc.js' />"></script>

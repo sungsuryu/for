@@ -17,12 +17,10 @@ import org.springmodules.validation.commons.DefaultBeanValidator;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
-import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.CommonCodeService;
 import egovframework.knia.foreign.exchange.vo.CommonCodeVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
-import egovframework.knia.foreign.exchange.vo.UserVO;
 
 @Controller
 public class CommonCodeController {
@@ -106,7 +104,7 @@ public class CommonCodeController {
 		beanValidator.validate(commonCodeVO, bindingResult);
 		if (bindingResult.hasErrors()) {
 			logger.error("필수 파라메터 바인딩 오류");
-			throw new Exception("수 파라메터 바인딩 오류");
+			throw new Exception("필수 파라메터 바인딩 오류");
 		}
 		
 		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();

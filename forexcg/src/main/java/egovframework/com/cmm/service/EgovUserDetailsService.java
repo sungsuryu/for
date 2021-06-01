@@ -3,6 +3,7 @@ package egovframework.com.cmm.service;
 import java.util.HashMap;
 import java.util.List;
 
+import egovframework.knia.foreign.exchange.vo.ActiveHistVO;
 import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 
 public interface EgovUserDetailsService {
@@ -33,4 +34,5 @@ public interface EgovUserDetailsService {
 	 */
 	public Boolean isAuthenticated(); 
 
+	public List<?> getActiveHistory(ActiveHistVO activeHistVO);
 }

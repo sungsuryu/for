@@ -2,6 +2,7 @@ package egovframework.com.cmm.interceptor;
 
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.service.MenuService;
+import egovframework.knia.foreign.exchange.vo.ActiveHistVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.MenuVO;
 import egovframework.knia.foreign.exchange.vo.UserRoleVO;
@@ -71,11 +72,14 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 				UserRoleVO setRoleVO = new UserRoleVO();
 				setRoleVO.setRoleId(loginVO.getRoleId());
 				setRoleVO.setUrl(reqSvlPath);
+				setRoleVO.setInsrtId(loginVO.getLoginId());
+				
 				if (EgovUserDetailsHelper.isAuthorities(setRoleVO)) {
 					return true;
 				}
 				
 				logger.error("권한없음 으로 권한 등록이 필요합니다. -- ");
+//				return false;
 				return true;
 			} else {	// 추가인증 필요
 				logger.debug("AuthenticInterceptor - OTP인증 필요.:{} 단계", loginVO.getLoginStep());
@@ -100,8 +104,16 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 		logger.debug("postHandle");
 		
 		Map<String, Object> gnbMenu = menuService.selectMenuTree(new MenuVO());
-		
 		model.addObject("gnbMenu", gnbMenu);
+		
+		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+		model.addObject("loginVo", getLoginVO);
+		
+		ActiveHistVO histVo = new ActiveHistVO();
+		histVo.setUserId(getLoginVO.getLoginId());
+		
+		List<?> getHist = EgovUserDetailsHelper.getActiveHistory(histVo);
+		model.addObject("histVo", getHist);
 		
 		super.postHandle(request, response, handler, model);
 	}

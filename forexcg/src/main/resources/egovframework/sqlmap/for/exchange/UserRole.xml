@@ -7,6 +7,8 @@
 		<result property="mnuId" column="MNU_ID" />
 		<result property="roleNm" column="ROLE_NM" />
 		<result property="useYn" column="USE_YN" />
+		<result property="mnuType" column="MNU_TYPE" />
+		<result property="lvl" column="LVL" />
 		<result property="url" column="URL" />
 	</resultMap>
 	
@@ -36,13 +38,19 @@
 		SELECT
 			RG.ROLE_ID,
 			RG.MNU_ID, 
-			MN.URL
+			MN.URL, 
+			MN.MNU_TYPE, 
+			MN.LVL
 		FROM
 			TB_FOR_ROLE_GRP RG
 			INNER JOIN TB_FOR_MNU MN ON RG.MNU_ID=MN.MNU_ID
 		WHERE
 			RG.ROLE_ID=#{roleId }
-			AND INSTR(MN.URL, #{url }) > 0
-			AND RG.USE_YN='Y' AND RG.IS_DEL='N'
+			<!-- AND INSTR(MN.URL, #{url }) > 0 -->
+			AND MN.URL=#{url }
+			AND RG.USE_YN='Y'
+			AND RG.IS_DEL='N'
+		LIMIT 1
 	</select>
+	
 </mapper>

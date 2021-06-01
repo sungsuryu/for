@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.knia.foreign.exchange.dao.mapper.ActiveHistMapper">
+
+	<resultMap id="mapAtvHistVO" type="egovframework.knia.foreign.exchange.vo.ActiveHistVO">
+		<result property="mnuId" column="MNU_ID" />
+		<result property="mnuNm" column="MNU_NM" />
+		<result property="atvDesc" column="ATV_DESC" />
+		<result property="userId" column="USER_ID" />
+		<result property="mnuType" column="MNU_TYPE" />
+		<result property="lvl" column="LVL" />
+		<result property="url" column="URL" />
+	</resultMap>
+
+	<sql id="selectActiveHist">
+		SELECT
+			MNU_ID, MNU_NM, ATV_DESC, 
+			USER_ID, 
+			MNU_TYPE, LVL,  
+			URL
+		FROM
+			${tableName}
+	</sql>
+	
+	<select id="selectActiveHistFindByUserId" parameterType="activeHistVO" resultMap="mapAtvHistVO">
+		/** ActiveHist.selectActiveHistFindByUserId */
+		SELECT
+			HIS.MNU_ID, 
+			MN.MNU_NM,  
+			MN.MNU_TYPE, 
+			MN.LVL,  
+			MN.URL
+		FROM
+			(
+				SELECT MNU_ID FROM TB_FOR_ATV_HIST
+				WHERE
+				USER_ID=#{userId }
+				AND IS_DEL='N'
+				AND INSRT_DATE > DATE_SUB(NOW(), INTERVAL 1 DAY)
+				GROUP BY MNU_ID ORDER BY INSRT_DATE DESC
+				LIMIT 10
+			) HIS LEFT JOIN TB_FOR_MNU MN ON HIS.MNU_ID=MN.MNU_ID
+	</select>
+
+	<insert id="insertActiveHist" parameterType="activeHistVO">
+		INSERT INTO
+		TB_FOR_ATV_HIST (
+			USER_ID, 
+			MNU_ID, 
+			ATV_DESC, 
+			IS_DEL, 
+			INSRT_ID, 
+			INSRT_DATE, 
+			UPDT_ID, 
+			UPDT_DATE
+		) VALUES (
+			#{userId }, 
+			#{mnuId }, 
+			#{atvDesc }, 
+			'N', 
+			#{userId }, 
+			now(),
+			#{userId },
+			now()
+		)
+	</insert>
+
+	<update id="updateActiveHist" parameterType="activeHistVO">
+		UPDATE TB_FOR_ATV_HIST
+		SET
+			IS_DEL='Y', 
+			UPDT_ID=#{userId },
+			UPDT_DATE=now()
+		WHERE
+			USER_ID=#{userId }
+			AND MNU_ID=#{mnuId }
+	</update>
+	
+	<delete id="deleteActiveHist" parameterType="activeHistVO">
+		DELETE FROM TB_FOR_ATV_HIST
+		WHERE
+			USER_ID=#{userId }
+			AND MNU_ID=#{mnuId }
+	</delete>
+</mapper>

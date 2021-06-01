@@ -85,7 +85,7 @@
 		WHERE
 			USER_ID=#{loginId}
 			AND IS_EXP='N'
-			AND INSRT_DATE > DATE_SUB(now(), INTERVAL 60 MINUTE)
+			AND INSRT_DATE &gt; DATE_SUB(now(), INTERVAL 60 MINUTE)
 	</update>
 	
 	<select id="selectAuthNum" parameterType="loginAuthHistVO" resultMap="mapAuthHistVO">
@@ -98,7 +98,7 @@
 				USER_ID=#{loginId}
 				AND IS_EXP='N'
 				AND IS_DEL='N'
-				AND INSRT_DATE > DATE_SUB(now(), INTERVAL 2 MINUTE)
+				AND INSRT_DATE &gt; DATE_SUB(now(), INTERVAL 2 MINUTE)
 			ORDER BY
 				INSRT_DATE DESC LIMIT 1
 			

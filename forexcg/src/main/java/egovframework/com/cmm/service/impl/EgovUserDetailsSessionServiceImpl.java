@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import egovframework.knia.foreign.exchange.vo.ActiveHistVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 import egovframework.com.cmm.service.EgovUserDetailsService;
@@ -16,6 +17,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
+import egovframework.knia.foreign.exchange.cmm.code.MenuCode;
+import egovframework.knia.foreign.exchange.dao.mapper.ActiveHistMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.LoginMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.UserRoleMapper;
 /**
@@ -41,6 +44,9 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 	@Resource(name="userRoleMapper")
 	private UserRoleMapper userRoleMapper;
 	
+	@Resource(name="activeHistMapper")
+	private ActiveHistMapper activeHistMapper;
+	
 	public Object getAuthenticatedUser() {
 		if (RequestContextHolder.getRequestAttributes() == null) {
 			return null;
@@ -53,7 +59,8 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 //		loginVO.setLoginId("testid");
 //		return loginVO;
 	}
-
+	
+	@Deprecated
 	public List<String> getAuthorities() {
 
 		List<String> listAuth = new ArrayList<String>();
@@ -69,14 +76,21 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 	public boolean isAuthorities(UserRoleVO userRoleVO) {
 		
 		try {
-			List<?> userRole = userRoleMapper.selectMenuIdFindByRoleId(userRoleVO);
-			if (userRole.size() > 0) {
+			UserRoleVO getRole = userRoleMapper.selectMenuIdFindByRoleId(userRoleVO);
+			if (getRole != null) {
+				if (getRole.getMnuType().equals(MenuCode.VIEW.toString())) {
+					ActiveHistVO atvVo = new ActiveHistVO();
+					atvVo.setUserId(userRoleVO.getInsrtId());
+					atvVo.setMnuId(getRole.getMnuId());
+	
+					activeHistMapper.insertActiveHist(atvVo);
+				}
 				return true;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();	
 			return false;
 		}
-		
 		return false;
 	}
 
@@ -94,4 +108,13 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 		}
 	}
 
+	public List<?> getActiveHistory(ActiveHistVO activeHistVO) {
+		try {
+			return activeHistMapper.selectActiveHistFindByUserId(activeHistVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 }

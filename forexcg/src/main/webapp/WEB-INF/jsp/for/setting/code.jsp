@@ -4,7 +4,7 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
+<%@ include file="/WEB-INF/jsp/for/inc/_header.jsp"%>
 <script type="text/javascript">
 
 	// 그룹코드 클릭 이벤트
@@ -17,7 +17,7 @@
 		var cdEl = thisEl.children("td").children("strong");
 		var cmmCd = $(cdEl).text();
 		var pData = {
-			"cmmCd":cmmCd	
+			"cmmCd":cmmCd
 		};
 		subCodeList(pData);
 	});

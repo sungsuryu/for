@@ -15,6 +15,26 @@ public class UserRoleVO extends CommonVO implements Serializable {
 	private String useYn;
 	
 	private String url;
+	
+	private int lvl;
+	
+	private String mnuType;
+	
+	public int getLvl() {
+		return lvl;
+	}
+
+	public void setLvl(int lvl) {
+		this.lvl = lvl;
+	}
+
+	public String getMnuType() {
+		return mnuType;
+	}
+
+	public void setMnuType(String mnuType) {
+		this.mnuType = mnuType;
+	}
 
 	public String getRoleId() {
 		return roleId;

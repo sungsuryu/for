@@ -12,5 +12,5 @@ public interface UserRoleMapper {
 	
 	List<?> selectUserRoleFindByRoleId(UserRoleVO userRoleVO) throws Exception;
 	
-	List<?> selectMenuIdFindByRoleId(UserRoleVO userRoleVO) throws Exception;
+	UserRoleVO selectMenuIdFindByRoleId(UserRoleVO userRoleVO) throws Exception;
 }
