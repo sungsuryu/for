@@ -97,7 +97,7 @@
 		WHERE
 			IS_DEL='N'
 			AND IS_INC='Y'
-		ORDER BY SORT_NUM
+		ORDER BY LVL, SORT_NUM
 	</select>
 	
 	<insert id="insertMenu" parameterType="menuVO">

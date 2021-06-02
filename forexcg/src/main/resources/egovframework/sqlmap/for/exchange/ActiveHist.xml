@@ -80,6 +80,8 @@
 		DELETE FROM TB_FOR_ATV_HIST
 		WHERE
 			USER_ID=#{userId }
-			AND MNU_ID=#{mnuId }
+			<if test="mnuId != null and mnuId !=''">
+				AND MNU_ID=#{mnuId}
+			</if>
 	</delete>
 </mapper>

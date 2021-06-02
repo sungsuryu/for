@@ -18,11 +18,13 @@ import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
+import egovframework.knia.foreign.exchange.service.ActiveHistService;
 import egovframework.knia.foreign.exchange.service.FindUserAccount;
 import egovframework.knia.foreign.exchange.service.LoginService;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.UserVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.knia.foreign.exchange.vo.ActiveHistVO;
 import egovframework.knia.foreign.exchange.vo.FindIdVO;
 import egovframework.knia.foreign.exchange.vo.FindPwdVO;
 import egovframework.knia.foreign.exchange.vo.LoginAuthHistVO;
@@ -52,6 +54,8 @@ public class LoginController {
     @Resource(name="propertiesService")
     protected EgovPropertyService propertyService;
     
+    @Resource(name="activeHistService")
+    private ActiveHistService activeHistService;
     /**
      * 로그인 화면
      * @param request
@@ -141,8 +145,11 @@ public class LoginController {
 					getLoginVO.setLoginStep(CommonConst.LOGIN_STEP1);
 					request.getSession().setAttribute(ConstCode.loginVO.toString(), getLoginVO);
 					
-					// 사용완료된 인증번호 만료처리
-					loginService.deleteAuthNum(getLoginVO);
+					loginService.deleteAuthNum(getLoginVO);	// 사용완료된 인증번호 만료처리
+					
+					ActiveHistVO histVO = new ActiveHistVO();
+					histVO.setUserId(getLoginVO.getLoginId());
+					activeHistService.deleteActiveHist(histVO);	// 최근방문 메뉴 목록 초기화(삭제)
 				}
 			} else {
 				authInfo.put("auth", "F");
