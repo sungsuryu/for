@@ -20,13 +20,28 @@
 		$("#popupEnd").datepicker({
 			dateFormat : 'yy-mm-dd'
 		});
+		
+		$("#fileNm").click(function(){
+			fn_egov_downFile();
+		});
+		
 		nhn.husky.EZCreator.createInIFrame({
 	 		oAppRef: editors,
 	 		elPlaceHolder: 'popupContent',
 	 		sSkinURI: "/smartEditor/SmartEditor2Skin.html",
-	 		fCreator: "createSEditor2"
+	 		fOnAppLoad : function(){
+	 			$("#popupForm").hide();
+	        },
+	 		fCreator: "createSEditor2",
+	 		htParams : {fOnBeforeUnload : function(){}}
 	 	});
 	});
+	
+	function fn_egov_link_page(page){
+		$("#page").val(page);
+		$("#boardForm").attr("action", "/setting/board/notice.do");
+		$("#boardForm").submit();
+	}
 	
 	//신규 팝업 추가
 	function insertPopup(){
@@ -34,6 +49,18 @@
 		$("#popupForm").submit();
 	}
 	
+	//팝업 수정
+	function updatePopup(){
+		$("#popupForm").attr("action", "/setting/popupEditAction.do");
+		$("#popupForm").submit();
+	}
+	
+	//팝업 수정
+	function deletePopup(){
+		$("#popupForm").attr("action", "/setting/popupDeleteAction.do");
+		$("#popupForm").submit();
+	}
+		
 	function valueCheck(){
 		editors.getById["popupContent"].exec("UPDATE_CONTENTS_FIELD", []);
 		var popupTitle = $("#popupTitle").val();
@@ -58,12 +85,100 @@
 			alert("게시 종료일을 선택하여 주세요.");
 			return
 		}
-		insertPopup();
+		if($("#popupIdx").val() == 0){
+			insertPopup();
+		}
+		else{
+			updatePopup();
+		}
+	}
+	
+	function newWrite(){
+		$("#newBtn").addClass("dispNon");
+		$("#saveBtn").removeClass("dispNon");
+		$("#popupForm").show();
 	}
 	
 	function goPopupView(popupIdx){
-		
+		//$("#newBtn").removeClass("dispNon");
+		$("#popupIdx").val(popupIdx);
+		var formData = $("#popupForm").serialize();
+		$.ajax({
+	        type:"POST",
+	        url:"/setting/popupEditView.ajax",
+	        data : formData,
+	        success: function(data){
+	        	var res = data.result;
+	        	console.log(data.result);
+	        	if(res.status == "SUCCESS"){
+	        		$("#newBtn").addClass("dispNon");
+	        		$("#saveBtn").removeClass("dispNon");
+	        		$("#deleteBtn").removeClass("dispNon");
+	        		$("#popupForm").show();
+	        		
+	        		$("#popupTitle").val(res.popupVO.popupTitle);
+	        		$("#popupStart").val(res.popupVO.popupStartDt);
+	        		$("#popupEnd").val(res.popupVO.popupEndDt);
+	        		editors.getById["popupContent"].exec("SET_IR", [""]);
+	        		editors.getById["popupContent"].exec("PASTE_HTML", [res.popupVO.popupContent]);
+	        		
+	        		if(res.isFile == "Y"){
+	        			$("#fileId").val(res.fileList.fileId);
+	        			$("#originFile").removeClass("dispNon");
+	        			$("#fileNm").text(res.fileList.phyFileNm);
+	        			$("#fileNm").css("display", "inline-block");
+	        			$("#fileNm").css("margin-bottom", "10px");
+	        			console.log(res.fileList);
+	        		}
+	        		else{
+	        			$("#fileId").val("");
+	        			$("#fileNm").text("");
+	        			$("#originFile").addClass("dispNon");
+	        		}
+	        	}
+	        	else{
+	        		alert("불러오기 실패");
+	        	}
+	        },
+			error: function(e){
+				alert("불러오기 실패");
+			}			
+    	});
 	}
+	
+	function deleteFile(){
+		if (confirm("첨부파일을 삭제하시겠습니까?") == true){    //확인
+			var formData = $("#popupForm").serialize();
+			$.ajax({
+		        type:"POST",
+		        url:"/setting/popupDeletefile.ajax",
+		        data : formData,
+		        success: function(data){
+		        	var res = data.result;
+		        	if(res.resultStatus == "SUCCESS"){
+	        			$("#fileId").val("");
+	        			$("#fileNm").text("");
+	        			$("#originFile").addClass("dispNon");
+		        	}
+		        	else{
+		        	console.log(data.result);
+		        		alert("파일삭제 실패");
+		        	}
+		        },
+				error: function(e){
+					alert("파일삭제 실패");
+				}			
+	    	});
+ 		}else{   //취소
+ 		     return false;
+ 		}
+	}
+	
+ 	function fn_egov_downFile(){
+		$("#popupForm").attr("action", "/popup/downloadFile.do");
+		$("#popupForm").submit();
+	}
+	
 </script>
 </head>
 <body>
@@ -124,10 +239,10 @@
 	</div>
 	
 	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong>10</strong>건</p>
+		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${totalCnt}" /></strong>건</p>
 	</div>
 	
-	<div class="table_h01 paragraph" style="height:calc(100% - 495px)">
+	<div class="table_h01 paragraph">
 		<table>
 			<colgroup>
 				<col style="width:70px">
@@ -174,9 +289,16 @@
 					</c:forEach>
 				</tbody>
 			</table>
+			<div class="f_left">
+				<div class="pagenum">
+					<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+				</div>
+			</div>
 		</div>
 	</div>
 	<form id="popupForm" name="popupForm" method="post" enctype="multipart/form-data">
+		<input id="popupIdx" name="popupIdx" type="hidden" value="0">
+		<input id="fileId" name="fileId" type="hidden" value="">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -199,6 +321,11 @@
 					<tr>
 						<th>첨부파일</th>
 						<td colspan="3">
+				        	<div id="originFile" class="dispNon">
+				        		<h3 id="fileNm"></h3>&nbsp
+								<a href="javascript:deleteFile()"><i id="deleteFilebtn" class="fa fa-times-circle" aria-hidden="true"></i></a>
+				        	</div>
+							<div>
 								<input type="file" name="file" id="egovComFileUploader" title="첨부파일" />
 							</div>
 						</td>
@@ -215,9 +342,9 @@
 	</form>
 	<div class="tbl_btm">
 		<div class="f_right">
-			<a href="javascript:;" class="btn btn-lg btn-green"><i class="fa fa-plus-circle" aria-hidden="true"></i> 신규</a>
-			<a href="javascript:valueCheck();" class="btn btn-lg btn-primary"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-			<a href="javascript:;" class="btn btn-lg btn-red"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
+			<a id="newBtn" href="javascript:newWrite();" class="btn btn-lg btn-green"><i class="fa fa-plus-circle" aria-hidden="true"></i> 신규</a>
+			<a id="saveBtn" href="javascript:valueCheck();" class="btn btn-lg btn-primary dispNon"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			<a id="deleteBtn" href="javascript:deletePopup();" class="btn btn-lg btn-red dispNon"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
 		</div>
 	</div>
 	
