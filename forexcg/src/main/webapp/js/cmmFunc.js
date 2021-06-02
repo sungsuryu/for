@@ -27,3 +27,44 @@
 		var url = thisEl.children("url");
 		document.location.href = $(url).text();
 	});
+
+	function selectGuide(){
+		var formData = $("#guideForm").serialize();
+		$.ajax({
+	        type:"POST",
+	        url:"/help/guide.ajax",
+	        data : formData,
+	        success: function(data){
+	        	if(data.result.status == "SUCCESS"){
+	        		if(data.result.levelCheck == "N"){
+	        			$("#updateGuide").css("display", "none");
+	        			$("#guideContent").attr("readonly", true);
+	        			$("#guideContent").attr("disable", true);
+	        		}
+	        		if(data.result.isYn == "Y"){
+	        			$("#guideContent").val(data.result.guideVO.guideContent);
+	        		}
+	        	}
+	        	else{
+	        		alert("도움말 불러오기 실패");
+	        	}
+	        },
+			error: function(e){
+				alert("도움말 불러오기 실패");
+			}			
+    	});
+	}
+	
+	function updateGuide(){
+		var formData = $("#guideForm").serialize();
+		$.ajax({
+	        type:"POST",
+	        url:"/help/updateGuide.ajax",
+	        data : formData,
+	        success: function(data){
+	        },
+			error: function(e){
+				alert("도움말 수정 실패");
+			}			
+    	});
+	}
