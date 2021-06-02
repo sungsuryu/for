@@ -4,6 +4,7 @@ import java.util.List;
 
 import egovframework.com.cmm.service.EgovUserDetailsService;
 import egovframework.knia.foreign.exchange.vo.ActiveHistVO;
+import egovframework.knia.foreign.exchange.vo.MenuVO;
 import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 
 /**
@@ -55,6 +56,10 @@ public class EgovUserDetailsHelper {
 		return null;
 	}
 
+	public static MenuVO getMenuInfo(String sPath) {
+		return egovUserDetailsService.getMenuInfo(sPath);
+	}
+	
 	public static boolean isAuthorities(UserRoleVO userRoleVO) {
 		return egovUserDetailsService.isAuthorities(userRoleVO);
 	}

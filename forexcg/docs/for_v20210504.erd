@@ -1299,7 +1299,7 @@
                 </columnType>
                 <size>20</size>
                 <notNull>true</notNull>
-                <primaryKey>false</primaryKey>
+                <primaryKey>true</primaryKey>
                 <description></description>
                 <autoIncrement>false</autoIncrement>
                 <defaultValue></defaultValue>

@@ -66,8 +66,7 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 		if(loginVO != null) {
 			if (loginVO.getLoginStep() > 0) {	// 2차 인증 완료
 				
-				// TODO 권한Role 체크
-				String reqSvlPath = request.getServletPath();
+				String reqSvlPath = request.getServletPath();	// ServletPath 비교
 
 				UserRoleVO setRoleVO = new UserRoleVO();
 				setRoleVO.setRoleId(loginVO.getRoleId());
@@ -114,6 +113,10 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 		
 		List<?> getHist = EgovUserDetailsHelper.getActiveHistory(histVo);
 		model.addObject("histVo", getHist);
+		
+		String reqSvlPath = request.getServletPath();	// ServletPath 기준 현 메뉴정보 조회
+		MenuVO getCurrentMenuInfo = EgovUserDetailsHelper.getMenuInfo(reqSvlPath);
+		model.addObject("menuInfo", getCurrentMenuInfo);
 		
 		super.postHandle(request, response, handler, model);
 	}

@@ -10,6 +10,8 @@ public interface MenuMapper {
 
 	MenuVO selectMenu(MenuVO menuVO) throws Exception;
 	
+	MenuVO selectMenuFindByUrl(String sPath) throws Exception;
+	
 	List<?> selectMenuList(MenuVO menuVO) throws Exception;
 	
 	void insertMenu(MenuVO menuVO) throws Exception;

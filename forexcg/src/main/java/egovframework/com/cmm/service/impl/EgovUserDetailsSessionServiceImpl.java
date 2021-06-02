@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import egovframework.knia.foreign.exchange.vo.ActiveHistVO;
 import egovframework.knia.foreign.exchange.vo.LoginVO;
+import egovframework.knia.foreign.exchange.vo.MenuVO;
 import egovframework.knia.foreign.exchange.vo.UserRoleVO;
 import egovframework.com.cmm.service.EgovUserDetailsService;
 
@@ -20,6 +21,7 @@ import egovframework.knia.foreign.exchange.cmm.code.ConstCode;
 import egovframework.knia.foreign.exchange.cmm.code.MenuCode;
 import egovframework.knia.foreign.exchange.dao.mapper.ActiveHistMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.LoginMapper;
+import egovframework.knia.foreign.exchange.dao.mapper.MenuMapper;
 import egovframework.knia.foreign.exchange.dao.mapper.UserRoleMapper;
 /**
  * 
@@ -47,20 +49,19 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 	@Resource(name="activeHistMapper")
 	private ActiveHistMapper activeHistMapper;
 	
+	@Resource(name="menuMapper")
+	private MenuMapper menuMapper;
+	
+	
+	
 	public Object getAuthenticatedUser() {
 		if (RequestContextHolder.getRequestAttributes() == null) {
 			return null;
 		}
 
 		return RequestContextHolder.getRequestAttributes().getAttribute(ConstCode.loginVO.toString(), RequestAttributes.SCOPE_SESSION);
-
-//		테스트를 위한 계정 생성
-//		LoginVO loginVO = new LoginVO();
-//		loginVO.setLoginId("testid");
-//		return loginVO;
 	}
 	
-	@Deprecated
 	public List<String> getAuthorities() {
 
 		List<String> listAuth = new ArrayList<String>();
@@ -73,17 +74,28 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 		return listAuth;
 	}
 	
-	public boolean isAuthorities(UserRoleVO userRoleVO) {
+	public MenuVO getMenuInfo(String sPath) {
 		
+		MenuVO mVo = new MenuVO();
 		try {
-			UserRoleVO getRole = userRoleMapper.selectMenuIdFindByRoleId(userRoleVO);
+			mVo = menuMapper.selectMenuFindByUrl(sPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mVo;
+	}
+	
+	public boolean isAuthorities(UserRoleVO userRoleVO) {
+		try {
+			UserRoleVO getRole = userRoleMapper.selectMenuIdFindByRoleId(userRoleVO);	// 권한여부 확인
 			if (getRole != null) {
-				if (getRole.getMnuType().equals(MenuCode.VIEW.toString())) {
+				if (getRole.getMnuType().equals(MenuCode.VIEW.toString())) {	// 현 메뉴가 VIEW 인지
 					ActiveHistVO atvVo = new ActiveHistVO();
 					atvVo.setUserId(userRoleVO.getInsrtId());
 					atvVo.setMnuId(getRole.getMnuId());
 	
-					activeHistMapper.insertActiveHist(atvVo);
+					activeHistMapper.insertActiveHist(atvVo);	// 현 메뉴접근 정보를 History 등록
 				}
 				return true;
 			}

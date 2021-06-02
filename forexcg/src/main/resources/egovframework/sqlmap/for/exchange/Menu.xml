@@ -7,6 +7,7 @@
 		<result property="mnuNm" column="MNU_NM" />
 		<result property="prtMnuId" column="PRT_MNU_ID" />
 		<result property="srcMnuId" column="SRC_MNU_ID" />
+		<result property="stMnuId" column="ST_MNU_ID" />
 		<result property="mnuType" column="MNU_TYPE" />
 		<result property="lvl" column="LVL" />
 		<result property="sortNum" column="SORT_NUM" />
@@ -24,6 +25,25 @@
 		FROM
 			${tableName}
 	</sql>
+	
+	<select id="selectMenuFindByUrl" parameterType="String" resultMap="mapMenuVO">
+		/** menu.selectMenuFindByUrl */
+		SELECT
+			CM.MNU_ID, 
+			CM.PRT_MNU_ID, 
+			CM.LVL, 
+			CM.MNU_NM, 
+			CM.SRC_MNU_ID, 
+			CM.MNU_TYPE, 
+			PM.PRT_MNU_ID ST_MNU_ID
+		FROM
+			TB_FOR_MNU CM LEFT JOIN TB_FOR_MNU PM ON CM.PRT_MNU_ID=PM.MNU_ID
+		WHERE
+			CM.IS_DEL='N'
+			AND CM.USE_YN='Y'
+			AND CM.URL=#{value }
+		LIMIT 1
+	</select>
 	
 	<select id="selectMenu" parameterType="menuVO" resultMap="mapMenuVO">
 		/** menu.selectMenu */
