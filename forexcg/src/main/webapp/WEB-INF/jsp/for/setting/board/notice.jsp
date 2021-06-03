@@ -27,48 +27,7 @@
 		$("#boardForm").attr("action", "/board/downloadZipFile.do");
 		$("#boardForm").submit();
 	}
-	
-	function selectGuide(){
-		var formData = $("#guideForm").serialize();
-		$.ajax({
-	        type:"POST",
-	        url:"/help/guide.ajax",
-	        data : formData,
-	        success: function(data){
-	        	if(data.result.status == "SUCCESS"){
-	        		if(data.result.levelCheck == "N"){
-	        			$("#updateGuide").css("display", "none");
-	        			$("#guideContent").attr("readonly", true);
-	        			$("#guideContent").attr("disable", true);
-	        		}
-	        		if(data.result.isYn == "Y"){
-	        			$("#guideContent").val(data.result.guideVO.guideContent);
-	        		}
-	        	}
-	        	else{
-	        		alert("도움말 불러오기 실패");
-	        	}
-	        },
-			error: function(e){
-				alert("도움말 불러오기 실패");
-			}			
-    	});
-	}
-	
-	function updateGuide(){
-		var formData = $("#guideForm").serialize();
-		$.ajax({
-	        type:"POST",
-	        url:"/help/updateGuide.ajax",
-	        data : formData,
-	        success: function(data){
-	        },
-			error: function(e){
-				alert("도움말 수정 실패");
-			}			
-    	});
-	}
-	
+		
 </script>
 </head>
 
@@ -182,27 +141,6 @@
 	</form>
 </div>
 <!--+++++ /컨텐츠 +++++-->
-
-<!--+++++ 우측 레이어(도움말) +++++-->
-<aside id="aside_right">
-	<header class="aside_right_header">
-		<h2>도움말</h2>
-		<a href="javascript:;" class="btn_close">창닫기</a>
-	</header>
-	<div class="aside_right_con">
-		<form id="guideForm" name="guideForm" method="post">
-			<input id="uiId" name="uiId" type="hidden" value="MID03003006000" />
-			<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;"></textarea>
-			<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-		</form>
-	</div>
-</aside>
-<!--+++++ /우측 레이어(도움말) +++++-->
-
-<script>
-$(function(){
-});
-</script>
-
+<%@ include file="/WEB-INF/jsp/for/inc/_help.jsp" %>
 </body>
 </html>

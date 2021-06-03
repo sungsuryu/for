@@ -234,24 +234,6 @@
 	
 </div>
 <!--+++++ /컨텐츠 +++++-->
-
-<!--+++++ 우측 레이어(도움말) +++++-->
-<aside id="aside_right">
-	<header class="aside_right_header">
-		<h2>도움말</h2>
-		<a href="javascript:;" class="btn_close">창닫기</a>
-	</header>
-	<div class="aside_right_con">
-		<textarea>도움말 내용</textarea>
-		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-	</div>
-</aside>
-<!--+++++ /우측 레이어(도움말) +++++-->
-
-<script>
-$(function(){
-});
-</script>
-
+<%@ include file="/WEB-INF/jsp/for/inc/_help.jsp" %>
 </body>
 </html>
