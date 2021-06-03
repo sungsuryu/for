@@ -67,9 +67,9 @@
 	
 	<div class="catg_area">
 		<ul>
-			<li><a href="javascript:;">공지사항</a></li>
-			<li class="on"><a href="javascript:;">자료실</a></li>
-			<li><a href="for_014_faq.htm">FAQ</a></li>
+			<li><a href="/setting/board/notice.do">공지사항</a></li>
+			<li class="on"><a href="/setting/board/pds.do">자료실</a></li>
+			<li><a href="/setting/board/faq.do">FAQ</a></li>
 		</ul>
 	</div>
 	
