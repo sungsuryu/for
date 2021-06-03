@@ -58,8 +58,20 @@
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
 	</select>
 	
+	<select id="selectPopup" parameterType="popupVO" resultMap="mapPopupVO">
+		/** popup.selectPopup */
+		SELECT 
+			 POPUP_IDX
+			,POPUP_TITLE
+			,POPUP_CONTENT
+			,POPUP_START
+			,POPUP_END
+		FROM TB_FOR_POPUP
+		WHERE POPUP_IDX = #{popupIdx};
+	</select>
+	
 	<insert id="insertPopup" parameterType="popupVO" useGeneratedKeys="true" keyProperty="popupIdx">
-		/** board.insertPopup */
+		/** popup.insertPopup */
 		INSERT INTO TB_FOR_POPUP
 		(
 				POPUP_TITLE,
@@ -87,5 +99,29 @@
 		)
 	</insert>
 	
+	<update id="updatePopup" parameterType="popupVO">
+		/** popup.updatePopup */
+		UPDATE
+			TB_FOR_POPUP
+		SET
+			 POPUP_TITLE = #{popupTitle}
+			,POPUP_CONTENT = #{popupContent}
+			,POPUP_START = #{popupStart}
+			,POPUP_END = #{popupEnd}
+			,USER_NM = #{userNm}
+			,UPDT_ID = #{updtId}
+			,UPDT_DATE = NOW()
+		WHERE
+			POPUP_IDX = #{popupIdx}
+	</update>
 	
+	<update id="deletePopup" parameterType="popupVO">
+		/** popup.deletePopup */
+		UPDATE
+			TB_FOR_POPUP
+		SET
+			IS_DEL = 'Y'
+		WHERE
+			POPUP_IDX = #{popupIdx}
+	</update>
 </mapper>

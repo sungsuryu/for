@@ -46,6 +46,8 @@ public class PopupVO implements Serializable{
 	
 	private String searchName = "";
 	
+	private String fileId = "";
+	
 	public int getListNum() {
 		return listNum;
 	}
@@ -204,5 +206,13 @@ public class PopupVO implements Serializable{
 
 	public void setSearchName(String searchName) {
 		this.searchName = searchName;
+	}
+	
+	public String getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
 	}
 }
