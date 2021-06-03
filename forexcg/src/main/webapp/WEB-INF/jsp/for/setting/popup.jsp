@@ -281,10 +281,10 @@
 						<tr>
 							<td><c:out value="${result.listNum}" /></td>
 							<td class="left"><a href="javascript:goPopupView(<c:out value="${result.popupIdx}" />)"><c:out value="${result.popupTitle}" /></a></td>
-							<td><c:out value="${result.insrtDate}"/></td>
+							<td><fmt:formatDate value="${result.insrtDate }" pattern="yyyy.MM.dd"/></td>
 							<td><c:out value="${result.userNm}" /></td>
-							<td><c:out value="${result.popupStart}" /></td>
-							<td><c:out value="${result.popupEnd}" /></td>
+							<td><fmt:formatDate value="${result.popupStart }" pattern="yyyy.MM.dd"/></td>
+							<td><fmt:formatDate value="${result.popupEnd }" pattern="yyyy.MM.dd"/></td>
 						</tr>
 					</c:forEach>
 				</tbody>
