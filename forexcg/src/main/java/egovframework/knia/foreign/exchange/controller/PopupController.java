@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.util.EgovBasicLogger;
@@ -62,8 +65,19 @@ public class PopupController {
     @RequestMapping(value = "/setting/popup.do")
 	public String settingPopup(@ModelAttribute("popupVO") PopupVO popupVO, HttpServletRequest request, ModelMap model) throws Exception {
 		logger.debug("팝업 관리 화면");
+		Map<String, ?> pageInfo = RequestContextUtils.getInputFlashMap(request);
+		
 		if (popupVO.getPage() == 0) {
-			popupVO.setPage(1);
+			if(null != pageInfo){
+				int pageNo = (int) pageInfo.get("page");
+				String searchName = (String) pageInfo.get("searchName");
+				String searchType = (String) pageInfo.get("searchType");
+				popupVO.setPage(pageNo);
+				popupVO.setSearchName(searchName);
+				popupVO.setSearchType(searchType);
+			}else{
+				popupVO.setPage(1);
+			}
 		}
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(popupVO.getPage());// 개발용:현재 페이지 번호
@@ -73,16 +87,20 @@ public class PopupController {
 		popupVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		popupVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 		
-		PopupVO resultPopupVO = popupService.selectPopupCnt(popupVO);
+		PopupVO cntPopupVO = popupService.selectPopupCnt(popupVO);
 		
 		List<?> popupList = popupService.selectPopupList(popupVO);
 		
-		paginationInfo.setTotalRecordCount(resultPopupVO.getTotalCnt());
+		List<?> resulPopupList = new ArrayList<>();
+		int pageCnt = (cntPopupVO.getTotalCnt() - ((popupVO.getPage()-1) * propertyService.getInt("pageUnit"))) + 1;
+		
+		paginationInfo.setTotalRecordCount(cntPopupVO.getTotalCnt());
 		
 		model.addAttribute("paginationInfo", paginationInfo);
-		model.addAttribute("page", popupVO.getPage());
+		model.addAttribute("pageCnt", pageCnt);
+		model.addAttribute("popupVO", popupVO);
 		model.addAttribute("popupList", popupList);
-		model.addAttribute("totalCnt", resultPopupVO.getTotalCnt());
+		model.addAttribute("totalCnt", cntPopupVO.getTotalCnt());
 		
 		return "setting/popup";
 	}
@@ -140,7 +158,7 @@ public class PopupController {
     
     @RequestMapping(value = "/setting/popupEditAction.do")
 	public String settingPopupEditUpdate(final MultipartHttpServletRequest multiRequest,
-			@ModelAttribute("popupVO") PopupVO popupVO, HttpServletRequest request) throws Exception {
+			@ModelAttribute("popupVO") PopupVO popupVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
 		logger.debug("팝업 수정");
 		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 
@@ -167,12 +185,15 @@ public class PopupController {
 
 			int insertFileCnt = fileService.insertFileInfo(result, "");
 		}
+		attr.addFlashAttribute("page", popupVO.getPage());
+		attr.addFlashAttribute("searchName", popupVO.getSearchName());
+		attr.addFlashAttribute("searchType", popupVO.getSearchType());
 		return "redirect:/setting/popup.do";
 	}
     
     @RequestMapping(value = "/setting/popupDeleteAction.do")
    	public String settingPopupEditDelete(final MultipartHttpServletRequest multiRequest,
-   			@ModelAttribute("popupVO") PopupVO popupVO, HttpServletRequest request) throws Exception {
+   			@ModelAttribute("popupVO") PopupVO popupVO, HttpServletRequest request, RedirectAttributes attr) throws Exception {
    		logger.debug("팝업 삭제");
    		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 
@@ -187,6 +208,9 @@ public class PopupController {
    			fileVO.setUserId(getLoginVO.getLoginId().toString());
    			popupService.deleteFile(fileVO);
    		}
+   		attr.addFlashAttribute("page", popupVO.getPage());
+		attr.addFlashAttribute("searchName", popupVO.getSearchName());
+		attr.addFlashAttribute("searchType", popupVO.getSearchType());
    		return "redirect:/setting/popup.do";
    	}
     

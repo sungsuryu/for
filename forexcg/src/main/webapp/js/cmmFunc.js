@@ -28,12 +28,15 @@
 		document.location.href = $(url).text();
 	});
 
+	// 도움말 불러오기
 	function selectGuide(){
-		var formData = $("#guideForm").serialize();
+		var uiId = $("#uiId").val();
 		$.ajax({
 	        type:"POST",
 	        url:"/help/guide.ajax",
-	        data : formData,
+	        data : {
+	        	"uiId":uiId
+	        },
 	        success: function(data){
 	        	if(data.result.status == "SUCCESS"){
 	        		if(data.result.levelCheck == "N"){
@@ -55,12 +58,17 @@
     	});
 	}
 	
+	// 도움말 가져오기
 	function updateGuide(){
-		var formData = $("#guideForm").serialize();
+		var uiId = $("#uiId").val();
+		var guideContent = $("#guideContent").val();
 		$.ajax({
 	        type:"POST",
 	        url:"/help/updateGuide.ajax",
-	        data : formData,
+	        data : {
+	        	"uiId":uiId,
+	        	"guideContent":guideContent
+	        },
 	        success: function(data){
 	        },
 			error: function(e){

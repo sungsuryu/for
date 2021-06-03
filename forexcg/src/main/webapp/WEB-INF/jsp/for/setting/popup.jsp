@@ -14,12 +14,33 @@
 	var editors = [];
 	$(document).ready(function() {
  		$("#popupStart").datepicker({
-			dateFormat : 'yy-mm-dd'
-		});
+ 			changeMonth: true,
+ 			changeYear: true,
+ 			nextText: '다음 달',
+ 			prevText: '이전 달',
+ 			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+ 			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+			dateFormat : 'yy-mm-dd',
+				onSelect: function (date) {
+					var endDate = $('#popupEnd');
+					var startDate = $(this).datepicker('getDate');
+					var minDate = $(this).datepicker('getDate');
+					endDate.datepicker('setDate', minDate);
+					startDate.setDate(startDate.getDate() + 30);
+					endDate.datepicker('option', 'maxDate', startDate);
+					endDate.datepicker('option', 'minDate', minDate);
+				}
+		}).datepicker("setDate", new Date());
 		
 		$("#popupEnd").datepicker({
+ 			changeMonth: true,
+ 			changeYear: true,
+ 			nextText: '다음 달',
+ 			prevText: '이전 달',
+ 			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+ 			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
 			dateFormat : 'yy-mm-dd'
-		});
+		}).datepicker("setDate", new Date());
 		
 		$("#fileNm").click(function(){
 			fn_egov_downFile();
@@ -35,16 +56,22 @@
 	 		fCreator: "createSEditor2",
 	 		htParams : {fOnBeforeUnload : function(){}}
 	 	});
+		
+		$("#" + "${popupVO.searchType}").attr("selected", "selected");
+		
 	});
 	
 	function fn_egov_link_page(page){
 		$("#page").val(page);
-		$("#boardForm").attr("action", "/setting/board/notice.do");
-		$("#boardForm").submit();
+		$("#popupForm").attr("action", "/setting/popup.do");
+		$("#popupForm").submit();
 	}
 	
 	//신규 팝업 추가
 	function insertPopup(){
+		$("#page").val(0);
+		$("#searchName").val("");
+		$("#searchType").val("");
 		$("#popupForm").attr("action", "/setting/popupWriteAction.do");
 		$("#popupForm").submit();
 	}
@@ -100,7 +127,6 @@
 	}
 	
 	function goPopupView(popupIdx){
-		//$("#newBtn").removeClass("dispNon");
 		$("#popupIdx").val(popupIdx);
 		var formData = $("#popupForm").serialize();
 		$.ajax({
@@ -109,7 +135,6 @@
 	        data : formData,
 	        success: function(data){
 	        	var res = data.result;
-	        	console.log(data.result);
 	        	if(res.status == "SUCCESS"){
 	        		$("#newBtn").addClass("dispNon");
 	        		$("#saveBtn").removeClass("dispNon");
@@ -127,8 +152,7 @@
 	        			$("#originFile").removeClass("dispNon");
 	        			$("#fileNm").text(res.fileList.phyFileNm);
 	        			$("#fileNm").css("display", "inline-block");
-	        			$("#fileNm").css("margin-bottom", "10px");
-	        			console.log(res.fileList);
+	        			$("#fileNm").css("margin-bottom", "8px");
 	        		}
 	        		else{
 	        			$("#fileId").val("");
@@ -161,7 +185,6 @@
 	        			$("#originFile").addClass("dispNon");
 		        	}
 		        	else{
-		        	console.log(data.result);
 		        		alert("파일삭제 실패");
 		        	}
 		        },
@@ -178,7 +201,14 @@
 		$("#popupForm").attr("action", "/popup/downloadFile.do");
 		$("#popupForm").submit();
 	}
-	
+ 	
+ 	function goSearch(){
+ 		$("#page").val(0);
+ 		$("#searchName").val($("#SearchText").val());
+ 		$("#searchType").val($("#searchTypeSelector option:selected").val());
+ 		$("#popupForm").attr("action", "/setting/popup.do");
+		$("#popupForm").submit();
+ 	}
 </script>
 </head>
 <body>
@@ -224,18 +254,18 @@
 	<div class="top_search_area">
 		<span class="label">검색항목</span>
 		<span class="styled_select">
-			<select>
-				<option>전체</option>
-				<option></option>
-				<option></option>
-				<option></option>
+			<select id="searchTypeSelector">
+				<option id="all" value="all">전체</option>
+				<option id="title" value="title">제목</option>
+				<option id="content" value="content">내용</option>
+				<option id="userNm" value="userNm">작성자</option>
 			</select>
 		<i class="fa fa-sort" aria-hidden="true"></i>
 		</span>
 		<span class="space"></span>
 		<span class="label">검색어</span>
-		<input type="text">
-		<a href="javascript:;" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
+		<input id="SearchText" name="SearchText" type="text" value="<c:out value="${popupVO.searchName}" />">
+		<a href="javascript:goSearch();" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
 	</div>
 	
 	<div class="tbl_top">
@@ -278,8 +308,9 @@
 				</colgroup>
 				<tbody>
 					<c:forEach var="result" items="${popupList}" varStatus="status">
+						<c:set var="pageCnt" value="${pageCnt-1}"></c:set>
 						<tr>
-							<td><c:out value="${result.listNum}" /></td>
+							<td><c:out value="${pageCnt}"/></td>
 							<td class="left"><a href="javascript:goPopupView(<c:out value="${result.popupIdx}" />)"><c:out value="${result.popupTitle}" /></a></td>
 							<td><fmt:formatDate value="${result.insrtDate }" pattern="yyyy.MM.dd"/></td>
 							<td><c:out value="${result.userNm}" /></td>
@@ -296,9 +327,12 @@
 			</div>
 		</div>
 	</div>
-	<form id="popupForm" name="popupForm" method="post" enctype="multipart/form-data">
+	<form id="popupForm" name="popupForm" method="post" enctype="multipart/form-data" style="display:inline-block; margin-top:5px;">
 		<input id="popupIdx" name="popupIdx" type="hidden" value="0">
 		<input id="fileId" name="fileId" type="hidden" value="">
+		<input id="page" name="page" type="hidden" value="${popupVO.page}">
+		<input id="searchName" name="searchName" type="hidden" value="${popupVO.searchName}">
+		<input id="searchType" name="searchType" type="hidden" value="${popupVO.searchType}">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -322,7 +356,7 @@
 						<th>첨부파일</th>
 						<td colspan="3">
 				        	<div id="originFile" class="dispNon">
-				        		<h3 id="fileNm"></h3>&nbsp
+				        		<h3 id="fileNm" style="cursor:pointer;"></h3>&nbsp
 								<a href="javascript:deleteFile()"><i id="deleteFilebtn" class="fa fa-times-circle" aria-hidden="true"></i></a>
 				        	</div>
 							<div>
@@ -350,24 +384,6 @@
 	
 </div>
 <!--+++++ /컨텐츠 +++++-->
-
-<!--+++++ 우측 레이어(도움말) +++++-->
-<aside id="aside_right">
-	<header class="aside_right_header">
-		<h2>도움말</h2>
-		<a href="javascript:;" class="btn_close">창닫기</a>
-	</header>
-	<div class="aside_right_con">
-		<textarea>도움말 내용</textarea>
-		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-	</div>
-</aside>
-<!--+++++ /우측 레이어(도움말) +++++-->
-
-<script>
-$(function(){
-});
-</script>
-
+<%@ include file="/WEB-INF/jsp/for/inc/_help.jsp" %>
 </body>
 </html>

@@ -92,9 +92,9 @@ function makeFileAttachment(){
 	
 	<div class="catg_area">
 		<ul>
-			<li><a href="javascript:;">공지사항</a></li>
-			<li class="on"><a href="javascript:;">자료실</a></li>
-			<li><a href="for_014_faq.htm">FAQ</a></li>
+			<li><a href="/setting/board/notice.do">공지사항</a></li>
+			<li class="on"><a href="/setting/board/pds.do">자료실</a></li>
+			<li><a href="/setting/board/faq.do">FAQ</a></li>
 		</ul>
 	</div>
 	<form id="boardForm" name="boardForm" method="post" enctype="multipart/form-data">
@@ -150,23 +150,6 @@ function makeFileAttachment(){
 	
 </div>
 <!--+++++ /컨텐츠 +++++-->
-
-<!--+++++ 우측 레이어(도움말) +++++-->
-<aside id="aside_right">
-	<header class="aside_right_header">
-		<h2>도움말</h2>
-		<a href="javascript:;" class="btn_close">창닫기</a>
-	</header>
-	<div class="aside_right_con">
-		<textarea>도움말 내용</textarea>
-		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-	</div>
-</aside>
-<!--+++++ /우측 레이어(도움말) +++++-->
-
-<script>
-
-</script>
-
+<%@ include file="/WEB-INF/jsp/for/inc/_help.jsp" %>
 </body>
 </html>

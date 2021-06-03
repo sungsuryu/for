@@ -14,10 +14,8 @@
 		<a href="javascript:;" class="btn_close">창닫기</a>
 	</header>
 	<div class="aside_right_con">
-		<form id="guideForm" name="guideForm" method="post">
-			<input id="uiId" name="uiId" type="hidden" value="<c:out value="${helpId }" />" />
-			<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;"></textarea>
-			<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-		</form>
+		<input id="uiId" name="uiId" type="hidden" value="<c:out value="${helpId }" />" />
+		<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;"></textarea>
+		<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
 	</div>
 </aside>
