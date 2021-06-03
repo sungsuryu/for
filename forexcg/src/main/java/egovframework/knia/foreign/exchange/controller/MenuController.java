@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
+import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.CommonCodeService;
 import egovframework.knia.foreign.exchange.service.MenuService;
 import egovframework.knia.foreign.exchange.vo.CommonCodeVO;
@@ -47,7 +49,30 @@ public class MenuController {
 		List<?> mnuTypeLst = commonCodeService.selectCodeList(CommonConst.MENU_TYPE);
 		model.addAttribute("mnuTypeLst", mnuTypeLst);
 		
+		List<?> sourceMenu = menuService.selectSourceMenu();
+		model.addAttribute("srcMenu", sourceMenu);
+		
+		menuVO.setLvl(menuVO.getLvl()-1);
+		List<?> getPrtMenu = menuService.selectParentMenu(menuVO);
+		model.addAttribute("prtMenu", getPrtMenu);
+		
 		return "setting/menu";
+	}
+	
+	@RequestMapping(value="/setting/prtMenuLst.ajax")
+	public String listPrtMenu(@ModelAttribute("menuVO") MenuVO menuVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		menuVO.setLvl(menuVO.getLvl()-1);
+		
+		List<?> getPrtMenu = menuService.selectParentMenu(menuVO);
+		model.addAttribute("prtMenu", getPrtMenu);
+		
+		MenuVO getMenu = menuService.getMenuFromParentMnuId(menuVO);
+		model.addAttribute("cMenu", getMenu);
+		
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
+		
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/setting/subMenu.ajax")
@@ -55,8 +80,13 @@ public class MenuController {
 		
 		menuVO.setIsDel("N");
 		
-		List<?> getMenu = menuService.selectMenuList(menuVO);
-		model.addAttribute("subMenuList", getMenu);
+		List<?> getMenuLst = menuService.selectMenuList(menuVO);
+		model.addAttribute("subMenuList", getMenuLst);
+		
+		MenuVO getMenu = menuService.getMenuFromParentMnuId(menuVO);
+		model.addAttribute("cMenu", getMenu);
+		
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
 		
 		return "jsonView";
 	}
@@ -68,6 +98,7 @@ public class MenuController {
 		
 		List<?> getMenu = menuService.selectMenuList(menuVO);
 		model.addAttribute("dtlMenuList", getMenu);
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
 		
 		return "jsonView";
 	}

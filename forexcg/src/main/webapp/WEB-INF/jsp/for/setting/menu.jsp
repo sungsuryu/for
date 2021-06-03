@@ -6,6 +6,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
 <script type="text/javascript">
+
+	// 대메뉴 click 이벤트
 	$(document).on('click', '.mnuLst li a', function(event) {
 		$(this).parent().parent().find('> li').removeClass('on');
 		$(this).parent().addClass('on');
@@ -20,6 +22,7 @@
 		reqSubMenu("subMnuLst", pData);
 	});
 
+	// 중메뉴 click 이벤트
 	$(document).on('click', '.subMnuLst li a', function(event) {
 		$(this).parent().parent().find('> li').removeClass('on');
 		$(this).parent().addClass('on');
@@ -33,6 +36,7 @@
 		reqSubMenu("dtlMnuLst", pData);
 	});
 
+	// 하위메뉴 render 이벤트
 	var reqSubMenu = function(uri, pData) {
 		if (pData.prtMnuId == "") {
 			alert("선택된 메뉴가 없습니다.");
@@ -43,6 +47,7 @@
 	        url:"/setting/subMenu.ajax",
 	        data : pData,
 	        success: function(e){
+	        	console.log(e);
 	        	if (uri == "subMnuLst")
 	        		$(".subMnuLst").find("> li").remove();
 	        	$(".dtlMnuLst").find("> li").remove();
@@ -54,10 +59,45 @@
 	        			addMenu(uri, mnuLst[i]);
 	        		}
 	        	}
+	        	setMenuDesc(e.cMenu);	// 메뉴등록 및 수정화면 세팅
 	        }
     	});
 	};
 	
+	// 메뉴등록 및 수정화면 세팅
+	var setMenuDesc = function(e) {
+		var mnuId = e.mnuId;
+		var mnuNm = e.mnuNm;
+		var lvl = e.lvl;
+		var srcMnuId = e.srcMnuId;
+		var prtMnuId = e.prtMnuId;
+		var mnuType = e.mnuType;
+		var isInc = e.isInc;
+		var url = e.url;
+		var mnuDesc = e.mnuDesc;
+		
+		if ($("input[name='lvl']:checked").val() != lvl) {	// 선택한 메뉴와 등록 및 수정화면의 선택된 값(lvl)이 다른경우 상위메뉴 reload 이벤트 생성
+			$("input[name='lvl']").each(function() {
+				if($(this).val() == lvl)
+					$(this).attr('checked', true);	
+			});
+			var pData = {
+					"lvl":lvl--
+				};
+			subaction(pData);	// 상위메뉴 reload
+		}
+		// TODO interval 차이로 binding 안되고 있음.
+		$("#prtMnuId").val(prtMnuId).prop("selected", true);
+		$("#srcMnuId").val(srcMnuId).prop("selected", true);
+		$("#mnuId").val(mnuId);
+		$("#mnuNm").val(mnuNm);
+		$("#mnuType").val(mnuType).prop("selected", true);
+		$("#isInc").val(isInc).prop("selected", true);
+		$("#url").val(url);
+		$("#mnuDesc").val(mnuDesc);
+	};
+	
+	// render 메뉴에 이벤트 추가
 	var addMenu = function(id, itm) {
 		var mnuId = itm.mnuId;
 		var mnuNm = itm.mnuNm;
@@ -74,12 +114,60 @@
 		$("."+id).append(rows);
 	};
 	
+	// 소메뉴 client 이벤트
 	$(document).on('click', '.dtlMnuLst li a', function(event) {
 		$(this).parent().parent().find('> li').removeClass('on');
 		$(this).parent().addClass('on');
 
 
 	});
+	
+	// 메뉴위치 change 이벤트
+	$(document).on("change", "input[name='lvl']:radio", function(e) {
+		var getLvl = $(this).val();
+		var pData = {
+				"lvl":getLvl--
+		};
+		subaction(pData);	// 상위메뉴 reload
+	});
+	
+	// 상위메뉴 reload 이벤트
+	var subaction = function(pData) {
+		$.ajax({
+	        type:"POST",
+	        url:"/setting/prtMenuLst.ajax",
+	        data : pData,
+	        success: function(e){
+	        	try {
+		        	if (e.result.status == "SUCCESS") {
+		        		var itm = e.prtMenu;
+		        		var mnuCnt = e.prtMenu.length;
+		        		initOption();
+		        		if (mnuCnt > 0) {
+		        			initOption();
+		        			for (var i in itm) {
+			        			addOption(itm[i]);
+			        		}
+		        		}
+		        	}
+	        	} catch (e) {;}
+	        }
+    	});
+	};
+	
+	// 메뉴 등록 및 수정화면의 상위메뉴 option 추가
+	var addOption = function(itm) {
+		var opt = $("<option />").val(itm.mnuId);
+		$("#prtMnuId").append(
+				$(opt).text(itm.mnuNm)
+		);
+	};
+	
+	// 메뉴 등록 및 수정화면의 상위메뉴 option 초기화
+	var initOption = function() {
+		$("#prtMnuId > option").remove();
+	};
+
 </script>
 </head>
 
@@ -223,6 +311,35 @@
 						<span class="space"></span>
 						<input type="radio" name="lvl" id="lvl_3" value="3"><i></i> <label for="lvl_3">소메뉴</label>
 					</td>
+					<th>상위메뉴</th>
+					<td>
+					<span class="styled_select" style="width:120px; min-width:inherit">
+						<select name="prtMenuId" id="prtMnuId">
+						<c:forEach var="prtMenu" items="${prtMenu }" varStatus="status">
+							<option value="<c:out value="${prtMenu.mnuId }" />"><c:out value="${prtMenu.mnuNm }"></c:out></option>
+						</c:forEach>
+						</select>
+						<i class="fa fa-sort" aria-hidden="true"></i>
+					</span>
+					</td>
+					
+					<th>대표메뉴</th>
+					<td>
+					<span class="styled_select" style="width:120px; min-width:inherit">
+						<select name="srcMnuId" id="srcMnuId">
+							<option value="">선택</option>
+						<c:forEach var="srcMnu" items="${srcMenu }" varStatus="status">
+							<option value="${srcMnu.srcMnuId }">${srcMnu.mnuNm }</option>
+						</c:forEach>
+						</select>
+						<i class="fa fa-sort" aria-hidden="true"></i>
+					</span>
+					</td>
+					
+				</tr>
+				<tr>
+					<th>메뉴ID</th>
+					<td><input type="text" id="mnuId" name="mnuId" style="width:100%" placeholder="MID00000000000"></td>
 					<th>메뉴유형</th>
 					<td>
 					<span class="styled_select" style="width:120px; min-width:inherit">
@@ -235,24 +352,24 @@
 						<i class="fa fa-sort" aria-hidden="true"></i>
 					</span>
 					</td>
-					<th>설명</th>
+					<th>노출여부</th>
 					<td>
-						<input type="text" id="mnuDesc" name="mnuDesc" style="width:100%">
-					</td>
-				</tr>
-				<tr>
-					<th>메뉴ID</th>
-					<td><input type="text" id="mnuId" name="mnuId" style="width:100%" placeholder="MID00000000000"></td>
-					<th>포함여부</th>
-					<td>
+					<span class="styled_select" style="width:120px; min-width:inherit">
 						<select name="isInc" id="isInc">
 							<option value="Y">포함</option>
 							<option value="N">미포함</option>
 						</select>
 						<i class="fa fa-sort" aria-hidden="true"></i>
-					</td>
+					</span>
+					
+				</tr>
+				<tr>
 					<th>URL</th>
-					<td><input type="text" name="url" id="url" style="width:100%" placeholder="URL"></td>
+					<td colspan="3"><input type="text" name="url" id="url" style="width:100%" placeholder="URL"></td>
+					<th>설명</th>
+					<td>
+						<input type="text" id="mnuDesc" name="mnuDesc" style="width:100%">
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -266,21 +383,6 @@
 	
 </div>
 <!--+++++ /컨텐츠 +++++-->
-
-<!--+++++ 우측 레이어(도움말) +++++-->
-<aside id="aside_right">
-	<header class="aside_right_header">
-		<h2>도움말</h2>
-		<a href="javascript:;" class="btn_close">창닫기</a>
-	</header>
-	<div class="aside_right_con">
-		<textarea>도움말 내용</textarea>
-		<a href="javascript:;" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
-	</div>
-</aside>
-<!--+++++ /우측 레이어(도움말) +++++-->
-
-
-
+<%@ include file="/WEB-INF/jsp/for/inc/_help.jsp" %>
 </body>
 </html>

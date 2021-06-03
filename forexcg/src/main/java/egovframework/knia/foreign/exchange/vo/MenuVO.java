@@ -1,7 +1,6 @@
 package egovframework.knia.foreign.exchange.vo;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class MenuVO extends CommonVO implements Serializable {
 

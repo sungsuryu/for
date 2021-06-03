@@ -20,11 +20,25 @@ public class MenuServiceImpl implements MenuService {
 	MenuMapper menuMapper;
 	
 	@Override
+	public MenuVO getMenuFromParentMnuId(MenuVO menuVO) throws Exception {
+		MenuVO setMenu = new MenuVO();
+		setMenu.setMnuId(menuVO.getPrtMnuId());
+		
+		return this.getMenu(setMenu);
+	}
+	
+	@Override
+	public MenuVO getMenu(MenuVO menuVO) throws Exception {
+		return menuMapper.selectMenu(menuVO);
+	}
+	
+	@Override
 	public List<?> selectMenuList(MenuVO menuVO) throws Exception {
 		
 		return menuMapper.selectMenuList(menuVO);
 	}
 
+	@Override
 	public Map<String, Object> selectMenuTree(MenuVO menuVO) throws Exception {
 		
 		@SuppressWarnings("unchecked")
@@ -53,5 +67,15 @@ public class MenuServiceImpl implements MenuService {
 		forMenu.put("lMnu", lMnu);
 		
 		return forMenu;
+	}
+	
+	@Override
+	public List<?> selectSourceMenu() throws Exception {
+		return menuMapper.selectSourceMenu();
+	}
+	
+	@Override
+	public List<?> selectParentMenu(MenuVO memuVO) throws Exception {
+		return menuMapper.selectParentMenu(memuVO);
 	}
 }

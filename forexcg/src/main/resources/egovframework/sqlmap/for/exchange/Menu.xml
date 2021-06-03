@@ -10,6 +10,7 @@
 		<result property="stMnuId" column="ST_MNU_ID" />
 		<result property="mnuType" column="MNU_TYPE" />
 		<result property="lvl" column="LVL" />
+		<result property="isInc" column="IS_INC" />
 		<result property="sortNum" column="SORT_NUM" />
 		<result property="useYn" column="USE_YN" />
 		<result property="url" column="URL" />
@@ -51,8 +52,8 @@
 			<property name="tableName" value="TB_FOR_MNU" />
 		</include>
 		WHERE
-			IS_DEL=#{isDel}
-			AND LVL=#{lvl}
+			IS_DEL='N'
+			AND USE_YN='Y'
 			<if test="mnuId != null and mnuId !=''">
 				AND MNU_ID=#{mnuId}
 			</if>
@@ -65,7 +66,6 @@
 			<if test="mnuType != null and mnuType !=''">
 				AND MNU_TYPE=#{mnuType}
 			</if>
-		LIMIT 1
 	</select>
 	
 	<select id="selectMenuList" parameterType="menuVO" resultMap="mapMenuVO">
@@ -160,4 +160,31 @@
 			MNU_ID=#{mnuId }
 	</update>
 
+	<select id="selectSourceMenu" resultMap="mapMenuVO">
+		/** menu.selectSourceMenu */
+		<include refid="commonMenu">
+			<property name="tableName" value="TB_FOR_MNU" />
+		</include>
+		WHERE 
+			MNU_TYPE='VIEW' 
+			AND USE_YN='Y' 
+			AND IS_DEL='N' 
+		ORDER BY
+			LVL, SORT_NUM
+	</select>
+
+	<select id="selectParentMenu" parameterType="menuVO" resultMap="mapMenuVO">
+		/** menu.selectParentMenu */
+		<include refid="commonMenu">
+			<property name="tableName" value="TB_FOR_MNU" />
+		</include>
+		WHERE 
+			MNU_TYPE IN ('VIEW', 'LABEL', 'ROOT')
+			AND USE_YN='Y' 
+			AND IS_DEL='N'
+			AND LVL=#{lvl } 
+		ORDER BY
+			SORT_NUM
+	</select>
+	
 </mapper>
