@@ -88,10 +88,9 @@ public class PopupController {
 		popupVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 		
 		PopupVO cntPopupVO = popupService.selectPopupCnt(popupVO);
-		
+		popupVO.setTotalCnt(cntPopupVO.getTotalCnt());
 		List<?> popupList = popupService.selectPopupList(popupVO);
 		
-		List<?> resulPopupList = new ArrayList<>();
 		int pageCnt = (cntPopupVO.getTotalCnt() - ((popupVO.getPage()-1) * propertyService.getInt("pageUnit"))) + 1;
 		
 		paginationInfo.setTotalRecordCount(cntPopupVO.getTotalCnt());
@@ -100,7 +99,6 @@ public class PopupController {
 		model.addAttribute("pageCnt", pageCnt);
 		model.addAttribute("popupVO", popupVO);
 		model.addAttribute("popupList", popupList);
-		model.addAttribute("totalCnt", cntPopupVO.getTotalCnt());
 		
 		return "setting/popup";
 	}

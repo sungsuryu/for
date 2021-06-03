@@ -269,7 +269,7 @@
 	</div>
 	
 	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${totalCnt}" /></strong>건</p>
+		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${popupVO.totalCnt}" /></strong>건</p>
 	</div>
 	
 	<div class="table_h01 paragraph">

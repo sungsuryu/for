@@ -74,7 +74,7 @@
 	</div>
 	
 	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${total_cnt}" /></strong>건</p>
+		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${boardVO.totalCnt}" /></strong>건</p>
 	</div>
 	
 	<div class="table_h01">
@@ -99,8 +99,9 @@
 			</thead>
 			<tbody>
 				<c:forEach var="result" items="${boardList}" varStatus="status">
+					<c:set var="pageCnt" value="${pageCnt-1}"></c:set>
 					<tr>
-						<td><c:out value="${result.listNum}" /></td>
+						<td><c:out value="${pageCnt}" /></td>
 						<td class="left"><a href="javascript:goBoardView(<c:out value="${result.boardIdx}" />)"><c:out value="${result.boardTitle}" /></a></td>
 						<td>
 							<c:if test = "${result.fileCnt > 0}">
@@ -128,7 +129,7 @@
 		</div>
 	</div>
 	<form id="boardForm" name="boardForm" method="post" action="/setting/board/pds.do">
-		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" id="page" name="page" value="${boardVO.page}" />
 		<input type='hidden' id="boardIdx" name='boardIdx' value="0" />
 		<input type='hidden' id="boardType" name="boardType" value="PDS" />
 	</form>

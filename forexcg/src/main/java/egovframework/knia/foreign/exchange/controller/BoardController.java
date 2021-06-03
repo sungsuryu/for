@@ -92,13 +92,17 @@ public class BoardController {
 		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
-		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
-
+		int totalCnt = boardService.selectBoardCnt(boardVO);// 개발용
+		boardVO.setTotalCnt(totalCnt);
+		paginationInfo.setTotalRecordCount(totalCnt);
+		
 		List<?> boardList = boardService.selectBoardList(boardVO);
+		
+		int pageCnt = (totalCnt - ((boardVO.getPage()-1) * propertyService.getInt("pageUnit"))) + 1;
+		
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("total_cnt", total_cnt);
-		model.addAttribute("page", boardVO.getPage());
-		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("pageCnt", pageCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
 		return "setting/board/notice";
@@ -295,13 +299,16 @@ public class BoardController {
 		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
-		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
-
+		int totalCnt = boardService.selectBoardCnt(boardVO);// 개발용
+		boardVO.setTotalCnt(totalCnt);
 		List<?> boardList = boardService.selectBoardList(boardVO);
+		
+		int pageCnt = (totalCnt - ((boardVO.getPage()-1) * propertyService.getInt("pageUnit"))) + 1;
+		paginationInfo.setTotalRecordCount(totalCnt);
+		
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("total_cnt", total_cnt);
-		model.addAttribute("page", boardVO.getPage());
-		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("pageCnt", pageCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
 		return "setting/board/pds";
@@ -493,14 +500,17 @@ public class BoardController {
 		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할 첫번째 데이터 번호
 
-		int total_cnt = boardService.selectFaqCnt(boardVO);// 개발용
-
+		int totalCnt = boardService.selectFaqCnt(boardVO);// 개발용
+		boardVO.setTotalCnt(totalCnt);
 		List<?> faqList = boardService.selectFaqList(boardVO);
-		paginationInfo.setTotalRecordCount(total_cnt);
+		paginationInfo.setTotalRecordCount(totalCnt);
+		
+		int pageCnt = (totalCnt - ((boardVO.getPage()-1) * propertyService.getInt("pageUnit"))) + 1;
+		
 		model.addAttribute("paginationInfo", paginationInfo);
-		model.addAttribute("page", boardVO.getPage());
 		model.addAttribute("faqList", faqList);
-		model.addAttribute("total_cnt", total_cnt);
+		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("pageCnt", pageCnt);
 		
 		return "setting/board/faq";
 	}
@@ -569,14 +579,17 @@ public class BoardController {
 		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
 
-		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
-
+		int totalCnt = boardService.selectBoardCnt(boardVO);// 개발용
+		boardVO.setTotalCnt(totalCnt);
+		paginationInfo.setTotalRecordCount(totalCnt);
+		
 		List<?> boardList = boardService.selectBoardList(boardVO);
+		
+		int pageCnt = (totalCnt - ((boardVO.getPage()-1) * propertyService.getInt("pageUnit"))) + 1;
+		
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("total_cnt", total_cnt);
-		model.addAttribute("searchName", boardVO.getSearchName());
-		model.addAttribute("page", boardVO.getPage());
-		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("pageCnt", pageCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
 		return "board/notice";
@@ -627,14 +640,16 @@ public class BoardController {
 		boardVO.setRecordCountPerPage(propertyService.getInt("pageUnit"));// 개발용:한번에 조회할 데이터 수
 		boardVO.setFirstIndex(paginationInfo.getFirstRecordIndex());// 개발용:조회할
 
-		int total_cnt = boardService.selectBoardCnt(boardVO);// 개발용
-
+		int totalCnt = boardService.selectBoardCnt(boardVO);// 개발용
+		boardVO.setTotalCnt(totalCnt);
+		paginationInfo.setTotalRecordCount(totalCnt);
 		List<?> boardList = boardService.selectBoardList(boardVO);
+		
+		int pageCnt = (totalCnt - ((boardVO.getPage()-1) * propertyService.getInt("pageUnit"))) + 1;
+		
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("total_cnt", total_cnt);
-		model.addAttribute("searchName", boardVO.getSearchName());
-		model.addAttribute("page", boardVO.getPage());
-		paginationInfo.setTotalRecordCount(total_cnt);
+		model.addAttribute("boardVO", boardVO);
+		model.addAttribute("pageCnt", pageCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
 		return "board/pds";

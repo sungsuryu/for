@@ -130,7 +130,7 @@
 	</div>
 	
 	<div class="tbl_top">
-		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${total_cnt}" /></strong>건</p>
+		<p class="result"><i class="fa fa-check-circle" aria-hidden="true"></i> 조회건 수 - 총 <strong><c:out value="${boardVO.totalCnt}" /></strong>건</p>
 	</div>
 	
 	<div class="table_h01 paragraph" style="height:calc(100% - 275px)">
@@ -166,32 +166,33 @@
 				</colgroup>
 				<tbody>
 					<c:forEach var="result" items="${faqList}" varStatus="status">
-					<tr>
-						<td><c:out value="${result.listNum}" /></td>
-						<td><a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}" />')" class="link01"><c:out value="${result.faqFileNm}" /></a></td>
-						<td><c:out value="${result.userName}" /></td>
-						<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
-						<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
-						<td><c:out value="${insrtDate}"/></td>
-						<td>
-							<c:choose>
-								<c:when test="${result.useYn eq 'N'}">
-									<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'Y')">
-										<strong class="txt_red">
-											<c:out value="${result.useYn}" />
-										</strong>
-									</a>
-								</c:when>
-								<c:otherwise>
-									<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'N')">
-										<strong class="txt_blue">
-											<c:out value="${result.useYn}" />
-										</strong>
-									</a>
-								</c:otherwise>
-							</c:choose>
-						</td>
-					</tr>
+						<c:set var="pageCnt" value="${pageCnt-1}"></c:set>
+						<tr>
+							<td><c:out value="${pageCnt}" /></td>
+							<td><a href="javascript:fn_egov_downFile('<c:out value="${result.fileId}" />')" class="link01"><c:out value="${result.faqFileNm}" /></a></td>
+							<td><c:out value="${result.userName}" /></td>
+							<fmt:parseDate value="${result.insrtDate}" var="dateValue" pattern="yyyy-MM-dd"/>
+							<fmt:formatDate var="insrtDate" value="${dateValue}" pattern="yyyy-MM-dd" />
+							<td><c:out value="${insrtDate}"/></td>
+							<td>
+								<c:choose>
+									<c:when test="${result.useYn eq 'N'}">
+										<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'Y')">
+											<strong class="txt_red">
+												<c:out value="${result.useYn}" />
+											</strong>
+										</a>
+									</c:when>
+									<c:otherwise>
+										<a href="javascript:updateUseYn('<c:out value="${result.faqIdx}" />', 'N')">
+											<strong class="txt_blue">
+												<c:out value="${result.useYn}" />
+											</strong>
+										</a>
+									</c:otherwise>
+								</c:choose>
+							</td>
+						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
@@ -206,7 +207,7 @@
 		<input id="faqFileNm" name="faqFileNm" type="hidden" value="">
 		<input id="faqIdx" name="faqIdx" type="hidden", value="0">
 		<input id="useYn" name="useYn" type="hidden", value="N">
-		<input type="hidden" id="page" name="page" value="${page}" />
+		<input type="hidden" id="page" name="page" value="${boardVO.page}" />
 		<input type='hidden' id="boardType" name="boardType" value="FAQ" />
 		<div class="table_v01">
 			<table>
