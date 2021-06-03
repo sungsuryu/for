@@ -114,7 +114,6 @@
 	        data : formData,
 	        success: function(data){
 	        	var res = data.result;
-	        	console.log(data.result);
 	        	if(res.status == "SUCCESS"){
 	        		$("#newBtn").addClass("dispNon");
 	        		$("#saveBtn").removeClass("dispNon");
@@ -133,7 +132,6 @@
 	        			$("#fileNm").text(res.fileList.phyFileNm);
 	        			$("#fileNm").css("display", "inline-block");
 	        			$("#fileNm").css("margin-bottom", "8px");
-	        			console.log(res.fileList);
 	        		}
 	        		else{
 	        			$("#fileId").val("");
@@ -166,7 +164,6 @@
 	        			$("#originFile").addClass("dispNon");
 		        	}
 		        	else{
-		        	console.log(data.result);
 		        		alert("파일삭제 실패");
 		        	}
 		        },
