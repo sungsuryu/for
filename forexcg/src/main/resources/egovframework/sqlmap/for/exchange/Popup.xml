@@ -25,13 +25,27 @@
 			FROM
 				TB_FOR_POPUP
 			WHERE
-				IS_DEL = 'N'
+					IS_DEL = 'N'
 			<if test='searchName != null or !searchName.equals("")'>
-				AND POPUP_TITLE LIKE CONCAT('%', #{searchName}, '%')
+				<choose>
+					<when test='searchType.equals("all")'>
+						AND (POPUP_TITLE LIKE CONCAT('%', #{searchName}, '%')
+						OR POPUP_CONTENT LIKE CONCAT('%', #{searchName}, '%'))
+					</when>
+					<when test='searchType.equals("title")'>
+						AND POPUP_TITLE LIKE CONCAT('%', #{searchName}, '%')
+					</when>
+					<when test='searchType.equals("content")'>
+						AND POPUP_CONTENT LIKE CONCAT('%', #{searchName}, '%')
+					</when>
+					<when test='searchType.equals("userNm")'>
+						AND USER_NM LIKE CONCAT('%', #{searchName}, '%')
+					</when>
+				</choose>
 			</if>
 	</select>
 	
-	<select id="selectPopupList" parameterType="popupVO" resultMap="mapPopupVO">
+<!-- 	<select id="selectPopupList" parameterType="popupVO" resultMap="mapPopupVO">
 		/** popup.selectPopupList */
 		SELECT 
 			TP.LIST_NUM
@@ -44,6 +58,19 @@
 		FROM
 		(SELECT
 			@ROWNUM:=@ROWNUM+1 AS LIST_NUM
+			,TP.*
+		FROM
+			TB_FOR_POPUP TP, (SELECT @rownum:=0) temp
+		WHERE
+			TP.IS_DEL = 'N'
+		ORDER BY TP.POPUP_IDX DESC) TP
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
+	</select> -->
+	
+		<select id="selectPopupList" parameterType="popupVO" resultMap="mapPopupVO">
+		/** popup.selectPopupList */
+		SELECT 
+			TP.LIST_NUM
 			,TP.POPUP_IDX
 			,TP.POPUP_TITLE
 			,TP.POPUP_START
@@ -51,9 +78,30 @@
 			,TP.USER_NM
 			,TP.INSRT_DATE
 		FROM
+		(SELECT
+			@ROWNUM:=@ROWNUM+1 AS LIST_NUM
+			,TP.*
+		FROM
 			TB_FOR_POPUP TP, (SELECT @rownum:=0) temp
 		WHERE
 			TP.IS_DEL = 'N'
+		<if test='searchName != null or !searchName.equals("")'>
+			<choose>
+				<when test='searchType.equals("all")'>
+					AND (TP.POPUP_TITLE LIKE CONCAT('%', #{searchName}, '%')
+					OR TP.POPUP_CONTENT LIKE CONCAT('%', #{searchName}, '%'))
+				</when>
+				<when test='searchType.equals("title")'>
+					AND TP.POPUP_TITLE LIKE CONCAT('%', #{searchName}, '%')
+				</when>
+				<when test='searchType.equals("content")'>
+					AND TP.POPUP_CONTENT LIKE CONCAT('%', #{searchName}, '%')
+				</when>
+				<when test='searchType.equals("userNm")'>
+					AND USER_NM LIKE CONCAT('%', #{searchName}, '%')
+				</when>
+			</choose>
+		</if>
 		ORDER BY TP.POPUP_IDX DESC) TP
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
 	</select>

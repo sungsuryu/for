@@ -35,16 +35,22 @@
 	 		fCreator: "createSEditor2",
 	 		htParams : {fOnBeforeUnload : function(){}}
 	 	});
+		
+		$("#" + "${popupVO.searchType}").attr("selected", "selected");
+		
 	});
 	
 	function fn_egov_link_page(page){
 		$("#page").val(page);
-		$("#boardForm").attr("action", "/setting/board/notice.do");
-		$("#boardForm").submit();
+		$("#popupForm").attr("action", "/setting/popup.do");
+		$("#popupForm").submit();
 	}
 	
 	//신규 팝업 추가
 	function insertPopup(){
+		$("#page").val(0);
+		$("#searchName").val("");
+		$("#searchType").val("");
 		$("#popupForm").attr("action", "/setting/popupWriteAction.do");
 		$("#popupForm").submit();
 	}
@@ -100,7 +106,6 @@
 	}
 	
 	function goPopupView(popupIdx){
-		//$("#newBtn").removeClass("dispNon");
 		$("#popupIdx").val(popupIdx);
 		var formData = $("#popupForm").serialize();
 		$.ajax({
@@ -127,7 +132,7 @@
 	        			$("#originFile").removeClass("dispNon");
 	        			$("#fileNm").text(res.fileList.phyFileNm);
 	        			$("#fileNm").css("display", "inline-block");
-	        			$("#fileNm").css("margin-bottom", "10px");
+	        			$("#fileNm").css("margin-bottom", "8px");
 	        			console.log(res.fileList);
 	        		}
 	        		else{
@@ -178,7 +183,14 @@
 		$("#popupForm").attr("action", "/popup/downloadFile.do");
 		$("#popupForm").submit();
 	}
-	
+ 	
+ 	function goSearch(){
+ 		$("#page").val(0);
+ 		$("#searchName").val($("#SearchText").val());
+ 		$("#searchType").val($("#searchTypeSelector option:selected").val());
+ 		$("#popupForm").attr("action", "/setting/popup.do");
+		$("#popupForm").submit();
+ 	}
 </script>
 </head>
 <body>
@@ -224,18 +236,18 @@
 	<div class="top_search_area">
 		<span class="label">검색항목</span>
 		<span class="styled_select">
-			<select>
-				<option>전체</option>
-				<option></option>
-				<option></option>
-				<option></option>
+			<select id="searchTypeSelector">
+				<option id="all" value="all">전체</option>
+				<option id="title" value="title">제목</option>
+				<option id="content" value="content">내용</option>
+				<option id="userNm" value="userNm">작성자</option>
 			</select>
 		<i class="fa fa-sort" aria-hidden="true"></i>
 		</span>
 		<span class="space"></span>
 		<span class="label">검색어</span>
-		<input type="text">
-		<a href="javascript:;" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
+		<input id="SearchText" name="SearchText" type="text" value="<c:out value="${popupVO.searchName}" />">
+		<a href="javascript:goSearch();" class="btn btn-sm btn-info btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 조회</a>
 	</div>
 	
 	<div class="tbl_top">
@@ -278,8 +290,9 @@
 				</colgroup>
 				<tbody>
 					<c:forEach var="result" items="${popupList}" varStatus="status">
+						<c:set var="pageCnt" value="${pageCnt-1}"></c:set>
 						<tr>
-							<td><c:out value="${result.listNum}" /></td>
+							<td><c:out value="${pageCnt}"/></td>
 							<td class="left"><a href="javascript:goPopupView(<c:out value="${result.popupIdx}" />)"><c:out value="${result.popupTitle}" /></a></td>
 							<td><fmt:formatDate value="${result.insrtDate }" pattern="yyyy.MM.dd"/></td>
 							<td><c:out value="${result.userNm}" /></td>
@@ -296,9 +309,12 @@
 			</div>
 		</div>
 	</div>
-	<form id="popupForm" name="popupForm" method="post" enctype="multipart/form-data">
+	<form id="popupForm" name="popupForm" method="post" enctype="multipart/form-data" style="display:inline-block; margin-top:5px;">
 		<input id="popupIdx" name="popupIdx" type="hidden" value="0">
 		<input id="fileId" name="fileId" type="hidden" value="">
+		<input id="page" name="page" type="hidden" value="${popupVO.page}">
+		<input id="searchName" name="searchName" type="hidden" value="${popupVO.searchName}">
+		<input id="searchType" name="searchType" type="hidden" value="${popupVO.searchType}">
 		<div class="table_v01">
 			<table>
 				<colgroup>
@@ -322,7 +338,7 @@
 						<th>첨부파일</th>
 						<td colspan="3">
 				        	<div id="originFile" class="dispNon">
-				        		<h3 id="fileNm"></h3>&nbsp
+				        		<h3 id="fileNm" style="cursor:pointer;"></h3>&nbsp
 								<a href="javascript:deleteFile()"><i id="deleteFilebtn" class="fa fa-times-circle" aria-hidden="true"></i></a>
 				        	</div>
 							<div>
