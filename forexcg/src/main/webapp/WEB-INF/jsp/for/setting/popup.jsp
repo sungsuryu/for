@@ -14,12 +14,33 @@
 	var editors = [];
 	$(document).ready(function() {
  		$("#popupStart").datepicker({
-			dateFormat : 'yy-mm-dd'
-		});
+ 			changeMonth: true,
+ 			changeYear: true,
+ 			nextText: '다음 달',
+ 			prevText: '이전 달',
+ 			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+ 			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+			dateFormat : 'yy-mm-dd',
+				onSelect: function (date) {
+					var endDate = $('#popupEnd');
+					var startDate = $(this).datepicker('getDate');
+					var minDate = $(this).datepicker('getDate');
+					endDate.datepicker('setDate', minDate);
+					startDate.setDate(startDate.getDate() + 30);
+					endDate.datepicker('option', 'maxDate', startDate);
+					endDate.datepicker('option', 'minDate', minDate);
+				}
+		}).datepicker("setDate", new Date());
 		
 		$("#popupEnd").datepicker({
+ 			changeMonth: true,
+ 			changeYear: true,
+ 			nextText: '다음 달',
+ 			prevText: '이전 달',
+ 			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+ 			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
 			dateFormat : 'yy-mm-dd'
-		});
+		}).datepicker("setDate", new Date());
 		
 		$("#fileNm").click(function(){
 			fn_egov_downFile();
