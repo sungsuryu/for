@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -689,7 +690,7 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/board/downloadFile.do")
-	public String downloadFile(@ModelAttribute("fileVO") FileVO fileVO, HttpServletRequest request, HttpServletResponse response)
+	public void downloadFile(@ModelAttribute("fileVO") FileVO fileVO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("첨부파일 다은로드");
 		FileVO resultfileVO = new FileVO();
@@ -702,19 +703,8 @@ public class BoardController {
 		if (fSize > 0) {
 			String mimetype = "application/x-msdownload";
 
-			// response.setBufferSize(fSize); // OutOfMemeory 발생
 			response.setContentType(mimetype);
-			// response.setHeader("Content-Disposition", "attachment;
-			// filename=\"" + URLEncoder.encode(fvo.getOrignlFileNm(), "utf-8")
-			// + "\"");
 			setDisposition(resultfileVO.getPhyFileNm(), request, response);
-			// response.setContentLength(fSize);
-
-			/*
-			 * FileCopyUtils.copy(in, response.getOutputStream()); in.close();
-			 * response.getOutputStream().flush();
-			 * response.getOutputStream().close();
-			 */
 			BufferedInputStream in = null;
 			BufferedOutputStream out = null;
 			
@@ -725,8 +715,6 @@ public class BoardController {
 				FileCopyUtils.copy(in, out);
 				out.flush();
 			} catch (IOException ex) {
-				// 다음 Exception 무시 처리
-				// Connection reset by peer: socket write error
 				EgovBasicLogger.ignore("IO Exception", ex);
 			} finally {
 				EgovResourceCloseHelper.close(in, out);
@@ -746,11 +734,10 @@ public class BoardController {
 			printwriter.flush();
 			printwriter.close();
 		}
-		return null;
 	}
 	
-	@RequestMapping(value = "/board/downloadZipFile.do")
-	public String downloadZipFile(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, HttpServletResponse response)
+	/*@RequestMapping(value = "/board/downloadZipFile.do")
+	public void downloadZipFile(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("첨부파일 묶음 다은로드");
 			
@@ -793,7 +780,8 @@ public class BoardController {
 		}
 		
 		if(fileList.size() > 0){
-			String mimetype = "application/x-msdownload";
+			//String mimetype = "application/x-msdownload";
+			String mimetype = "text/html";
 			
 			BufferedInputStream bin = null;
 			BufferedOutputStream out = null;
@@ -810,11 +798,9 @@ public class BoardController {
 					ZipEntry zipEntry = new ZipEntry(tempVO.getPhyFileNm());
 				    zout.putNextEntry(zipEntry);
 					
-					//File uFile = new File(tempVO.getFilePath(), tempVO.getFileNm());
 					in = new FileInputStream(tempVO.getFilePath() + tempVO.getFileNm());
 			        int length;
 
-			        // input file을 1024바이트로 읽음, zip stream에 읽은 바이트를 씀
 			        while((length = in.read(buffer)) > 0){
 			            zout.write(buffer, 0, length);
 			        }
@@ -849,7 +835,99 @@ public class BoardController {
 			printwriter.flush();
 			printwriter.close();
 		}
-		return null;
+	}*/
+	
+	@RequestMapping(value = "/board/downloadZipFile.do")
+	public void downloadZipFile(@ModelAttribute("boardVO") BoardVO boardVO, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		logger.debug("첨부파일 묶음 다은로드");
+			
+		ZipOutputStream zout = null;
+		String zipName = propertyService.getString("downloadZipName") + boardVO.getBoardType() + ".zip";
+		FileVO fileVO = new FileVO();
+		fileVO.setFileGrpNum(boardVO.getBoardIdx());
+		fileVO.setFileGrpCd(boardVO.getBoardType());
+
+		List<?> fileList = boardService.selectFileList(fileVO);
+		
+		List<FileVO> iniFileLst = new ArrayList<FileVO>();
+		
+		int fileSize = fileList.size();
+		for (int i=0; i<fileSize; i++) {
+			FileVO itm = (FileVO)fileList.get(i);
+			String getName = itm.getPhyFileNm();
+			int k = 1;
+			boolean firstCheck = false;
+			if (iniFileLst.size() > 0) {
+				for (int m=0; m<iniFileLst.size(); m++) {
+					FileVO sItm = iniFileLst.get(m);
+					if (getName.equals(sItm.getPhyFileNm())) {
+						if(firstCheck == false){
+							itm.setPhyFileNm(k+"-"+itm.getPhyFileNm());
+							k++;
+							getName = itm.getPhyFileNm();
+							firstCheck = true;
+						}
+						else{
+							String subText = itm.getPhyFileNm().substring(2);
+							itm.setPhyFileNm(k+"-"+subText);
+							k++;
+							getName = itm.getPhyFileNm();
+						}
+					}
+				}
+			}
+			iniFileLst.add(itm);
+		}
+		
+		if(fileList.size() > 0){
+			//String mimetype = "application/x-msdownload";
+			String mimetype = "text/html";
+			
+			BufferedInputStream bin = null;
+			BufferedOutputStream out = null;
+			response.setContentType(mimetype);
+			setDisposition(zipName, request, response);
+			try{
+				zout = new ZipOutputStream(new FileOutputStream(zipName));
+				byte[] buffer = new byte[1024];
+				FileInputStream in = null;
+				for(int i=0; i<fileList.size(); i++){
+					FileVO tempVO = new FileVO();
+					tempVO = (FileVO) fileList.get(i);
+					
+					ZipEntry zipEntry = new ZipEntry(tempVO.getPhyFileNm());
+				    zout.putNextEntry(zipEntry);
+					
+					in = new FileInputStream(tempVO.getFilePath() + tempVO.getFileNm());
+			        int length;
+
+			        while((length = in.read(buffer)) > 0){
+			            zout.write(buffer, 0, length);
+			        }
+					zout.closeEntry();
+					in.close();
+				}
+				zout.close();
+				
+//				bin = new BufferedInputStream(new FileInputStream(zipName));
+//				out = new BufferedOutputStream(response.getOutputStream());
+				
+				//bin = new BufferedInputStream(new FileInputStream(zipName));
+				byte fileByte[] = FileUtils.readFileToByteArray(new File(zipName));
+				response.getOutputStream().write(fileByte);
+				//FileCopyUtils.copy(bin, out);
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+				//out.flush();
+			}
+			catch (IOException ex) {
+				EgovBasicLogger.ignore("IO Exception", ex);
+			}finally {
+				zout = null;
+				EgovResourceCloseHelper.close(bin, out);
+			}
+		}
 	}
 
 	@RequestMapping(value = "/board/downloadFaqFile.do")
@@ -866,19 +944,8 @@ public class BoardController {
 		if (fSize > 0) {
 			String mimetype = "application/x-msdownload";
 
-			// response.setBufferSize(fSize); // OutOfMemeory 발생
 			response.setContentType(mimetype);
-			// response.setHeader("Content-Disposition", "attachment;
-			// filename=\"" + URLEncoder.encode(fvo.getOrignlFileNm(), "utf-8")
-			// + "\"");
 			setDisposition(fileVO.getPhyFileNm(), request, response);
-			// response.setContentLength(fSize);
-
-			/*
-			 * FileCopyUtils.copy(in, response.getOutputStream()); in.close();
-			 * response.getOutputStream().flush();
-			 * response.getOutputStream().close();
-			 */
 			BufferedInputStream in = null;
 			BufferedOutputStream out = null;
 			
@@ -889,8 +956,6 @@ public class BoardController {
 				FileCopyUtils.copy(in, out);
 				out.flush();
 			} catch (IOException ex) {
-				// 다음 Exception 무시 처리
-				// Connection reset by peer: socket write error
 				EgovBasicLogger.ignore("IO Exception", ex);
 			} finally {
 				EgovResourceCloseHelper.close(in, out);

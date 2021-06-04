@@ -33,7 +33,7 @@
 		var uiId = $("#uiId").val();
 		$.ajax({
 	        type:"POST",
-	        url:"/help/guide.ajax",
+	        url:"/common/help/guide.ajax",
 	        data : {
 	        	"uiId":uiId
 	        },
@@ -64,7 +64,7 @@
 		var guideContent = $("#guideContent").val();
 		$.ajax({
 	        type:"POST",
-	        url:"/help/updateGuide.ajax",
+	        url:"/common/help/updateGuide.ajax",
 	        data : {
 	        	"uiId":uiId,
 	        	"guideContent":guideContent

@@ -6,6 +6,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/jsp/for/inc/_header.jsp" %>
+<%
+	
+%>
 <script type="text/javascript">
 
 	$(function(){
@@ -22,12 +25,29 @@
 		$("#boardForm").submit();
 	}
 	
-	function doDownloadZip(boardIdx){
-		$("#boardIdx").val(boardIdx);
+  	function doDownloadZip(boardIdx){
+ 		$("#boardIdx").val(boardIdx);
 		$("#boardForm").attr("action", "/board/downloadZipFile.do");
 		$("#boardForm").submit();
+//		window.open("<c:url value='/board/downloadZipFile.do?boardIdx="+boardIdx+"&boardType="+"NOTICE"+"'/>");
 	}
-		
+
+	/* function doDownloadZip(boardIdx){
+		$.ajax({
+	        type:"POST",
+	        url:"/board/downloadZipFile.ajax",
+	        data : {
+	        	"boardIdx":boardIdx,
+	        	"boardType":"NOTICE"
+	        },
+	        success: function(data){
+	        	alert("파일다운로드 성공");
+	        },
+			error: function(e){
+				alert("파일삭제 실패");
+			}			
+		});
+	} */
 </script>
 </head>
 

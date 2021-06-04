@@ -33,7 +33,7 @@ public class GuideController {
 	@Resource(name = "EgovFileMngUtil")
 	private EgovFileMngUtil fileUtil;
 	
-	@RequestMapping(value = "/help/guide.ajax")
+	@RequestMapping(value = "/common/help/guide.ajax")
 	public String selectGuide(@ModelAttribute("guideVO") GuideVO guideVO, HttpServletRequest request, ModelMap model) throws Exception {
 		GuideVO resultGuideVO = new GuideVO();
 		resultGuideVO = guideService.selectGuide(guideVO);
@@ -53,7 +53,7 @@ public class GuideController {
 		return "jsonView";
 	}
 	
-	@RequestMapping(value = "/help/updateGuide.ajax")
+	@RequestMapping(value = "/common/help/updateGuide.ajax")
 	public String updateGuide(@ModelAttribute("guideVO") GuideVO guideVO, HttpServletRequest request, ModelMap model) throws Exception {
 		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 		guideVO.setUpdtId(getLoginVO.getLoginId());
