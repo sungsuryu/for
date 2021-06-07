@@ -39,11 +39,6 @@
 	        },
 	        success: function(data){
 	        	if(data.result.status == "SUCCESS"){
-	        		if(data.result.levelCheck == "N"){
-	        			$("#updateGuide").css("display", "none");
-	        			$("#guideContent").attr("readonly", true);
-	        			$("#guideContent").attr("disable", true);
-	        		}
 	        		if(data.result.isYn == "Y"){
 	        			$("#guideContent").val(data.result.guideVO.guideContent);
 	        		}

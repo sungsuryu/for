@@ -42,12 +42,10 @@ public class GuideController {
 		
 		if(resultGuideVO == null){
 			rMap.put("isYn", "N");
-			rMap.put("levelCheck", "Y");//개발용 권한체크
 		}
 		else{
 			rMap.put("isYn", "Y");
 			rMap.put("guideVO", resultGuideVO);
-			rMap.put("levelCheck", "Y");//개발용 권한체크
 		}
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap(rMap));
 		return "jsonView";

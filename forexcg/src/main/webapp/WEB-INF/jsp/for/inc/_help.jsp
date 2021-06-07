@@ -15,7 +15,15 @@
 	</header>
 	<div class="aside_right_con">
 		<input id="uiId" name="uiId" type="hidden" value="<c:out value="${helpId }" />" />
-		<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;"></textarea>
-		<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+		<c:choose>
+			<c:when test="${loginVO.roleId eq 'ROLE_ADMIN'}">
+				<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;"></textarea>
+				<a id="updateGuide" href="javascript:updateGuide();" class="btn"><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			</c:when>
+			<c:otherwise>
+				<textarea id="guideContent" name="guideContent" rows="40" style="resize:none;" readonly="readonly"></textarea>
+				<a id="updateGuide" href="javascript:updateGuide();" class="btn" style='display:none;'><i class="fa fa-check-circle" aria-hidden="true"></i> 저장</a>
+			</c:otherwise>
+		</c:choose>
 	</div>
 </aside>
