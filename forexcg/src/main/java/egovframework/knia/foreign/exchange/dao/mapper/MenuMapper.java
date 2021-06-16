@@ -23,4 +23,6 @@ public interface MenuMapper {
 	List<?> selectSourceMenu() throws Exception;
 	
 	List<?> selectParentMenu(MenuVO menuVO) throws Exception;
+	
+	void deleteMenu(MenuVO menuVO) throws Exception;
 }

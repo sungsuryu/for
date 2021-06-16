@@ -20,7 +20,7 @@ public class MenuVO extends CommonVO implements Serializable {
 	
 	private String mnuType;
 	
-	private int lvl;
+	private int lvl = 0;
 	
 	private int sortNum;
 	
@@ -28,6 +28,12 @@ public class MenuVO extends CommonVO implements Serializable {
 	
 	private String url = "N";
 
+	private String firstMnuId;
+	
+	private String secondMnuId;
+	
+	private String thirdMnuId;
+	
 	public String getStMnuId() {
 		return stMnuId;
 	}
@@ -114,5 +120,29 @@ public class MenuVO extends CommonVO implements Serializable {
 
 	public void setIsInc(String isInc) {
 		this.isInc = isInc;
+	}
+
+	public String getFirstMnuId() {
+		return firstMnuId;
+	}
+
+	public void setFirstMnuId(String firstMnuId) {
+		this.firstMnuId = firstMnuId;
+	}
+
+	public String getSecondMnuId() {
+		return secondMnuId;
+	}
+
+	public void setSecondMnuId(String secondMnuId) {
+		this.secondMnuId = secondMnuId;
+	}
+
+	public String getThirdMnuId() {
+		return thirdMnuId;
+	}
+
+	public void setThirdMnuId(String thirdMnuId) {
+		this.thirdMnuId = thirdMnuId;
 	}
 }

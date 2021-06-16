@@ -17,6 +17,14 @@ package egovframework.com.cmm.service;
  */
 
 public class Globals {
+	
+	public static void main(String[] args) throws Exception {
+		String regTT = "ss/test.ajax2";
+		if (regTT.contains(".ajax")) {
+			System.out.println("match");
+		};
+		System.out.println("finish");
+	}
 	//OS 유형
     public static final String OS_TYPE = EgovProperties.getProperty("Globals.OsType");
     //DB 유형

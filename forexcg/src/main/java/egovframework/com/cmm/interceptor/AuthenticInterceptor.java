@@ -102,22 +102,23 @@ public class AuthenticInterceptor extends HandlerInterceptorAdapter {
 		
 		logger.debug("postHandle");
 		
-		Map<String, Object> gnbMenu = menuService.selectMenuTree(new MenuVO());
-		model.addObject("gnbMenu", gnbMenu);
-		
-		LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
-		model.addObject("loginVo", getLoginVO);
-		
-		ActiveHistVO histVo = new ActiveHistVO();
-		histVo.setUserId(getLoginVO.getLoginId());
-		
-		List<?> getHist = EgovUserDetailsHelper.getActiveHistory(histVo);
-		model.addObject("histVo", getHist);
-		
 		String reqSvlPath = request.getServletPath();	// ServletPath 기준 현 메뉴정보 조회
-		MenuVO getCurrentMenuInfo = EgovUserDetailsHelper.getMenuInfo(reqSvlPath);
-		model.addObject("menuInfo", getCurrentMenuInfo);
-		
+		if (!reqSvlPath.contains(".ajax")) {
+			Map<String, Object> gnbMenu = menuService.selectMenuTree(new MenuVO());
+			model.addObject("gnbMenu", gnbMenu);
+			
+			LoginVO getLoginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+			model.addObject("loginVo", getLoginVO);
+			
+			ActiveHistVO histVo = new ActiveHistVO();
+			histVo.setUserId(getLoginVO.getLoginId());
+			List<?> getHist = EgovUserDetailsHelper.getActiveHistory(histVo);
+			model.addObject("histVo", getHist);
+			
+			MenuVO getCurrentMenuInfo = EgovUserDetailsHelper.getMenuInfo(reqSvlPath);	// 현재 메뉴의 세부 정보
+			model.addObject("menuInfo", getCurrentMenuInfo);
+		}
+
 		super.postHandle(request, response, handler, model);
 	}
 }

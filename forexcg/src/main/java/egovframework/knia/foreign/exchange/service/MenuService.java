@@ -24,4 +24,8 @@ public interface MenuService {
 	List<?> selectSourceMenu() throws Exception;
 	
 	List<?> selectParentMenu(MenuVO memuVO) throws Exception;
+	
+	void updateMenu(MenuVO menuVO) throws Exception;
+	
+	void deleteMenu(MenuVO memuVO) throws Exception;
 }

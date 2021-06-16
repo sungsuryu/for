@@ -36,6 +36,7 @@
 			CM.MNU_NM, 
 			CM.SRC_MNU_ID, 
 			CM.MNU_TYPE, 
+			CM.URL,
 			PM.PRT_MNU_ID ST_MNU_ID
 		FROM
 			TB_FOR_MNU CM LEFT JOIN TB_FOR_MNU PM ON CM.PRT_MNU_ID=PM.MNU_ID
@@ -148,18 +149,26 @@
 				PRT_MNU_ID=#{prtMnuId}, 
 				SRC_MNU_ID=#{srcMnuId},
 				LVL=#{lvl}, 
-				SORT_NUM=#{sortNum}, 
-				USE_YN=#{useYn},
 				IS_INC=#{isInc }, 
 				MNU_TYPE=#{mnuType }, 
-				URL=#{url } 
-				IS_DEL=#{isDel}, 
+				URL=#{url } ,
 				UPDT_ID=#{updtId}, 
 				UPDT_DATE=now()
 		WHERE
 			MNU_ID=#{mnuId }
 	</update>
 
+	<update id="deleteMenu" parameterType="menuVO">	
+		UPDATE
+			TB_FOR_MNU
+			SET
+				IS_DEL='Y', 
+				UPDT_ID=#{updtId }, 
+				UPDT_DATE=now()
+		WHERE
+			MNU_ID=#{mnuId }
+	</update>
+	
 	<select id="selectSourceMenu" resultMap="mapMenuVO">
 		/** menu.selectSourceMenu */
 		<include refid="commonMenu">

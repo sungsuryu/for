@@ -7,7 +7,7 @@ public class CommonVO implements Serializable {
 
 	private static final long serialVersionUID = -7869275865924832744L;
 
-	private String isDel;
+	private String isDel = "N";
 	
 	private String insrtId;
 	

@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.knia.foreign.exchange.cmm.ResponseResult;
 import egovframework.knia.foreign.exchange.cmm.code.CommonConst;
 import egovframework.knia.foreign.exchange.cmm.code.ResponseCode;
 import egovframework.knia.foreign.exchange.service.CommonCodeService;
 import egovframework.knia.foreign.exchange.service.MenuService;
 import egovframework.knia.foreign.exchange.vo.CommonCodeVO;
+import egovframework.knia.foreign.exchange.vo.LoginVO;
 import egovframework.knia.foreign.exchange.vo.MenuVO;
 
 @Controller
@@ -36,24 +38,55 @@ public class MenuController {
 	private CommonCodeService commonCodeService;
 	
 	@RequestMapping(value="/setting/menu.do")
-	public String listMainMenu(HttpServletRequest request, ModelMap model) throws Exception {
+	public String listMainMenu(@ModelAttribute("menuVO") MenuVO menuVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
-		MenuVO menuVO = new MenuVO();
-		menuVO.setIsDel("N");
 		menuVO.setLvl(1);
-//		menuVO.setMnuType("");
 		
 		List<?> getMenu = menuService.selectMenuList(menuVO);
-		model.addAttribute("menuList", getMenu);
+		model.addAttribute("fstList", getMenu);
 
-		List<?> mnuTypeLst = commonCodeService.selectCodeList(CommonConst.MENU_TYPE);
+		if (menuVO.getFirstMnuId() != null && !menuVO.getFirstMnuId().equals("")) {
+			MenuVO sMenuVO = new MenuVO();
+			sMenuVO.setLvl(2);
+			sMenuVO.setPrtMnuId(menuVO.getFirstMnuId());
+			List<?> sndMenu = menuService.selectMenuList(sMenuVO);
+			model.addAttribute("sndList", sndMenu);
+			
+			menuVO.setMnuId(menuVO.getFirstMnuId());	// 선택한 메뉴
+			
+			if (menuVO.getSecondMnuId() != null && !menuVO.getSecondMnuId().equals("")) {
+				MenuVO tMenuVO = new MenuVO();
+				tMenuVO.setLvl(3);
+				tMenuVO.setPrtMnuId(menuVO.getSecondMnuId());
+				List<?> trdMenu = menuService.selectMenuList(tMenuVO);
+				model.addAttribute("trdList", trdMenu);
+				
+				menuVO.setMnuId(menuVO.getSecondMnuId());	// 선택한 메뉴
+				
+				menuVO.setLvl(2);	// 상위메뉴 조회를 위해 레벨 변경
+				
+				if (menuVO.getThirdMnuId() != null && !menuVO.getThirdMnuId().equals("")) {
+					menuVO.setMnuId(menuVO.getThirdMnuId());	// 선택한 메뉴
+					
+					menuVO.setLvl(3);	// 상위메뉴 조회를 위해 레벨 변경
+				}
+			}
+		}
+
+		if (menuVO.getMnuId() != null && !menuVO.getMnuId().equals("")) {	// 선택한 메뉴 조회
+			MenuVO selMenu = menuService.getMenu(menuVO);
+			model.addAttribute("selMenu", selMenu);
+		}
+		
+		List<?> mnuTypeLst = commonCodeService.selectCodeList(CommonConst.MENU_TYPE);	// 메뉴유형
 		model.addAttribute("mnuTypeLst", mnuTypeLst);
 		
-		List<?> sourceMenu = menuService.selectSourceMenu();
+		List<?> sourceMenu = menuService.selectSourceMenu();	// 대표메뉴
 		model.addAttribute("srcMenu", sourceMenu);
 		
-		menuVO.setLvl(menuVO.getLvl()-1);
-		List<?> getPrtMenu = menuService.selectParentMenu(menuVO);
+		menuVO.setLvl(menuVO.getLvl()-1);	// 상위메뉴 조회를 위해 레벨 변경
+		
+		List<?> getPrtMenu = menuService.selectParentMenu(menuVO);	// 상위메뉴
 		model.addAttribute("prtMenu", getPrtMenu);
 		
 		return "setting/menu";
@@ -67,8 +100,8 @@ public class MenuController {
 		List<?> getPrtMenu = menuService.selectParentMenu(menuVO);
 		model.addAttribute("prtMenu", getPrtMenu);
 		
-		MenuVO getMenu = menuService.getMenuFromParentMnuId(menuVO);
-		model.addAttribute("cMenu", getMenu);
+//		MenuVO getMenu = menuService.getMenuFromParentMnuId(menuVO);
+//		model.addAttribute("cMenu", getMenu);
 		
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
 		
@@ -98,6 +131,32 @@ public class MenuController {
 		
 		List<?> getMenu = menuService.selectMenuList(menuVO);
 		model.addAttribute("dtlMenuList", getMenu);
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/setting/updateMenu.ajax")
+	public String updateMenu(@ModelAttribute("menuVO") MenuVO menuVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		menuVO.setUpdtId(loginVO.getLoginId());
+		
+		menuService.updateMenu(menuVO);
+		
+		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
+		
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/setting/deleteMenu.ajax")
+	public String deleteMenu(@ModelAttribute("menuVO") MenuVO menuVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		LoginVO loginVO = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		menuVO.setUpdtId(loginVO.getLoginId());
+		
+		menuService.deleteMenu(menuVO);
+		
 		model.addAttribute("result", new ResponseResult(ResponseCode.RESULT_0).toMap());
 		
 		return "jsonView";

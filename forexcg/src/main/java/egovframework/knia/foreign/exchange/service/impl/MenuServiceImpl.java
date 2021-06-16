@@ -78,4 +78,14 @@ public class MenuServiceImpl implements MenuService {
 	public List<?> selectParentMenu(MenuVO memuVO) throws Exception {
 		return menuMapper.selectParentMenu(memuVO);
 	}
+	
+	@Override
+	public void updateMenu(MenuVO menuVO) throws Exception {
+		menuMapper.updateMenu(menuVO);
+	}
+	
+	@Override
+	public void deleteMenu(MenuVO menuVO) throws Exception {
+		menuMapper.deleteMenu(menuVO);
+	}
 }
